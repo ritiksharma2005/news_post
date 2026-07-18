@@ -1,0 +1,62 @@
+[
+  {
+    "source": "GNews",
+    "query": "JEE",
+    "title": "Bihar CM Samrat Choudhary Launches Live Classes For Schools, Free JEE-NEET Coaching Programme",
+    "description": "Bihar CM Samrat Choudhary launched the ‘Bihar School Live Classes’ initiative and a free online JEE-NEET coaching programme in Patna. The initiative will connect schools with expert teachers through video conferencing, while the coaching programme has started in 10 model schools. The government also signed MoUs with NGOs to promote AI, STEM education and digital learning resources.",
+    "url": "https://www.freepressjournal.in/education/bihar-cm-samrat-choudhary-launches-live-classes-for-schools-free-jee-neet-coaching-programme",
+    "image": "https://media.assettype.com/freepressjournal/2026-07-16/88gmhvo5/Untitled-design-9.jpg",
+    "published_at": "2026-07-16T18:39:52Z",
+    "score": 95,
+    "tier": "1",
+    "reason": "Major national/student education initiative"
+  },
+  {
+    "source": "GNews",
+    "query": "Paper leak India",
+    "title": "NEET-UG results declared: 2 score 715/720, 19 cross 700",
+    "description": "India News: NEW DELHI: NEET-UG 2026 saw a sharp rise in top scores after the paper-leak controversy and nationwide retest, with Punjab’s Aryan Gupta topping the e.",
+    "url": "https://timesofindia.indiatimes.com/india/neet-ug-results-declared-2-score-715/720-19-cross-700/articleshow/132447910.cms",
+    "image": "https://static.toiimg.com/thumb/msid-132447909,width-1280,height-720,resizemode-6,overlay-toi_sw,pt-32,y_pad-600/photo.jpg",
+    "published_at": "2026-07-16T20:16:00Z",
+    "score": 95,
+    "tier": "1",
+    "reason": "Major national medical entrance exam results"
+  },
+  {
+    "source": "GNews",
+    "query": "JEE",
+    "title": "APSWREIS Invites Applications for IIT-JEE, NEET Coaching",
+    "description": "Admissions will be made as per the reservation policy, with 75 per cent of seats reserved for Scheduled Caste students and the remaining 25 per cent for students from OC, ST and BC categories.",
+    "url": "https://www.deccanchronicle.com/southern-states/andhra-pradesh/apswreis-invites-applications-for-iit-jee-neet-coaching-1971152",
+    "image": "https://www.deccanchronicle.com/h-upload/2026/07/15/2064212-new-year-to-herald-work-on-capital-amaravati-tenders-by-sankranti-world-class-capital-to-be-ready-within-three-years-md-ilyas-dc-vijayawada-dec-22-chief-minister-nara-chandrababu-naidu-will-st23.jpg",
+    "published_at": "2026-07-15T13:56:46Z",
+    "score": 90,
+    "tier": "1",
+    "reason": "Student education/coaching news"
+  },
+  {
+    "source": "GNews",
+    "query": "Campus placement India",
+    "title": "IIT Placements: Why IITs are drawing a red line over withdrawn job offers",
+    "description": "The issue is no longer the withdrawn offers themselves. It is whether an IIT offer letter still carries the certainty it once did. The answer will determine not just the fate of one placement season, but the future credibility of India's most trusted campus recruitment system.",
+    "url": "https://www.indiatoday.in/education-today/jobs-and-careers/story/iit-placements-why-iits-are-drawing-a-red-line-over-withdrawn-job-offers-2933867-2026-06-25",
+    "image": "https://akm-img-a-in.tosshub.com/indiatoday/images/story/202606/when-iit-job-offers-vanish-inside-the-biggest-trust-crisis-in-campus-placements-ai-generated-imag-255004198-16x9_0.png?VersionId=FVE9.hU5PuXGqNm5xw_nYT3nj.OzX9tp",
+    "published_at": "2026-06-25T11:08:15Z",
+    "score": 90,
+    "tier": "1",
+    "reason": "IIT campus placement issues"
+  },
+  {
+    "source": "GNews",
+    "query": "Technology India",
+    "title": "Talent exodus at ISRO: Department of Space restricts resignations of mission",
+    "description": "Talent exodus at ISRO: Department of Space restricts resignations of mission-critical scientists - Bengaluru, July 17 In a major administrative intervention aimed at safeguarding India's ambitious space programmes, the Department of ... Get Latest News on Technology only on lokmattimes.com",
+    "url": "https://www.lokmattimes.com/technology/talent-exodus-at-isro-department-of-space-restricts-resignations-of-mission-critical-scientists-1/",
+    "image": "https://d3pc1xvrcw35tl.cloudfront.net/ln/feedImages/1200x900/202607173867232_202607.jpg",
+    "published_at": "2026-07-16T19:44:13Z",
+    "score": 90,
+    "tier": "1",
+    "reason": "ISRO/National scientific HR issue"
+  }
+]
