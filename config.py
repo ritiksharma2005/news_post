@@ -2,6 +2,9 @@
 Central configuration for the news pipeline.
 Loads secrets from .env and defines what we search for.
 """
+import os 
+TELEGRAM_BOT_TOKEN = os.getenv("EAAWH0f4vts8BSEEJCqfJRChHAFmZBTkJJ65m8aGTL3eqtNqkEU5yykIaDAQry8O7dopDHp4ETXoKrpCX3eFI3rZBXkKMJPChqgxseCs0XmOCjbIZCaqmfeTF5GLhe4MRvNtCBp5ib83sYOXrHLHfcHvIZBBamXUWB4fz4RdAYf4Y4jJsnbNVZArERFTCI", "")
+TELEGRAM_CHAT_ID = os.getenv("1237139552813418", "")
 
 import os
 from dotenv import load_dotenv
