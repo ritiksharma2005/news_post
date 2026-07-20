@@ -73,6 +73,7 @@ def run_pipeline():
             headline=headline,
             summary=story.get("new_summary", ""),
             image_path=image_path,
+            bucket=story.get("bucket", "StudentEducation"),  # 🔹 Passes category bucket
             language="en",
             emoji="📩",
             output_path=f"output/cards/story_{i}.png",

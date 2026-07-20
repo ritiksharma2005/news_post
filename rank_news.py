@@ -1,168 +1,138 @@
 """
 rank_news.py
-Sends the articles fetched by fetch_news.py to Gemini for scoring against
-your priority tiers, then keeps the top N highest-scoring stories.
-
-Run directly to test: python rank_news.py
-(Requires output/raw_articles.json to already exist — run fetch_news.py first)
+Scores articles and guarantees a balanced 3-post selection:
+1. Indian Politics & Government Bills/Protests
+2. Student Education, Exams & Govt Jobs
+3. Tech, AI & Innovation
 """
 
 import json
 import os
 import time
-
 import ai_client
 import config
 
+RANKING_PROMPT = """You are a news editor for an Indian student & Gen Z audience (@news.nit_iit).
+Analyze the provided articles and assign a score (0-100) and a category bucket to each article.
 
-RANKING_PROMPT = """You are a news editor for an Indian audience. You will be given a list of news headlines with short descriptions, each with an index number.
+CATEGORY BUCKETS:
+1. "IndianPolitics": Indian national & state politics, BJP, Congress, party news, new Bills passed in Parliament, government policies, protests against government, Supreme Court verdicts, elections.
+2. "StudentEducation": IIT/NIT updates, JEE/NEET/UPSC exam news, paper leak scandals, student protests, campus placements, Government job alerts (UPSC, SSC, Banking).
+3. "TechInnovation": Artificial Intelligence, ISRO space launches, DRDO defense tech, Indian startup funding, tech updates.
 
-CRITICAL GLOBAL RULE (applies before any tier scoring): every story must have an explicit, concrete connection to India — it is about India, affects India, or involves Indian people/teams/institutions. If a story has NO India connection at all (e.g. a UK-only school policy with no India mention, a UK cabinet reshuffle, a golf tournament with no Indian players, a UK-only crime story), score it below 15 regardless of how well it matches a tier's topic. Matching a tier's subject (education, sport, politics) is NOT enough by itself — the India connection is mandatory except where a tier explicitly says otherwise.
+SCORING RULES (0-100):
+- Score > 80: High national importance, major political move, official job alert, or major exam update.
+- Score < 40: Routine local crime, foreign news with no India connection.
 
-Score each one from 0-100 based on this priority system:
+OUTPUT FORMAT (Valid JSON Array of Objects only, no extra text):
+[
+  {
+    "index": 0,
+    "score": 92,
+    "bucket": "IndianPolitics",
+    "reason": "Major new bill passed in Parliament affecting citizens."
+  },
+  ...
+]
 
-TIER 1 (85-100) — HIGHEST PRIORITY, TWO EQUAL CATEGORIES:
-  (1A) Major India national news — top political, economic, or social developments directly about India (economy, government, national events).
-  (1B) IIT/NIT/engineering/medical college and student news — exam paper leaks, JEE/NEET results or controversies, admission scandals, engineering/medical college announcements, campus issues at Indian technical/medical institutions. This category is EQUALLY important as national news, not secondary to it.
-
-TIER 2 (45-60) — LOW PRIORITY: International news with a clear indirect impact on India (oil prices, currency, trade, global conflicts affecting Indian interests). IMPORTANT: this tier's score ceiling (60) is deliberately kept BELOW Tier 1's floor (85), so international news can never outrank India national or student/college news, no matter how large or fast-developing the international story is. International news only fills top-5 slots when there simply aren't enough Tier 1 stories available that day.
-  - QUALIFIES (up to 60): Iran-Israel tensions affecting Strait of Hormuz oil shipments, a US Federal Reserve decision affecting the rupee.
-  - DOES NOT QUALIFY (below 30): A country's internal cabinet reshuffle, leadership purge, or war with no explained effect on India's trade/energy/citizens/diplomacy.
-
-TIER 3 (60-80): General education and social-issue news about India specifically (broader than Tier 1B — school policy, non-technical college news, social programs). Other countries' equivalent news does not qualify.
-
-TIER 4 (55-75): Social issues and new government policy announcements about India specifically (central or state level). Other countries' social policy does not qualify.
-
-TIER 5 (50-70): Sports involving Indian teams/athletes specifically. A global sporting event with no Indian participant or angle does not qualify — score below 20.
-
-TIER 6 (40-60): Indian politics and national issues not already covered above — include but weight lowest among the core categories. Other countries' domestic politics does not qualify.
-
-BONUS: Add +10 to any story's score (cap at 100) if it represents an "Indian pride" moment — an Indian individual, team, or achievement gaining recognition, winning, or excelling globally, regardless of which tier it falls in.
-
-CRITICAL DEDUPLICATION RULE: group articles by the underlying real-world event or crisis they're about, not just by literal wording. If multiple articles are all about the same ongoing situation — even if each covers a different specific angle, fact, or development within it — treat them as ONE event cluster. Within each cluster, score only the single best/most comprehensive article normally; give every other article in that same cluster a score of 5 with reason "same event as index X" (replace X with the index of the one you kept).
-  - EXAMPLE OF WHAT COUNTS AS ONE CLUSTER: "Iran stages military drills near Strait of Hormuz", "Tehran to impose new transit fees on ships crossing Hormuz", "Europe considers toll system for Hormuz shipping", "Tensions at Hormuz reach boiling point after US strike" — these are four different specific facts, but they are ALL part of the SAME ongoing Iran/Hormuz crisis. Only ONE of these should score highly; the other three get score 5.
-  - Do NOT let a single ongoing crisis or story arc occupy more than one top-scoring slot, no matter how many distinct facts or angles different outlets publish about it. A fast-developing story generating many articles is exactly the case this rule exists for.
-  - Articles about genuinely different events (even in the same broad region/topic) are NOT duplicates — e.g. an Iran/Hormuz story and a separate India-China border story are different clusters.
-
-Also merge literal duplicates: if two or more articles clearly describe the same specific fact worded differently by different outlets, only score the best-written one and give the others a score of 5 with reason "duplicate".
-
-Ignore or score below 15: celebrity gossip with no social relevance, international stories with no India angle, pure entertainment news, obituaries, and any story (regardless of topic) with no explicit India connection. Remember: international news (Tier 2) is your LAST priority — India national news and IIT/NIT/student/exam news (Tier 1) always come first.
-
-Return ONLY a JSON object in this exact format, nothing else, no markdown fences:
-{
-  "results": [
-    {"index": 0, "tier": "1", "score": 95, "reason": "short phrase"}
-  ]
-}
-
-Here are the articles:
+Articles to evaluate:
 """
 
 
-def build_prompt(articles):
-    """Build the full prompt text with numbered articles."""
-    lines = [RANKING_PROMPT]
-    for i, article in enumerate(articles):
-        lines.append(
-            f"\n[{i}] Title: {article['title']}\n"
-            f"    Description: {article.get('description', '')[:100]}"
-        )
-    return "\n".join(lines)
+def rank_all():
+    """Scores articles and selects 1 Indian Politics + 1 Student/Education + 1 Tech story."""
+    raw_path = config.RAW_ARTICLES_PATH
+    if not os.path.exists(raw_path):
+        print(f"Error: {raw_path} not found. Run fetch_news.py first.")
+        return []
 
+    with open(raw_path, "r", encoding="utf-8") as f:
+        articles = json.load(f)
 
-def parse_gemini_json(text):
-    """Strip markdown fences if present and parse JSON safely."""
-    cleaned = text.strip()
-    if cleaned.startswith("```"):
-        cleaned = cleaned.split("```")[1]
-        if cleaned.startswith("json"):
-            cleaned = cleaned[4:]
-    cleaned = cleaned.strip()
-    return json.loads(cleaned)
-
-
-def rank_articles(articles):
-    """Send articles to the AI for scoring (Gemini, falling back to Groq), return them sorted with scores attached."""
     if not articles:
         print("No articles to rank.")
         return []
 
-    prompt = build_prompt(articles)
+    print(f"Ranking {len(articles)} articles across Politics, Student & Tech buckets...")
+
+    # Format articles for prompt
+    formatted = []
+    for i, a in enumerate(articles):
+        title = a.get("title", "")
+        desc = a.get("description", "")[:150]
+        formatted.append(f"[{i}] {title}\nSummary: {desc}")
+
+    prompt = RANKING_PROMPT + "\n\n".join(formatted[:30])
 
     try:
-        response_text = ai_client.call_ai(prompt)
+        response_text = ai_client.ask_ai(prompt)
+        clean_text = response_text.strip()
+        if "```json" in clean_text:
+            clean_text = clean_text.split("```json")[1].split("```")[0].strip()
+        elif "```" in clean_text:
+            clean_text = clean_text.split("```")[1].split("```")[0].strip()
+
+        scores_list = json.loads(clean_text)
     except Exception as e:
-        print(f"AI call failed on both Gemini and Groq: {e}")
-        return []
+        print(f"AI ranking failed or returned invalid JSON: {e}")
+        return articles[:3]
 
-    try:
-        parsed = parse_gemini_json(response_text)
-    except (json.JSONDecodeError, IndexError, AttributeError) as e:
-        print(f"Failed to parse AI response as JSON: {e}")
-        print(f"Raw response: {response_text[:500]}")
-        return []
+    # Map AI scores back to articles
+    for item in scores_list:
+        idx = item.get("index")
+        if idx is not None and idx < len(articles):
+            articles[idx]["score"] = item.get("score", 50)
+            articles[idx]["bucket"] = item.get("bucket", "IndianPolitics")
+            articles[idx]["reason"] = item.get("reason", "")
 
-    scored = []
-    for result in parsed.get("results", []):
-        idx = result.get("index")
-        if idx is None or idx >= len(articles):
-            continue
-        article = dict(articles[idx])
-        article["score"] = result.get("score", 0)
-        article["tier"] = result.get("tier", "")
-        article["reason"] = result.get("reason", "")
-        scored.append(article)
+    # Group into Buckets
+    buckets = {
+        "IndianPolitics": [],
+        "StudentEducation": [],
+        "TechInnovation": [],
+    }
 
-    scored.sort(key=lambda a: a["score"], reverse=True)
-    return scored
+    for a in articles:
+        bucket = a.get("bucket", "StudentEducation")
+        if bucket in buckets:
+            buckets[bucket].append(a)
+        else:
+            buckets["StudentEducation"].append(a)
 
+    # Sort each bucket by score
+    for b in buckets:
+        buckets[b].sort(key=lambda x: x.get("score", 0), reverse=True)
 
-def chunk_list(items, size):
-    """Split a list into chunks of at most `size` items each."""
-    for i in range(0, len(items), size):
-        yield items[i:i + size]
+    # Select TOP 1 from each bucket for a balanced 3-post output
+    selected_stories = []
+    
+    if buckets["IndianPolitics"]:
+        selected_stories.append(buckets["IndianPolitics"][0])
+    if buckets["StudentEducation"]:
+        selected_stories.append(buckets["StudentEducation"][0])
+    if buckets["TechInnovation"]:
+        selected_stories.append(buckets["TechInnovation"][0])
 
+    # Fallback if any bucket was missing
+    if len(selected_stories) < 3:
+        all_sorted = sorted(articles, key=lambda x: x.get("score", 0), reverse=True)
+        for story in all_sorted:
+            if story not in selected_stories:
+                selected_stories.append(story)
+            if len(selected_stories) == 3:
+                break
 
-def rank_all():
-    """
-    Load raw articles, rank them in batches (so we don't discard most of
-    the pool just to keep one prompt small), merge all results, and save
-    the true top N to disk.
-    """
-    with open(config.RAW_ARTICLES_PATH, "r", encoding="utf-8") as f:
-        articles = json.load(f)
+    print(f"Selected {len(selected_stories)} stories (1 Politics + 1 Student + 1 Tech):")
+    for s in selected_stories:
+        print(f"  - [{s.get('bucket')}] Score: {s.get('score')} | {s.get('title')[:50]}")
 
-    batches = list(chunk_list(articles, config.ARTICLES_PER_RANKING_BATCH))
-    print(f"Ranking {len(articles)} articles across {len(batches)} batches "
-          f"of up to {config.ARTICLES_PER_RANKING_BATCH} each...")
-
-    all_scored = []
-    for i, batch in enumerate(batches):
-        print(f"\n  Batch {i + 1}/{len(batches)} ({len(batch)} articles)...")
-        scored_batch = rank_articles(batch)
-        all_scored.extend(scored_batch)
-        if i < len(batches) - 1:
-            time.sleep(config.RANKING_BATCH_DELAY_SECONDS)
-
-    all_scored.sort(key=lambda a: a["score"], reverse=True)
-
-    print(f"\nAll scored stories across all batches (for debugging):")
-    for story in all_scored:
-        print(f"  [{story['score']}] ({story['tier']}) {story['title'][:70]}")
-
-    top_stories = [a for a in all_scored if a["score"] > 0][:config.TOP_STORIES_COUNT]
-
-    print(f"\nTop {len(top_stories)} stories:")
-    for story in top_stories:
-        print(f"  [{story['score']}] ({story['tier']}) {story['title']} — {story['reason']}")
-
-    os.makedirs(os.path.dirname(config.RANKED_ARTICLES_PATH), exist_ok=True)
+    os.makedirs("output", exist_ok=True)
     with open(config.RANKED_ARTICLES_PATH, "w", encoding="utf-8") as f:
-        json.dump(top_stories, f, indent=2, ensure_ascii=False)
+        json.dump(selected_stories, f, indent=2, ensure_ascii=False)
 
-    print(f"\nSaved to {config.RANKED_ARTICLES_PATH}")
-    return top_stories
+    return selected_stories
 
 
 if __name__ == "__main__":
     rank_all()
+    
