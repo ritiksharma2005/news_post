@@ -33,7 +33,11 @@ def run_pipeline():
     if not ranked:
         print("\nNo stories made it through ranking. Stopping here.")
         return
-
+      
+    # 🔹 KEEP ONLY TOP 3 STORIES HERE:
+    ranked = ranked[:3]
+    print(f"Limiting to top {len(ranked)} stories for posting.")
+  
     print("\n" + "=" * 50)
     print("STEP 3: Rewriting headlines & summaries")
     print("=" * 50)
