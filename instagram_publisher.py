@@ -5,8 +5,8 @@ import config
 
 
 def publish_photo(image_url, caption=""):
-    token = getattr(config, "INSTAGRAM_ACCESS_TOKEN", os.getenv("EAAWH0f4vts8BSEEJCqfJRChHAFmZBTkJJ65m8aGTL3eqtNqkEU5yykIaDAQry8O7dopDHp4ETXoKrpCX3eFI3rZBXkKMJPChqgxseCs0XmOCjbIZCaqmfeTF5GLhe4MRvNtCBp5ib83sYOXrHLHfcHvIZBBamXUWB4fz4RdAYf4Y4jJsnbNVZArERFTCI", ""))
-    user_id = getattr(config, "INSTAGRAM_USER_ID", os.getenv("1237139552813418", ""))
+        token = os.getenv("INSTAGRAM_ACCESS_TOKEN") or getattr(config, "INSTAGRAM_ACCESS_TOKEN", "")
+    user_id = os.getenv("INSTAGRAM_USER_ID") or getattr(config, "INSTAGRAM_USER_ID", "")
 
     if not token or not user_id:
         print("  ⚠️ Skipping Instagram: INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID missing in config/secrets.", flush=True)
