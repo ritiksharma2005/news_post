@@ -1,3 +1,8 @@
+"""
+instagram_publisher.py
+Publishes poster cards + captions to Instagram via Meta Graph API.
+"""
+
 import os
 import time
 import requests
@@ -5,7 +10,7 @@ import config
 
 
 def publish_photo(image_url, caption=""):
-        token = os.getenv("INSTAGRAM_ACCESS_TOKEN") or getattr(config, "INSTAGRAM_ACCESS_TOKEN", "")
+    token = os.getenv("INSTAGRAM_ACCESS_TOKEN") or getattr(config, "INSTAGRAM_ACCESS_TOKEN", "")
     user_id = os.getenv("INSTAGRAM_USER_ID") or getattr(config, "INSTAGRAM_USER_ID", "")
 
     if not token or not user_id:
@@ -84,3 +89,4 @@ def publish_all(stories):
     except Exception as e:
         print(f"❌ Error in publish_all: {e}", flush=True)
         return 0
+            
