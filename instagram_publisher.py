@@ -1,64 +1,86 @@
 import os
-import requests
 import time
-import logging
+import requests
+import config
 
-logger = logging.getLogger(__name__)
 
-class InstagramPublisher:
-    def __init__(self, access_token=None, ig_user_id=None):
-        self.access_token = access_token or os.getenv("EAAWH0f4vts8BSEEJCqfJRChHAFmZBTkJJ65m8aGTL3eqtNqkEU5yykIaDAQry8O7dopDHp4ETXoKrpCX3eFI3rZBXkKMJPChqgxseCs0XmOCjbIZCaqmfeTF5GLhe4MRvNtCBp5ib83sYOXrHLHfcHvIZBBamXUWB4fz4RdAYf4Y4jJsnbNVZArERFTCI")
-        self.ig_user_id = ig_user_id or os.getenv("1237139552813418")
-        self.graph_url = f"https://graph.facebook.com/v19.0/{self.ig_user_id}"
+def publish_photo(image_url, caption=""):
+    token = getattr(config, "INSTAGRAM_ACCESS_TOKEN", os.getenv("EAAWH0f4vts8BSEEJCqfJRChHAFmZBTkJJ65m8aGTL3eqtNqkEU5yykIaDAQry8O7dopDHp4ETXoKrpCX3eFI3rZBXkKMJPChqgxseCs0XmOCjbIZCaqmfeTF5GLhe4MRvNtCBp5ib83sYOXrHLHfcHvIZBBamXUWB4fz4RdAYf4Y4jJsnbNVZArERFTCI", ""))
+    user_id = getattr(config, "INSTAGRAM_USER_ID", os.getenv("1237139552813418", ""))
 
-    def publish_photo(self, image_url: str, caption: str) -> bool:
-        """
-        Publishes a single photo post to Instagram using the Graph API.
-        Step 1: Create a media container (POST /{ig-user-id}/media)
-        Step 2: Wait for Meta to fetch the image
-        Step 3: Publish the container (POST /{ig-user-id}/media_publish)
-        """
-        if not self.access_token or not self.ig_user_id:
-            logger.error("❌ Instagram credentials missing (INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID).")
-            return False
+    if not token or not user_id:
+        print("  ⚠️ Skipping Instagram: INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID missing in config/secrets.", flush=True)
+        return False
 
-        logger.info("📸 Creating Instagram Media Container...")
-        
-        # Step 1: Create Media Container
-        container_endpoint = f"{self.graph_url}/media"
+    base_url = f"https://graph.facebook.com/v19.0/{user_id}"
+
+    try:
+        print("  Creating Instagram media container...", flush=True)
+        container_url = f"{base_url}/media"
         payload = {
             "image_url": image_url,
             "caption": caption,
-            "access_token": self.access_token
+            "access_token": token
         }
-        
-        response = requests.post(container_endpoint, data=payload)
-        res_data = response.json()
-        
-        if "id" not in res_data:
-            logger.error(f"❌ Failed to create Instagram container: {res_data}")
+
+        resp = requests.post(container_url, data=payload, timeout=30)
+        result = resp.json()
+
+        if "id" not in result:
+            print(f"  ❌ Instagram container creation failed: {result}", flush=True)
             return False
 
-        creation_id = res_data["id"]
-        logger.info(f"✅ Container created successfully! Creation ID: {creation_id}")
+        creation_id = result["id"]
+        print(f"  Container created! ID: {creation_id}. Waiting for Meta to fetch image...", flush=True)
 
-        # Wait 5 seconds to ensure Meta's servers finish downloading the image URL
         time.sleep(5)
 
-        # Step 2: Publish Container
-        logger.info("🚀 Publishing post to Instagram feed...")
-        publish_endpoint = f"{self.graph_url}/media_publish"
+        publish_url = f"{base_url}/media_publish"
         publish_payload = {
             "creation_id": creation_id,
-            "access_token": self.access_token
+            "access_token": token
         }
 
-        pub_response = requests.post(publish_endpoint, data=publish_payload)
-        pub_data = pub_response.json()
+        pub_resp = requests.post(publish_url, data=publish_payload, timeout=30)
+        pub_result = pub_resp.json()
 
-        if "id" in pub_data:
-            logger.info(f"🎉 SUCCESS! Published to Instagram! Post ID: {pub_data['id']}")
+        if "id" in pub_result:
+            print(f"  🎉 Published successfully to Instagram! Post ID: {pub_result['id']}", flush=True)
             return True
         else:
-            logger.error(f"❌ Failed to publish to Instagram: {pub_data}")
+            print(f"  ❌ Failed to publish to Instagram: {pub_result}", flush=True)
             return False
+
+    except Exception as e:
+        print(f"  ❌ Exception during Instagram publish: {e}", flush=True)
+        return False
+
+
+def publish_story(story):
+    image_url = story.get("public_image_url")
+    if not image_url:
+        print("  ⚠️ No public_image_url found for story. Skipping Instagram publish.", flush=True)
+        return False
+
+    caption_text = story.get("caption", "")
+    hashtags = story.get("hashtags", [])
+    if hashtags:
+        caption_text += "\n\n" + " ".join(hashtags)
+
+    headline = story.get("new_headline", story.get("title", ""))[:60]
+    print(f"  Publishing to IG: {headline}...", flush=True)
+    return publish_photo(image_url, caption_text)
+
+
+def publish_all(stories):
+    try:
+        print(f"\nPublishing {len(stories)} stories to Instagram...", flush=True)
+        published = 0
+        for story in stories:
+            if publish_story(story):
+                published += 1
+        print(f"Done. Published {published}/{len(stories)} stories to Instagram.", flush=True)
+        return published
+    except Exception as e:
+        print(f"❌ Error in publish_all: {e}", flush=True)
+        return 0
