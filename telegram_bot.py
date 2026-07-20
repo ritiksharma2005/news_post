@@ -1,20 +1,10 @@
-"""
-telegram_bot.py
-Sends a finished poster (image) + its caption/hashtags to your Telegram,
-one story at a time, so you can review and post manually. Also extracts
-a public image URL for Instagram publishing.
-
-Run directly to test: python telegram_bot.py
-"""
-
 import requests
 import config
 
-TELEGRAM_CAPTION_LIMIT = 1024  # Telegram's hard limit for photo captions
+TELEGRAM_CAPTION_LIMIT = 1024
 
 
 def get_telegram_file_url(file_id):
-    """Fetches the publicly accessible HTTPS URL for a file stored on Telegram's servers."""
     try:
         url = f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/getFile?file_id={file_id}"
         resp = requests.get(url, timeout=15).json()
@@ -22,17 +12,12 @@ def get_telegram_file_url(file_id):
             file_path = resp["result"]["file_path"]
             return f"https://api.telegram.org/file/bot{config.TELEGRAM_BOT_TOKEN}/{file_path}"
     except Exception as e:
-        print(f"  Error fetching Telegram file URL: {e}")
+        print(f"  Error fetching Telegram file URL: {e}", flush=True)
     return None
 
 
 def send_photo(image_path, caption=""):
-    """
-    Send a single photo with a caption to your Telegram chat.
-    Returns (success_boolean, public_image_url_or_None).
-    """
     url = f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/sendPhoto"
-
     short_enough = len(caption) <= TELEGRAM_CAPTION_LIMIT
     photo_caption = caption if short_enough else caption[:100] + "... (full caption below)"
 
@@ -43,10 +28,9 @@ def send_photo(image_path, caption=""):
 
     result = resp.json()
     if not result.get("ok"):
-        print(f"  Failed to send photo: {result}")
+        print(f"  Failed to send photo: {result}", flush=True)
         return False, None
 
-    # Get the file_id of the highest resolution photo sent to Telegram
     public_url = None
     if "result" in result and "photo" in result["result"]:
         highest_res_photo = result["result"]["photo"][-1]
@@ -60,23 +44,17 @@ def send_photo(image_path, caption=""):
 
 
 def send_message(text):
-    """Send a plain text message to your Telegram chat."""
     url = f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/sendMessage"
     payload = {"chat_id": config.TELEGRAM_CHAT_ID, "text": text}
     resp = requests.post(url, data=payload, timeout=15)
     result = resp.json()
     if not result.get("ok"):
-        print(f"  Failed to send message: {result}")
+        print(f"  Failed to send message: {result}", flush=True)
         return False
     return True
 
 
 def send_story(story):
-    """
-    Send one fully-processed story to Telegram: the poster card image,
-    followed by its caption + hashtags.
-    Saves 'public_image_url' into the story dictionary for Instagram.
-    """
     caption_text = story.get("caption", "")
     hashtags = story.get("hashtags", [])
     if hashtags:
@@ -84,10 +62,10 @@ def send_story(story):
 
     card_path = story.get("card_path")
     if not card_path:
-        print("  No card_path found for this story, skipping.")
+        print("  No card_path found for this story, skipping.", flush=True)
         return False
 
-    print(f"  Sending to Telegram: {story.get('new_headline', story.get('title', ''))[:60]}...")
+    print(f"  Sending to Telegram: {story.get('new_headline', story.get('title', ''))[:60]}...", flush=True)
     success, public_url = send_photo(card_path, caption_text)
 
     if success and public_url:
@@ -97,17 +75,10 @@ def send_story(story):
 
 
 def send_all(stories):
-    """Send a list of fully-processed stories to Telegram, one by one."""
-    print(f"Sending {len(stories)} stories to Telegram...")
+    print(f"Sending {len(stories)} stories to Telegram...", flush=True)
     sent = 0
     for story in stories:
         if send_story(story):
             sent += 1
-    print(f"Done. Sent {sent}/{len(stories)} stories to Telegram.")
+    print(f"Done. Sent {sent}/{len(stories)} stories to Telegram.", flush=True)
     return sent
-
-
-if __name__ == "__main__":
-    # Simple connectivity test — sends a plain text message
-    success = send_message("✅ telegram_bot.py test — if you see this, sending works.")
-    print("Test message sent!" if success else "Test failed — check your bot token/chat ID.")
