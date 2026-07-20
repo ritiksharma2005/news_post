@@ -2,11 +2,9 @@ name: Run News Pipeline
 
 on:
   schedule:
-    # Times are in UTC. These correspond to roughly 6am, 12pm, 5pm, 9pm IST.
-    - cron: "30 0 * * *"
-    - cron: "30 6 * * *"
-    - cron: "30 11 * * *"
-    - cron: "30 15 * * *"
+    # Times are in UTC. These correspond to roughly 8am, 6pm IST.
+    - cron: "30 2 * * *"
+    - cron: "30 12 * * *"
   workflow_dispatch: {}  # lets you trigger a run manually from the Actions tab
 
 jobs:
