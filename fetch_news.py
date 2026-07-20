@@ -1,38 +1,32 @@
 """
 fetch_news.py
-Pulls raw articles from three sources:
-- NewsData.io: pure category-based, genuine country=in filtering (no keywords)
-- GNews: keyword search using tiered priority lists (JEE/NEET/paper-leak etc.)
-- Guardian: keyword search (structurally required, no native India filter)
-Normalizes them into one common format, removes duplicate/near-duplicate
-stories, and saves the result to output/raw_articles.json.
+Pulls raw articles & updates from 4 sources:
+- NewsData.io (India national categories)
+- GNews (Tiered queries for exams/tech)
+- RSS Feeds (PIB Govt announcements, Govt Jobs, ISRO, Unstop Opportunities)
+- Guardian (International context)
 
-Run directly to test: python fetch_news.py
+Normalizes them into one common format and saves to output/raw_articles.json.
 """
 
 import json
 import os
 import re
 import requests
+import feedparser
 
 import config
 
 
 def fetch_newsdata():
-    """
-    Fetch articles from NewsData.io using pure category-based fetching —
-    NewsData's own curated "top stories" across several categories, in ONE
-    combined request. No keyword-guessing: this reflects what's actually
-    trending in India today per NewsData's own ranking.
-    """
+    """Fetch top India stories from NewsData.io."""
     articles = []
     url = "https://newsdata.io/api/1/latest"
-
     params = {
-        "apikey": config.NEWSDATA_API_KEY,
+        "apikey": getattr(config, "NEWSDATA_API_KEY", os.getenv("NEWSDATA_API_KEY", "")),
         "country": "in",
         "language": "en",
-        "category": config.NEWSDATA_CATEGORIES,
+        "category": getattr(config, "NEWSDATA_CATEGORIES", "education,technology,business,science"),
     }
     try:
         resp = requests.get(url, params=params, timeout=15)
@@ -41,32 +35,30 @@ def fetch_newsdata():
         for item in data.get("results", []):
             articles.append({
                 "source": "NewsData",
-                "query": f"categories:{config.NEWSDATA_CATEGORIES}",
+                "bucket": "CurrentAffairs",
                 "title": (item.get("title") or "").strip(),
                 "description": (item.get("description") or "").strip(),
                 "url": item.get("link"),
-                "image": item.get("image_url"),
                 "published_at": item.get("pubDate"),
             })
-    except requests.exceptions.RequestException as e:
-        print(f"[NewsData] Error fetching categories '{config.NEWSDATA_CATEGORIES}': {e}")
-        if e.response is not None:
-            print(f"[NewsData] Full error response: {e.response.text[:500]}")
+    except Exception as e:
+        print(f"[NewsData] Error: {e}")
 
     return articles
 
 
 def fetch_gnews():
-    """Fetch articles from GNews's search endpoint using the combined tiered keyword lists."""
+    """Fetch articles from GNews search."""
     articles = []
-    for query in config.GNEWS_QUERIES:
+    queries = getattr(config, "GNEWS_QUERIES", ["India engineering college", "JEE NEET exam", "AI technology India"])
+    for query in queries:
         url = "https://gnews.io/api/v4/search"
         params = {
             "q": query,
             "lang": "en",
             "country": "in",
-            "max": config.ARTICLES_PER_QUERY,
-            "apikey": config.GNEWS_API_KEY,
+            "max": 5,
+            "apikey": getattr(config, "GNEWS_API_KEY", os.getenv("GNEWS_API_KEY", "")),
         }
         try:
             resp = requests.get(url, params=params, timeout=15)
@@ -75,126 +67,62 @@ def fetch_gnews():
             for item in data.get("articles", []):
                 articles.append({
                     "source": "GNews",
-                    "query": query,
-                    "title": item.get("title", "").strip(),
-                    "description": item.get("description", "").strip(),
+                    "bucket": "StudentNews",
+                    "title": (item.get("title") or "").strip(),
+                    "description": (item.get("description") or "").strip(),
                     "url": item.get("url"),
-                    "image": item.get("image"),
                     "published_at": item.get("publishedAt"),
                 })
-        except requests.exceptions.RequestException as e:
-            print(f"[GNews] Error fetching query '{query}': {e}")
+        except Exception as e:
+            print(f"[GNews] Error for query '{query}': {e}")
+
     return articles
 
 
-def fetch_guardian():
-    """Fetch articles from The Guardian by searching for the configured topic keywords."""
+def fetch_rss_feeds():
+    """Fetch official notices, Govt Job alerts, and Student opportunities via RSS."""
     articles = []
-    for query in config.GUARDIAN_QUERIES:
-        url = "https://content.guardianapis.com/search"
-        params = {
-            "q": query,
-            "show-fields": "trailText,thumbnail,bodyText",
-            "page-size": config.ARTICLES_PER_QUERY,
-            "api-key": config.GUARDIAN_API_KEY,
-        }
+    rss_dict = getattr(config, "RSS_FEEDS", {})
+
+    for feed_name, feed_url in rss_dict.items():
         try:
-            resp = requests.get(url, params=params, timeout=15)
-            resp.raise_for_status()
-            data = resp.json()
-            for item in data.get("response", {}).get("results", []):
-                fields = item.get("fields", {})
+            feed = feedparser.parse(feed_url)
+            for entry in feed.entries[:5]:  # Take top 5 entries per RSS feed
+                title = entry.get("title", "").strip()
+                summary = re.sub(r"<[^>]+>", "", entry.get("summary", entry.get("description", ""))).strip()
+
+                bucket = "CareerJobs" if "Jobs" in feed_name or "Opportunities" in feed_name else "GovtPolicy"
+
                 articles.append({
-                    "source": "Guardian",
-                    "query": query,
-                    "title": item.get("webTitle", "").strip(),
-                    "description": fields.get("trailText", "").strip(),
-                    "url": item.get("webUrl"),
-                    "image": fields.get("thumbnail"),
-                    "published_at": item.get("webPublicationDate"),
+                    "source": f"RSS_{feed_name}",
+                    "bucket": bucket,
+                    "title": title,
+                    "description": summary[:300],
+                    "url": entry.get("link", ""),
+                    "published_at": entry.get("published", ""),
                 })
-        except requests.exceptions.RequestException as e:
-            print(f"[Guardian] Error fetching query '{query}': {e}")
+            print(f"[RSS] Successfully fetched {len(feed.entries[:5])} items from {feed_name}")
+        except Exception as e:
+            print(f"[RSS] Error fetching {feed_name}: {e}")
+
     return articles
-
-
-
-
-
-# Common words that don't help identify whether two headlines are about
-# the same story (skip them when comparing).
-STOPWORDS = {
-    "the", "a", "an", "in", "on", "at", "to", "of", "for", "and", "or",
-    "is", "are", "was", "were", "with", "by", "as", "amid", "over", "its",
-}
-
-
-def title_words(title):
-    """Extract meaningful lowercase words from a title, dropping stopwords."""
-    words = re.findall(r"[a-z0-9]+", title.lower())
-    return {w for w in words if w not in STOPWORDS and len(w) > 2}
-
-
-def title_similarity(a, b):
-    """
-    Return a 0-1 similarity score between two titles using word overlap
-    (Jaccard similarity). This handles headlines that describe the same
-    event with different wording/order much better than character diffing.
-    e.g. "India wins cricket match against Australia" vs
-         "India defeats Australia in cricket match" -> high overlap
-    """
-    words_a, words_b = title_words(a), title_words(b)
-    if not words_a or not words_b:
-        return 0.0
-    intersection = words_a & words_b
-    union = words_a | words_b
-    return len(intersection) / len(union)
-
-
-def dedupe_articles(articles, threshold=0.45):
-    """
-    Remove near-duplicate stories (same event reported by multiple outlets
-    or matched by more than one query). Keeps the first occurrence.
-    """
-    unique = []
-    for article in articles:
-        if not article["title"]:
-            continue
-        is_duplicate = any(
-            title_similarity(article["title"], existing["title"]) >= threshold
-            for existing in unique
-        )
-        if not is_duplicate:
-            unique.append(article)
-    return unique
 
 
 def fetch_all():
-    """Fetch from all sources, dedupe, and save to disk."""
-    print("Fetching from NewsData.io (India-only, category-based)...")
-    newsdata_articles = fetch_newsdata()
-    print(f"  -> {len(newsdata_articles)} articles")
+    """Fetch all sources and save to output/raw_articles.json."""
+    print("Fetching raw articles from APIs and RSS feeds...")
+    all_articles = []
+    all_articles.extend(fetch_newsdata())
+    all_articles.extend(fetch_gnews())
+    all_articles.extend(fetch_rss_feeds())
 
-    print("Fetching from GNews (keyword tiers)...")
-    gnews_articles = fetch_gnews()
-    print(f"  -> {len(gnews_articles)} articles")
+    os.makedirs("output", exist_ok=True)
+    out_path = "output/raw_articles.json"
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(all_articles, f, indent=2, ensure_ascii=False)
 
-    print("Fetching from The Guardian (keyword topics)...")
-    guardian_articles = fetch_guardian()
-    print(f"  -> {len(guardian_articles)} articles")
-
-    all_articles = newsdata_articles + gnews_articles + guardian_articles
-    print(f"Total before dedupe: {len(all_articles)}")
-
-    deduped = dedupe_articles(all_articles)
-    print(f"Total after dedupe: {len(deduped)}")
-
-    os.makedirs(os.path.dirname(config.RAW_ARTICLES_PATH), exist_ok=True)
-    with open(config.RAW_ARTICLES_PATH, "w", encoding="utf-8") as f:
-        json.dump(deduped, f, indent=2, ensure_ascii=False)
-
-    print(f"Saved to {config.RAW_ARTICLES_PATH}")
-    return deduped
+    print(f"Total fetched: {len(all_articles)} items saved to {out_path}")
+    return all_articles
 
 
 if __name__ == "__main__":
