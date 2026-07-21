@@ -1,11 +1,14 @@
-name: Run News Pipeline
+name: Run News & Life Mantra Pipeline
 
 on:
   schedule:
-    # Times are in UTC. These correspond to roughly 8am, 6pm IST.
+    # 7:00 AM IST (01:30 AM UTC) - 🌅 Life Mantra Morning Quote
+    - cron: "30 1 * * *"
+    # 8:00 AM IST (02:30 AM UTC) - 📰 Morning News Brief
     - cron: "30 2 * * *"
+    # 6:00 PM IST (12:30 PM UTC) - 🌆 Evening News Brief
     - cron: "30 12 * * *"
-  workflow_dispatch: {}  # lets you trigger a run manually from the Actions tab
+  workflow_dispatch: {}
 
 jobs:
   run-pipeline:
@@ -22,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run the pipeline
+      - name: Run Pipeline
         env:
           GNEWS_API_KEY: ${{ secrets.GNEWS_API_KEY }}
           GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
@@ -33,4 +36,5 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
-        run: python main.py
+        run: python main.py --mode auto
+        

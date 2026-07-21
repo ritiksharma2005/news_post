@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "theme": "Education",
+    "day": "Tuesday",
+    "quote_en": "Arise, awake and stop not till the goal is reached.",
+    "quote_hi": "उठो, जागो और तब तक मत रुको जब तक लक्ष्य प्राप्त न हो जाए।",
+    "author": "Swami Vivekananda",
+    "used": false
+  },
+  {
+    "id": 2,
+    "theme": "Career",
+    "day": "Monday",
+    "quote_en": "Dream is not that which you see while sleeping, it is something that does not let you sleep.",
+    "quote_hi": "सपने वो नहीं जो आप सोते समय देखते हैं, सपने वो हैं जो आपको सोने नहीं देते।",
+    "author": "Dr. A.P.J. Abdul Kalam",
+    "used": false
+  },
+  {
+    "id": 3,
+    "theme": "Leadership",
+    "day": "Thursday",
+    "quote_en": "Cultivation of mind should be the ultimate aim of human existence.",
+    "quote_hi": "मन का विकास मानव अस्तित्व का अंतिम लक्ष्य होना चाहिए।",
+    "author": "Dr. B.R. Ambedkar",
+    "used": false
+  }
+]
