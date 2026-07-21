@@ -10,15 +10,195 @@ import datetime
 import ai_client
 import config
 
-# Day-based Theme & Author Pool
 DAY_THEMES = {
-    "Monday": {"theme": "Career & Ambition", "focus": "Placements, Exams, Discipline", "authors": ["Dr. A.P.J. Abdul Kalam", "Steve Jobs", "Elon Musk", "Chanakya"]},
-    "Tuesday": {"theme": "Education & Mastery", "focus": "Learning, Focus, Knowledge", "authors": ["Swami Vivekananda", "Dr. B.R. Ambedkar", "Savitribai Phule", "Albert Einstein"]},
-    "Wednesday": {"theme": "Resilience & Courage", "focus": "Overcoming Failure, Persistence", "authors": ["Bhagat Singh", "Subhas Chandra Bose", "Nelson Mandela", "Winston Churchill"]},
-    "Thursday": {"theme": "Leadership & Character", "focus": "Integrity, Vision, Ethics", "authors": ["Sardar Vallabhbhai Patel", "Mahatma Gandhi", "Abraham Lincoln", "Atal Bihari Vajpayee"]},
-    "Friday": {"theme": "Success & Innovation", "focus": "Hard Work, Breakthroughs", "authors": ["Dr. A.P.J. Abdul Kalam", "Nikola Tesla", "Bill Gates", "ISRO Scientists"]},
-    "Saturday": {"theme": "Life & Mindset", "focus": "Mindset, Gratitude, Growth", "authors": ["Rabindranath Tagore", "Marcus Aurelius", "Stephen Hawking", "Mother Teresa"]},
-    "Sunday": {"theme": "Peace & Reflection", "focus": "Mindfulness, Purpose", "authors": ["Swami Vivekananda", "Gautama Buddha", "Mahatma Gandhi", "Lao Tzu"]},
+    "Monday": {
+        "theme": "Career & Ambition",
+        "focus": "Placements, Careers, Discipline, Goals",
+        "authors": [
+            "Dr. A.P.J. Abdul Kalam",
+            "Steve Jobs",
+            "Elon Musk",
+            "Chanakya",
+            "Ratan Tata",
+            "Narayana Murthy",
+            "Nandan Nilekani",
+            "Bill Gates",
+            "Jeff Bezos",
+            "Sundar Pichai",
+            "Satya Nadella",
+            "Indra Nooyi",
+            "Warren Buffett",
+            "Jack Ma",
+            "Dhirubhai Ambani",
+            "Azim Premji",
+            "Kiran Mazumdar-Shaw",
+            "Shiv Nadar",
+            "Tim Cook",
+            "Larry Page"
+        ]
+    },
+
+    "Tuesday": {
+        "theme": "Education & Learning",
+        "focus": "Knowledge, Curiosity, Wisdom",
+        "authors": [
+            "Swami Vivekananda",
+            "Dr. B.R. Ambedkar",
+            "Savitribai Phule",
+            "Albert Einstein",
+            "Rabindranath Tagore",
+            "Confucius",
+            "Aristotle",
+            "Socrates",
+            "Plato",
+            "Maria Montessori",
+            "A.P.J. Abdul Kalam",
+            "C.V. Raman",
+            "Homi J. Bhabha",
+            "Aryabhata",
+            "Dr. Vikram Sarabhai",
+            "Abdul Kalam Azad",
+            "J. Krishnamurti",
+            "Carl Sagan",
+            "Richard Feynman",
+            "Stephen Hawking"
+        ]
+    },
+
+    "Wednesday": {
+        "theme": "Resilience & Courage",
+        "focus": "Failure, Persistence, Determination",
+        "authors": [
+            "Bhagat Singh",
+            "Subhas Chandra Bose",
+            "Nelson Mandela",
+            "Winston Churchill",
+            "Abraham Lincoln",
+            "Helen Keller",
+            "Malala Yousafzai",
+            "Thomas Edison",
+            "Michael Jordan",
+            "Muhammad Ali",
+            "Mary Kom",
+            "Milkha Singh",
+            "P.V. Sindhu",
+            "Sachin Tendulkar",
+            "M.S. Dhoni",
+            "Virat Kohli",
+            "Amitabh Bachchan",
+            "J.K. Rowling",
+            "Nick Vujicic",
+            "Rocky Balboa (Fictional)"
+        ]
+    },
+
+    "Thursday": {
+        "theme": "Leadership & Character",
+        "focus": "Integrity, Ethics, Vision",
+        "authors": [
+            "Sardar Vallabhbhai Patel",
+            "Mahatma Gandhi",
+            "Abraham Lincoln",
+            "Atal Bihari Vajpayee",
+            "Lal Bahadur Shastri",
+            "Jawaharlal Nehru",
+            "Nelson Mandela",
+            "Martin Luther King Jr.",
+            "Aung San Suu Kyi",
+            "Theodore Roosevelt",
+            "Lee Kuan Yew",
+            "Ratan Tata",
+            "Narayana Murthy",
+            "Nandan Nilekani",
+            "Simon Sinek",
+            "Peter Drucker",
+            "John C. Maxwell",
+            "Shivaji Maharaj",
+            "Sam Manekshaw",
+            "Field Marshal Cariappa"
+        ]
+    },
+
+    "Friday": {
+        "theme": "Success & Innovation",
+        "focus": "Innovation, Entrepreneurship, Progress",
+        "authors": [
+            "Nikola Tesla",
+            "Bill Gates",
+            "Steve Jobs",
+            "Elon Musk",
+            "Larry Page",
+            "Sergey Brin",
+            "Mark Zuckerberg",
+            "Sam Altman",
+            "Demis Hassabis",
+            "Sundar Pichai",
+            "Satya Nadella",
+            "Ratan Tata",
+            "Azim Premji",
+            "Dr. Vikram Sarabhai",
+            "Dr. A.P.J. Abdul Kalam",
+            "ISRO Scientists",
+            "N.R. Narayana Murthy",
+            "Kailasavadivoo Sivan",
+            "Thomas Edison",
+            "Henry Ford"
+        ]
+    },
+
+    "Saturday": {
+        "theme": "Life & Mindset",
+        "focus": "Growth, Happiness, Gratitude",
+        "authors": [
+            "Rabindranath Tagore",
+            "Marcus Aurelius",
+            "Stephen Hawking",
+            "Mother Teresa",
+            "Dalai Lama",
+            "Osho",
+            "Naval Ravikant",
+            "Brené Brown",
+            "Robin Sharma",
+            "James Clear",
+            "Simon Sinek",
+            "Leo Tolstoy",
+            "Rumi",
+            "Khalil Gibran",
+            "Thich Nhat Hanh",
+            "Wayne Dyer",
+            "Eckhart Tolle",
+            "Louise Hay",
+            "Sri Sri Ravi Shankar",
+            "Sadhguru"
+        ]
+    },
+
+    "Sunday": {
+        "theme": "Peace & Reflection",
+        "focus": "Purpose, Spirituality, Inner Peace",
+        "authors": [
+            "Swami Vivekananda",
+            "Gautama Buddha",
+            "Mahatma Gandhi",
+            "Lao Tzu",
+            "Confucius",
+            "Rumi",
+            "Kabir",
+            "Guru Nanak",
+            "Ramakrishna Paramahamsa",
+            "J. Krishnamurti",
+            "Mother Teresa",
+            "Dalai Lama",
+            "Sri Aurobindo",
+            "Paramahansa Yogananda",
+            "Osho",
+            "Sadhguru",
+            "Patanjali",
+            "Saint Augustine",
+            "Thich Nhat Hanh",
+            "Pope Francis"
+        ]
+    }
 }
 
 QUOTE_PROMPT = """You are a quote editor for @news.nit_iit (Indian college students & Gen Z) for the "Life Mantra" daily morning series.

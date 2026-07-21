@@ -71,7 +71,7 @@ def draw_camera_logo(draw, x, y, color):
     draw.ellipse([(x + 10, y + 10), (x + 26, y + 26)], fill="#FAFAF9", outline=color, width=2)
     draw.ellipse([(x + 14, y + 14), (x + 22, y + 22)], fill=color)
 
-def draw_calendar_icon(draw, x, y, color="#D95D39"):
+def draw_calendar_icon(draw, x, y, color="#972A0B"):
     """Draws a crisp vector calendar icon directly in RGB mode."""
     # Calendar Body
     draw.rounded_rectangle([(x, y + 4), (x + 24, y + 26)], radius=3, fill="#F0EAE1", outline=color, width=2)
