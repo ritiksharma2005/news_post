@@ -1,1 +1,162 @@
-[]
+[
+  {
+    "source": "RSS_NDTV_Politics",
+    "bucket": "GovtPolicy",
+    "title": "March To Delhi Stopped At Haryana Border, Farmers Return After Assurance",
+    "description": "Hundreds of farmers have been stopped at Shambhu border",
+    "url": "https://www.ndtv.com/india-news/shambhu-again-farmers-march-to-delhi-stopped-at-haryana-border-11799216#publisher=newsstand",
+    "published_at": "Tue, 21 Jul 2026 16:34:44 +0530"
+  },
+  {
+    "source": "RSS_NDTV_Politics",
+    "bucket": "GovtPolicy",
+    "title": "CJP Parliament March LIVE Updates: Minister Reaches PM Modi's House Amid Protest",
+    "description": "CJP Parliament March LIVE",
+    "url": "https://www.ndtv.com/india-news/cjp-protest-in-delhi-live-cockroach-janta-party-parliament-protest-abhijeet-dipke-jantar-mantar-sonam-wangchuk-parliament-monsoon-session-saurav-das-11794314#publisher=newsstand",
+    "published_at": "Tue, 21 Jul 2026 16:34:16 +0530"
+  },
+  {
+    "source": "RSS_NDTV_Politics",
+    "bucket": "GovtPolicy",
+    "title": "Char Dham Yatra Resumes In Uttarakhand After Temporary Suspension",
+    "description": "Routes are being monitored, and vigilance is being maintained in vulnerable areas. (Representational)",
+    "url": "https://www.ndtv.com/india-news/char-dham-yatra-resumes-in-uttarakhand-after-temporary-suspension-11800880#publisher=newsstand",
+    "published_at": "Tue, 21 Jul 2026 16:32:41 +0530"
+  },
+  {
+    "source": "RSS_NDTV_Politics",
+    "bucket": "GovtPolicy",
+    "title": "Rahul, Priyanka Gandhi Protest Outside PM's House Over Paper Leaks",
+    "description": "Rahul Gandhi said the protest was to demand accountability for the \"brutality\" against students.",
+    "url": "https://www.ndtv.com/india-news/neet-paper-leak-row-rahul-gandhi-sister-priyanka-lead-congress-protest-to-pm-modi-s-house-11800745#publisher=newsstand",
+    "published_at": "Tue, 21 Jul 2026 16:31:58 +0530"
+  },
+  {
+    "source": "RSS_NDTV_Politics",
+    "bucket": "GovtPolicy",
+    "title": "One Launch A Month Our Next Goal After Vikram-1 Success: Skyroot CEO",
+    "description": "In an exclusive interview with NDTV, Pawan Kumar Chandana spoke about Vikram-1's success.",
+    "url": "https://www.ndtv.com/india-news/one-launch-a-month-our-next-goal-after-vikram-1-success-skyroot-ceo-11799473#publisher=newsstand",
+    "published_at": "Tue, 21 Jul 2026 16:27:52 +0530"
+  },
+  {
+    "source": "RSS_TOI_Politics",
+    "bucket": "GovtPolicy",
+    "title": "CJP removes spokesperson Vijeta Dahiya, condemns 'deeply insensitive actions'",
+    "description": "",
+    "url": "https://timesofindia.indiatimes.com/india/cjp-removes-spokesperson-vijeta-dahiya-condemns-deeply-insensitive-actions/articleshow/132534529.cms",
+    "published_at": "2026-07-21T16:32:48+05:30"
+  },
+  {
+    "source": "RSS_TOI_Politics",
+    "bucket": "GovtPolicy",
+    "title": "Times Prime's Aeonic partners with Sisters in Sweat to host premium mixed football tournament",
+    "description": "Times Prime and Sisters In Sweat announced a mixed-gender football tournament in Mumbai. This event is curated by Aeonic, Times Prime's new wellness membership. The tournament will take place on Saturday, July 25, 2026, at the Wings Sports Centre. It aims to integrate holistic well-being and active ",
+    "url": "https://timesofindia.indiatimes.com/india/times-primes-aeonic-partners-with-sisters-in-sweat-to-host-premium-mixed-football-tournament/articleshow/132534486.cms",
+    "published_at": "2026-07-21T16:30:40+05:30"
+  },
+  {
+    "source": "RSS_TOI_Politics",
+    "bucket": "GovtPolicy",
+    "title": "Quote of the day by Aristotle: 'A tyrant must appear deeply religious. People are less likely to rebel because they think God is on his side'",
+    "description": "Ancient philosopher Aristotle observed that tyrants often feign piety to quell fears of injustice among their subjects. This deception leads the populace to believe their ruler is favored by the divine, thus discouraging any thoughts of rebellion. Aristotle's reflections in Politics illuminate the s",
+    "url": "https://timesofindia.indiatimes.com/india/quote-of-the-day-by-aristotle-a-tyrant-must-appear-deeply-religious-people-are-less-likely-to-rebel-because-they-think-god-is-on-his-side/articleshow/132533163.cms",
+    "published_at": "2026-07-21T16:30:00+05:30"
+  },
+  {
+    "source": "RSS_TOI_Politics",
+    "bucket": "GovtPolicy",
+    "title": "'If someone dies .... ': Delhi Police probes alleged chats ahead of CJP's 'Sansad Chalo' march",
+    "description": "Delhi Police are examining alleged chat messages from the Cockroach Janta Party's protest march.  These conversations reportedly discussed maintaining communication during potential internet shutdowns.  Some messages also referred to participants being prepared to sacrifice their lives for the cause",
+    "url": "https://timesofindia.indiatimes.com/india/if-someone-dies-delhi-police-probes-alleged-chats-ahead-of-cjps-sansad-chalo-march/articleshow/132533757.cms",
+    "published_at": "2026-07-21T15:58:35+05:30"
+  },
+  {
+    "source": "RSS_TOI_Politics",
+    "bucket": "GovtPolicy",
+    "title": "Stopped at Shambhu border on way to Delhi: Why are farmers protesting again",
+    "description": "Farmers from Punjab were stopped at the Shambhu border while heading to Delhi. They are protesting the proposed India-United States trade deal announced in February. Their primary concern involves the agriculture and dairy sectors within the agreement. Farmers fear cheaper US imports will lower dome",
+    "url": "https://timesofindia.indiatimes.com/india/stopped-at-shambhu-border-on-way-to-delhi-why-are-farmers-protesting-again/articleshow/132533704.cms",
+    "published_at": "2026-07-21T15:58:00+05:30"
+  },
+  {
+    "source": "RSS_TheHindu_National",
+    "bucket": "GovtPolicy",
+    "title": "Gujarat records 49.79 million-tonnes drop in carbon emissions in 2025-26",
+    "description": "The reduction coincides with a record 67,655 million units of electricity generated from renewable energy sources",
+    "url": "https://www.thehindu.com/news/national/gujarat/gujarat-records-4979-million-tonnes-drop-in-carbon-emissions-in-2025-26/article71248948.ece",
+    "published_at": "Tue, 21 Jul 2026 16:47:02 +0530"
+  },
+  {
+    "source": "RSS_TheHindu_National",
+    "bucket": "GovtPolicy",
+    "title": "Tamil Nadu scales up ABHA creation, 2.54 crore people covered so far",
+    "description": "ABHA, a 14-digit unique health identifier created using an Aadhaar number, is a key feature of the Union government’s Ayushman Bharat Digital Mission (ABDM), launched in 2021, enabling a digital health records ecosystem",
+    "url": "https://www.thehindu.com/news/national/tamil-nadu/tamil-nadu-scales-up-abha-creation-254-crore-people-covered-so-far/article71246052.ece",
+    "published_at": "Tue, 21 Jul 2026 16:45:49 +0530"
+  },
+  {
+    "source": "RSS_TheHindu_National",
+    "bucket": "GovtPolicy",
+    "title": "CJP protest in Delhi LIVE: Thousands regroup at protest site in Jantar Mantar",
+    "description": "Congress MPs, including Mallikarjun Kharge, Rahul Gandhi and Priyanka Gandhi, marched to PM Modi's residence over the police brutality on students; Delhi High Court has allowed Sonam Wangchuk to shift to Medanta Hospital",
+    "url": "https://www.thehindu.com/news/national/cjp-protest-delhi-jantar-mantar-sonam-wangchuk-july-21-2026/article71247869.ece",
+    "published_at": "Tue, 21 Jul 2026 16:43:42 +0530"
+  },
+  {
+    "source": "RSS_TheHindu_National",
+    "bucket": "GovtPolicy",
+    "title": "Farmers stopped at Punjab-Haryana border en route to Delhi rally against India-U.S. trade deal",
+    "description": "Farmers wanted to peacefully go to Delhi and participate in the rally but the BJP-led Haryana government has stopped them by erecting barricades, Sarwan Singh Pandher, farmer leader and coordinator of the Desh Bachao Morcha, says",
+    "url": "https://www.thehindu.com/news/national/haryana-police-close-shambu-border-ahead-of-farmers-motorcycle-rally/article71248028.ece",
+    "published_at": "Tue, 21 Jul 2026 16:42:17 +0530"
+  },
+  {
+    "source": "RSS_TheHindu_National",
+    "bucket": "GovtPolicy",
+    "title": "Cauvery Water Management Authority to meet on July 22 amid Tamil Nadu’s growing deficit in water realisation",
+    "description": "Since June 1, the start of the current water year, four reservoirs of the Cauvery basin have received around 30 tmc ft, whereas Tamil Nadu has not even received four tmc ft, says an expert in Chennai",
+    "url": "https://www.thehindu.com/news/national/tamil-nadu/cauverywater-management-authority-is-meeting-on-wednesday-amid-a-growing-deficit-in-water-realisation-by-tamil-nadu/article71245268.ece",
+    "published_at": "Tue, 21 Jul 2026 16:41:57 +0530"
+  },
+  {
+    "source": "RSS_IndianExpress_India",
+    "bucket": "GovtPolicy",
+    "title": "Rahul Gandhi, Priyanka on sit-in outside PM’s home over Delhi crackdown",
+    "description": "",
+    "url": "https://indianexpress.com/article/india/rahul-gandhi-priyanka-gandhi-vadra-sit-in-pm-modi-residence-crackdown-student-delhi-10796664/",
+    "published_at": "Tue, 21 Jul 2026 10:11:38 +0000"
+  },
+  {
+    "source": "RSS_IndianExpress_India",
+    "bucket": "GovtPolicy",
+    "title": "IIT-Roorkee tells students not to ‘show affinity to political movements like the one currently’",
+    "description": "",
+    "url": "https://indianexpress.com/article/india/iit-roorkee-bans-students-staff-cjp-protest-mahua-moitra-reacts-10796637/",
+    "published_at": "Tue, 21 Jul 2026 10:09:49 +0000"
+  },
+  {
+    "source": "RSS_IndianExpress_India",
+    "bucket": "GovtPolicy",
+    "title": "He couldn’t find anyone to fund his movie. Now this Adivasi filmmaker has won a National Film Award",
+    "description": "",
+    "url": "https://indianexpress.com/article/india/angen-national-film-award-ravi-raj-murmu-first-santhali-film-winner-10796628/",
+    "published_at": "Tue, 21 Jul 2026 10:07:19 +0000"
+  },
+  {
+    "source": "RSS_IndianExpress_India",
+    "bucket": "GovtPolicy",
+    "title": "Water levels ‘unseen in half a century’: Flooding sends thousands to relief camps in Assam",
+    "description": "",
+    "url": "https://indianexpress.com/article/india/assam-floods-upper-assam-water-levels-himanta-biswa-sarma-evacuations-simalguri-trains-10796438/",
+    "published_at": "Tue, 21 Jul 2026 08:43:52 +0000"
+  },
+  {
+    "source": "RSS_IndianExpress_India",
+    "bucket": "GovtPolicy",
+    "title": "Have your say on Aravallis: Supreme Court panel opens 21-day window for feedback",
+    "description": "",
+    "url": "https://indianexpress.com/article/india/supreme-court-aravalli-hills-committee-public-suggestions-10796350/",
+    "published_at": "Tue, 21 Jul 2026 07:37:10 +0000"
+  }
+]

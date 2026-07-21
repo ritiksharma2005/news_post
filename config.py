@@ -1,6 +1,7 @@
 """
+config.py
 Central configuration for the news pipeline.
-Loads secrets from .env and defines what we search for.
+Loads secrets from .env / GitHub Secrets and defines search queries, RSS feeds, and 3 Buckets.
 """
 
 import os
@@ -30,7 +31,7 @@ INSTAGRAM_ACCESS_TOKEN = clean_env("INSTAGRAM_ACCESS_TOKEN")
 INSTAGRAM_USER_ID = clean_env("INSTAGRAM_USER_ID")
 
 # AI Models
-GEMINI_MODEL = "gemini-3.1-flash-lite"
+GEMINI_MODEL = "gemini-2.5-flash"
 GROQ_MODEL = "llama-3.1-8b-instant"
 
 # How many top stories to keep after ranking (Set to 3)
@@ -40,7 +41,7 @@ ARTICLES_PER_RANKING_BATCH = 25
 RANKING_BATCH_DELAY_SECONDS = 3
 
 # ---- NewsData.io Settings ----
-NEWSDATA_CATEGORIES = "top,education,sports,crime,domestic"
+NEWSDATA_CATEGORIES = "top,politics,education,domestic"
 NEWSDATA_TIMEFRAME_HOURS = 24
 
 # ---- GNews Keywords ----
@@ -65,23 +66,23 @@ GNEWS_PRIORITY_2 = [
     "Scholarship India",
 ]
 
+# 🏛️ ENHANCED INDIAN POLITICS KEYWORDS (BJP, Congress, Parliament, Supreme Court)
 GNEWS_PRIORITY_3 = [
-    "India politics",
+    "BJP Congress India politics",
+    "Lok Sabha Parliament news India",
+    "Supreme Court Verdict India",
+    "Election Commission India",
     "Government policy India",
-    "Supreme Court India",
-    "Economy India",
-    "Stock market India",
-    "India cricket",
+    "New Bill Parliament India",
 ]
 
 GNEWS_QUERIES = GNEWS_PRIORITY_1 + GNEWS_PRIORITY_2 + GNEWS_PRIORITY_3
 
 # ---- The Guardian Keywords ----
 GUARDIAN_QUERIES = [
-    "India",
-    "India education",
     "India politics",
     "India government",
+    "India education",
     "India economy",
     "Artificial Intelligence",
     "Startup",
@@ -95,10 +96,22 @@ RANKED_ARTICLES_PATH = "output/ranked_articles.json"
 REWRITTEN_ARTICLES_PATH = "output/rewritten_articles.json"
 CAPTIONED_ARTICLES_PATH = "output/captioned_articles.json"
 
-# 🔹 Student & Career RSS Feeds (Free & Official)
+# 🔹 3 BUCKET RSS FEEDS (Politics, Student, Tech)
 RSS_FEEDS = {
-    "Govt_PIB": "https://pib.gov.in/RssMain.aspx?ModId=6",  # Official Govt Policies & Schemes
-    "Govt_Jobs": "https://www.jagranjosh.com/rss/josh/jobs.xml",  # Govt Job Alerts (UPSC, SSC, Banking)
-    "ISRO_Official": "https://www.isro.gov.in/rss_news.xml",  # ISRO Space & Science News
-    "Student_Opportunities": "https://unstop.com/blog/feed/",  # Hackathons, Internships, Hiring Drives
+    # 🏛️ Bucket 1: Indian Politics & Govt (NDTV, Times of India, Indian Express, PIB)
+    "NDTV_Politics": "https://feeds.feedburner.com/ndtvnews-india-news",
+    "TOI_Politics": "https://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms",
+    "TheHindu_National": "https://www.thehindu.com/news/national/feeder/default.rss",
+    "IndianExpress_India": "https://indianexpress.com/section/india/feed/",
+    "Govt_PIB": "https://pib.gov.in/RssMain.aspx?ModId=6",
+
+    # 📚 Bucket 2: Student, Exams & Placements (Jagran Josh, Unstop)
+    "Govt_Jobs": "https://www.jagranjosh.com/rss/josh/jobs.xml",
+    "Student_Opportunities": "https://unstop.com/blog/feed/",
+
+    # 🚀 Bucket 3: Tech, AI & ISRO (ISRO Official)
+    "ISRO_Official": "https://www.isro.gov.in/rss_news.xml",
 }
+
+# 🔹 Content Pillars / Buckets
+BUCKETS = ["IndianPolitics", "StudentEducation", "TechInnovation"]

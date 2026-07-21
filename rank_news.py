@@ -1,68 +1,92 @@
 """
 rank_news.py
-Scores articles and guarantees a balanced 3-post selection:
-1. Indian Politics & Government Bills/Protests
-2. Student Education, Exams & Govt Jobs
-3. Tech, AI & Innovation
+Ranks all fetched news articles into 3 Buckets:
+- Bucket 1: IndianPolitics (BJP, Congress, Parliament, Supreme Court, Govt Bills)
+- Bucket 2: StudentEducation (JEE, NEET, UPSC, GATE, IIT/NIT alerts, Placements)
+- Bucket 3: TechInnovation (AI, ISRO, Startups, Technology)
 """
 
 import json
 import os
-import time
 import ai_client
 import config
 
-RANKING_PROMPT = """You are a news editor for an Indian student & Gen Z audience (@news.nit_iit).
-Analyze the provided articles and assign a score (0-100) and a category bucket to each article.
 
-CATEGORY BUCKETS:
-1. "IndianPolitics": Indian national & state politics, BJP, Congress, party news, new Bills passed in Parliament, government policies, protests against government, Supreme Court verdicts, elections.
-2. "StudentEducation": IIT/NIT updates, JEE/NEET/UPSC exam news, paper leak scandals, student protests, campus placements, Government job alerts (UPSC, SSC, Banking).
-3. "TechInnovation": Artificial Intelligence, ISRO space launches, DRDO defense tech, Indian startup funding, tech updates.
+RANKING_PROMPT = """You are a senior news editor for @news.nit_iit (targeting Indian college students & Gen Z).
 
-SCORING RULES (0-100):
-- Score > 80: High national importance, major political move, official job alert, or major exam update.
-- Score < 40: Routine local crime, foreign news with no India connection.
+Below is a list of candidate news articles fetched from top Indian news outlets:
 
-OUTPUT FORMAT (Valid JSON Array of Objects only, no extra text):
+{articles_text}
+
+TASK: Select EXACTLY 3 top articles—one for each of the following 3 distinct buckets:
+
+1. "IndianPolitics": MUST be a major Indian political or party story involving Union Govt, Parliament, BJP, Congress, Opposition, Supreme Court verdicts, Election Commission, or key national bills/protests.
+2. "StudentEducation": MUST be a student-centric story (JEE, NEET, UPSC, GATE, IIT/NIT updates, paper leaks, campus placements, or exam alerts).
+3. "TechInnovation": MUST be a technology or science story (AI developments, ISRO rocket launches, DRDO, Tech news, or Indian startup funding).
+
+OUTPUT FORMAT (Return valid JSON array of 3 objects only, no markdown or extra text):
 [
-  {
-    "index": 0,
-    "score": 92,
-    "bucket": "IndianPolitics",
-    "reason": "Major new bill passed in Parliament affecting citizens."
-  },
-  ...
+  {{
+    "title": "exact title of selected article",
+    "url": "url of article",
+    "summary": "brief description",
+    "source": "source name",
+    "bucket": "IndianPolitics"
+  }},
+  {{
+    "title": "exact title of selected article",
+    "url": "url of article",
+    "summary": "brief description",
+    "source": "source name",
+    "bucket": "StudentEducation"
+  }},
+  {{
+    "title": "exact title of selected article",
+    "url": "url of article",
+    "summary": "brief description",
+    "source": "source name",
+    "bucket": "TechInnovation"
+  }}
 ]
-
-Articles to evaluate:
 """
 
 
+def load_raw_articles():
+    paths = [
+        getattr(config, "RAW_ARTICLES_PATH", "output/raw_articles.json"),
+        "output/raw_news.json"
+    ]
+    for p in paths:
+        if os.path.exists(p):
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    if data:
+                        return data
+            except Exception:
+                continue
+    return []
+
+
 def rank_all():
-    """Scores articles and selects 1 Indian Politics + 1 Student/Education + 1 Tech story."""
-    raw_path = config.RAW_ARTICLES_PATH
-    if not os.path.exists(raw_path):
-        print(f"Error: {raw_path} not found. Run fetch_news.py first.")
-        return []
-
-    with open(raw_path, "r", encoding="utf-8") as f:
-        articles = json.load(f)
-
+    articles = load_raw_articles()
     if not articles:
-        print("No articles to rank.")
+        print("  No raw news found to rank.")
         return []
 
-    print(f"Ranking {len(articles)} articles across Politics, Student & Tech buckets...")
+    print(f"  Ranking {len(articles)} articles into 3 Buckets (Politics, Student, Tech)...")
 
-    # Format articles for prompt
-    formatted = []
-    for i, a in enumerate(articles):
+    # Format articles list for AI
+    articles_summary = []
+    for i, a in enumerate(articles[:40]):
         title = a.get("title", "")
-        desc = a.get("description", "")[:150]
-        formatted.append(f"[{i}] {title}\nSummary: {desc}")
+        summary = a.get("summary", a.get("description", ""))[:150]
+        source = a.get("source", "News")
+        url = a.get("url", a.get("link", ""))
+        articles_summary.append(f"[{i+1}] Title: {title}\n    Source: {source}\n    Summary: {summary}\n    URL: {url}\n")
 
-    prompt = RANKING_PROMPT + "\n\n".join(formatted[:30])
+    articles_text = "\n".join(articles_summary)
+    prompt = RANKING_PROMPT.format(articles_text=articles_text)
 
     try:
         response_text = ai_client.ask_ai(prompt)
@@ -72,65 +96,25 @@ def rank_all():
         elif "```" in clean_text:
             clean_text = clean_text.split("```")[1].split("```")[0].strip()
 
-        scores_list = json.loads(clean_text)
+        ranked_stories = json.loads(clean_text)
+
+        os.makedirs("output", exist_ok=True)
+        save_path = getattr(config, "RANKED_ARTICLES_PATH", "output/ranked_articles.json")
+        with open(save_path, "w", encoding="utf-8") as f:
+            json.dump(ranked_stories, f, indent=2, ensure_ascii=False)
+
+        # Dual save for full system compatibility
+        with open("output/ranked_news.json", "w", encoding="utf-8") as f:
+            json.dump(ranked_stories, f, indent=2, ensure_ascii=False)
+
+        print(f"  Successfully ranked 3 stories into 3 Buckets:")
+        for s in ranked_stories:
+            print(f"   • [{s.get('bucket')}] {s.get('title')[:60]}")
+
+        return ranked_stories
     except Exception as e:
-        print(f"AI ranking failed or returned invalid JSON: {e}")
-        return articles[:3]
-
-    # Map AI scores back to articles
-    for item in scores_list:
-        idx = item.get("index")
-        if idx is not None and idx < len(articles):
-            articles[idx]["score"] = item.get("score", 50)
-            articles[idx]["bucket"] = item.get("bucket", "IndianPolitics")
-            articles[idx]["reason"] = item.get("reason", "")
-
-    # Group into Buckets
-    buckets = {
-        "IndianPolitics": [],
-        "StudentEducation": [],
-        "TechInnovation": [],
-    }
-
-    for a in articles:
-        bucket = a.get("bucket", "StudentEducation")
-        if bucket in buckets:
-            buckets[bucket].append(a)
-        else:
-            buckets["StudentEducation"].append(a)
-
-    # Sort each bucket by score
-    for b in buckets:
-        buckets[b].sort(key=lambda x: x.get("score", 0), reverse=True)
-
-    # Select TOP 1 from each bucket for a balanced 3-post output
-    selected_stories = []
-    
-    if buckets["IndianPolitics"]:
-        selected_stories.append(buckets["IndianPolitics"][0])
-    if buckets["StudentEducation"]:
-        selected_stories.append(buckets["StudentEducation"][0])
-    if buckets["TechInnovation"]:
-        selected_stories.append(buckets["TechInnovation"][0])
-
-    # Fallback if any bucket was missing
-    if len(selected_stories) < 3:
-        all_sorted = sorted(articles, key=lambda x: x.get("score", 0), reverse=True)
-        for story in all_sorted:
-            if story not in selected_stories:
-                selected_stories.append(story)
-            if len(selected_stories) == 3:
-                break
-
-    print(f"Selected {len(selected_stories)} stories (1 Politics + 1 Student + 1 Tech):")
-    for s in selected_stories:
-        print(f"  - [{s.get('bucket')}] Score: {s.get('score')} | {s.get('title')[:50]}")
-
-    os.makedirs("output", exist_ok=True)
-    with open(config.RANKED_ARTICLES_PATH, "w", encoding="utf-8") as f:
-        json.dump(selected_stories, f, indent=2, ensure_ascii=False)
-
-    return selected_stories
+        print(f"❌ Error ranking news: {e}")
+        return []
 
 
 if __name__ == "__main__":
