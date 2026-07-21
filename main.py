@@ -1,9 +1,10 @@
 """
 main.py
 Master Orchestrator for @news.nit_iit:
-- Mode "quote": Generates 7:00 AM "Life Mantra" Quote & Reflection
-- Mode "news": Generates 3-Bucket Student News Briefs
-- Mode "auto": Detects current time to choose quote vs news automatically
+- Scheduled 7:00 AM IST   -> Life Mantra Quote (1 post)
+- Scheduled 8:00 AM IST   -> Morning News Brief (3 posts)
+- Scheduled 6:00 PM IST   -> Evening News Brief (3 posts)
+- Manual "Run workflow"   -> BOTH Life Mantra Quote + 3 News Briefs (4 posts total!)
 """
 
 import sys
@@ -22,12 +23,12 @@ import instagram_publisher
 import generate_quote
 import design_quote_post
 
-# 🛑 Toggle True when ready to post live on Instagram!
+# 🛑 Toggle True to publish live to Instagram!
 ENABLE_INSTAGRAM_POSTING = True
 
 
 def run_quote_pipeline():
-    """Runs the 7:00 AM Life Mantra Quote Pipeline."""
+    """Runs the Life Mantra Quote Pipeline."""
     print("=" * 50)
     print("🌅 STEP 1: Fetching today's Life Mantra Quote")
     print("=" * 50)
@@ -170,19 +171,30 @@ if __name__ == "__main__":
     for arg in sys.argv[1:]:
         if arg.startswith("--mode="):
             mode = arg.split("=")[1]
-        elif arg in ["quote", "news", "auto"]:
+        elif arg in ["quote", "news", "auto", "manual"]:
             mode = arg
 
-    if mode == "auto":
-        # Check current UTC hour to determine run mode
-        utc_hour = datetime.datetime.utcnow().hour
-        if utc_hour in [1, 2]:  # Around 7am-8am IST -> Run quote first, then news
-            print("Auto-detected morning run mode: Running Life Mantra...")
-            run_quote_pipeline()
-        else:
-            run_news_pipeline()
-    elif mode == "quote":
+    if mode == "quote":
         run_quote_pipeline()
-    else:
+    elif mode == "news":
         run_news_pipeline()
-        
+    elif mode == "manual":
+        print("🚀 Manual Trigger: Publishing Life Mantra Quote + 3 News Briefs...")
+        run_quote_pipeline()
+        run_news_pipeline()
+    else:  # mode == "auto"
+        utc_hour = datetime.datetime.utcnow().hour
+        if utc_hour == 1:
+            print("🌅 Scheduled 7:00 AM IST Run: Publishing Life Mantra Quote...")
+            run_quote_pipeline()
+        elif utc_hour == 2:
+            print("📰 Scheduled 8:00 AM IST Run: Publishing Morning News Brief...")
+            run_news_pipeline()
+        elif utc_hour == 12:
+            print("🌆 Scheduled 6:00 PM IST Run: Publishing Evening News Brief...")
+            run_news_pipeline()
+        else:
+            print("🚀 Manual Run Detected: Publishing Life Mantra Quote + 3 News Briefs...")
+            run_quote_pipeline()
+            run_news_pipeline()
+            
