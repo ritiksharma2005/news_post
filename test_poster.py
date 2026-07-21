@@ -1,6 +1,7 @@
 """
 test_poster.py
-Generates sample poster cards locally without calling any APIs or using secrets.
+Generates 3 sample poster cards matching the exact News.nit_iit template layout
+with fixed emojis (📚, 🏛️, 🚀, 📌, 📸).
 
 Run: python test_poster.py
 """
@@ -13,36 +14,33 @@ os.makedirs("output/cards", exist_ok=True)
 
 print("🎨 Generating 3 sample poster cards locally...")
 
-# Sample 1: Indian Politics & Govt (Red Accent)
+# Sample 1: Student & Education (Emerald Green Theme with 📚 Books Emoji)
+design_post.create_card(
+    headline="India Unveils Bold New Education Scheme for Colleges",
+    summary="The government announced a fresh push to modernize higher education, focusing on skill-based learning and better funding for state colleges across the country.",
+    image_path=None,
+    bucket="StudentEducation",
+    language="en",
+    output_path="output/cards/test_student.png"
+)
+
+# Sample 2: Indian Politics & Govt (Saffron Red Theme with 🏛️ Capitol Emoji)
 design_post.create_card(
     headline="Parliament Passes New Education & Career Equality Bill 2026",
     summary="The Union Government has introduced a major legislative update aimed at streamlining national entrance exams, increasing recruitment transparency, and regulating coaching hubs nationwide.",
     image_path=None,
     bucket="IndianPolitics",
     language="en",
-    emoji="🏛️",
     output_path="output/cards/test_politics.png"
 )
 
-# Sample 2: Student & Exams (Green Accent)
-design_post.create_card(
-    headline="UPSC & SSC Announce Combined Recruitment for 50,000+ Vacancies",
-    summary="Official notification released for engineering and general graduate aspirants. The application portal opens tomorrow with revised age relaxation guidelines for technical candidates.",
-    image_path=None,
-    bucket="StudentEducation",
-    language="en",
-    emoji="🎓",
-    output_path="output/cards/test_student.png"
-)
-
-# Sample 3: Tech & Innovation (Purple Accent)
+# Sample 3: Tech & Innovation (Electric Purple Theme with 🚀 Rocket Emoji)
 design_post.create_card(
     headline="ISRO Successfully Launches Next-Gen AI Satellite Into Orbit",
     summary="India's space agency marks another historic milestone with the successful deployment of high-resolution Earth imaging technology built in collaboration with top IIT research labs.",
     image_path=None,
     bucket="TechInnovation",
     language="en",
-    emoji="🚀",
     output_path="output/cards/test_tech.png"
 )
 
