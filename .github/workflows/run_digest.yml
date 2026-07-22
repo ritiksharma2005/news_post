@@ -1,17 +1,13 @@
-name: Run News & Life Mantra Pipeline
+name: Run Instagram Campus Digest
 
 on:
   schedule:
-    # 7:00 AM IST (01:30 AM UTC) - 🌅 Life Mantra Morning Quote
-    - cron: "30 1 * * *"
-    # 8:00 AM IST (02:30 AM UTC) - 📰 Morning News Brief
-    - cron: "30 2 * * *"
-    # 6:00 PM IST (12:30 PM UTC) - 🌆 Evening News Brief
-    - cron: "30 12 * * *"
+    # 9:00 AM IST (03:30 AM UTC) - 🎓 Campus Digest
+    - cron: "30 3 * * *"
   workflow_dispatch: {}
 
 jobs:
-  run-pipeline:
+  run-digest:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
@@ -28,16 +24,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run Pipeline
+      - name: Run Digest Pipeline
         env:
           GNEWS_API_KEY: ${{ secrets.GNEWS_API_KEY }}
-          GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
-          NEWSDATA_API_KEY: ${{ secrets.NEWSDATA_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
-        run: python main.py --mode auto
+        run: python instagram_digest/main_digest.py
         
