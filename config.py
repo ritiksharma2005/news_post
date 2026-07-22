@@ -31,7 +31,7 @@ INSTAGRAM_ACCESS_TOKEN = clean_env("INSTAGRAM_ACCESS_TOKEN")
 INSTAGRAM_USER_ID = clean_env("INSTAGRAM_USER_ID")
 
 # AI Models
-GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_MODEL = "gemini-1.5-flash"
 GROQ_MODEL = "llama-3.1-8b-instant"
 
 # How many top stories to keep after ranking (Set to 3)

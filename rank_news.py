@@ -51,6 +51,43 @@ OUTPUT FORMAT (Return valid JSON array of 3 objects only, no markdown or extra t
 """
 
 
+def extract_json_array(text):
+    """Resilient parser that extracts and loads first JSON array [ ... ] inside conversational text."""
+    import re
+    clean_text = text.strip()
+    
+    # Remove markdown code blocks if present
+    if "```json" in clean_text:
+        clean_text = clean_text.split("```json")[1].split("```")[0].strip()
+    elif "```" in clean_text:
+        clean_text = clean_text.split("```")[1].split("```")[0].strip()
+
+    # Try direct parse
+    try:
+        return json.loads(clean_text)
+    except json.JSONDecodeError:
+        pass
+
+    # Extract using regex search for array boundaries [ ... ]
+    match = re.search(r'\[\s*\{.*\}\s*\]', clean_text, re.DOTALL)
+    if match:
+        try:
+            return json.loads(match.group(0))
+        except json.JSONDecodeError:
+            pass
+
+    # Try bracket boundaries search
+    start = clean_text.find('[')
+    end = clean_text.rfind(']')
+    if start != -1 and end != -1:
+        try:
+            return json.loads(clean_text[start:end+1])
+        except json.JSONDecodeError:
+            pass
+
+    raise ValueError("Could not extract a valid JSON array from AI output.")
+
+
 def load_raw_articles():
     paths = [
         getattr(config, "RAW_ARTICLES_PATH", "output/raw_articles.json"),
@@ -90,20 +127,14 @@ def rank_all():
 
     try:
         response_text = ai_client.ask_ai(prompt)
-        clean_text = response_text.strip()
-        if "```json" in clean_text:
-            clean_text = clean_text.split("```json")[1].split("```")[0].strip()
-        elif "```" in clean_text:
-            clean_text = clean_text.split("```")[1].split("```")[0].strip()
-
-        ranked_stories = json.loads(clean_text)
+        ranked_stories = extract_json_array(response_text)
 
         os.makedirs("output", exist_ok=True)
         save_path = getattr(config, "RANKED_ARTICLES_PATH", "output/ranked_articles.json")
         with open(save_path, "w", encoding="utf-8") as f:
             json.dump(ranked_stories, f, indent=2, ensure_ascii=False)
 
-        # Dual save for full system compatibility
+        # Dual save for full compatibility
         with open("output/ranked_news.json", "w", encoding="utf-8") as f:
             json.dump(ranked_stories, f, indent=2, ensure_ascii=False)
 
