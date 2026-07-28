@@ -22,8 +22,9 @@ TASK:
 2. Extract key facts: College Name, Event/Exam Title, Registration Deadline/Dates, Eligibility, and Why it matters for students.
 3. Rewrite into @news.nit_iit's editorial style.
 
-OUTPUT FORMAT (Valid JSON object only, no markdown formatting):
+OUTPUT FORMAT (Return valid JSON object only, no markdown formatting):
 {{
+  "selected_index": 1,  // The [1-based index] of the selected post from the list below
   "headline": "Short Catchy Headline with Emoji (e.g. 🚀 IIT Bombay Opens Registration for XYZ Hackathon)",
   "bullets": [
     "• Registration Deadline: 25 July",
@@ -31,8 +32,7 @@ OUTPUT FORMAT (Valid JSON object only, no markdown formatting):
     "• National Level Innovation Competition"
   ],
   "why_it_matters": "A great opportunity for students interested in innovation and problem-solving.",
-  "caption": "Full Instagram caption text with CTAs and hashtags",
-  "source_account": "source username"
+  "caption": "Full Instagram caption text with CTAs and hashtags"
 }}
 """
 
@@ -81,4 +81,3 @@ def rewrite_latest_digest():
 
 if __name__ == "__main__":
     rewrite_latest_digest()
-    
