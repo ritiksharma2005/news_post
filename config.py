@@ -32,8 +32,8 @@ INSTAGRAM_USER_ID = clean_env("INSTAGRAM_USER_ID")
 RAPIDAPI_KEY = clean_env("RAPIDAPI_KEY")
 
 # AI Models
-GEMINI_MODEL = "gemini-2.5-flash"
-GROQ_MODEL = "llama-3.1-8b-instant"
+GEMINI_MODEL = "gemini-2.0-flash"
+GROQ_MODEL = "llama-3.3-70b-versatile"
 
 # How many top stories to keep after ranking (Set to 3)
 TOP_STORIES_COUNT = 3
