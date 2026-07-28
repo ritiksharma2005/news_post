@@ -25,12 +25,14 @@ TASK:
 OUTPUT FORMAT (Return valid JSON object only, no markdown formatting):
 {{
   "selected_index": 1,  // The [1-based index] of the selected post from the list below
-  "headline": "Short Catchy Headline with Emoji (e.g. 🚀 IIT Bombay Opens Registration for XYZ Hackathon)",
+  "headline": "A detailed 2-line headline with emojis (Make it long enough to span exactly two lines, around 60-80 characters. E.g. 🚀 IIT Bombay Opens National Innovation Hackathon: Registration Closes This Week)",
   "bullets": [
-    "• Registration Deadline: 25 July",
-    "• Open for Engineering & Science Students",
-    "• National Level Innovation Competition"
-  ],
+    "• Registration Deadline: 25 July 2026",
+    "• Open for all B.Tech, M.Tech & Ph.D. students",
+    "• Total prize pool of 5 Lakhs with mentorship",
+    "• Direct internship interview slots for winners",
+    "• Apply online via the official institute portal"
+  ],  // MUST provide exactly 4 to 5 bullet points
   "why_it_matters": "A great opportunity for students interested in innovation and problem-solving.",
   "caption": "Full Instagram caption text with CTAs and hashtags"
 }}

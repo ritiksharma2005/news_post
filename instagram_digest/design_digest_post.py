@@ -1,7 +1,7 @@
 """
 instagram_digest/design_digest_post.py
 Generates 1080x1080 Branded Posters for "Campus Digest" Series (@news.nit_iit)
-with the original post image in the center (shrunk to prioritize larger text).
+with the original post image in the center and space for a 2-line headline & 4-5 bullets.
 """
 
 import os
@@ -33,7 +33,7 @@ def draw_camera_logo(draw, x, y, color):
 def create_digest_card(headline, bullets, why_it_matters, image_path=None, output_path="output/digest_card.png"):
     """
     Renders a 1080x1080 Square Campus Digest Poster with centered image (reduced height)
-    and larger headline + summary box.
+    and space for a 2-line headline and 4-5 bullet points.
     """
     width, height = 1080, 1080
     bg_color = "#F5EFEB"
@@ -42,8 +42,8 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
     draw = ImageDraw.Draw(card)
 
     font_brand = get_font("bold", 34)
-    font_headline = get_font("bold", 48)  # Increased from 40
-    font_bullet = get_font("regular", 32)  # Increased from 28
+    font_headline = get_font("bold", 48)
+    font_bullet = get_font("regular", 30)  # Font adjusted to 30 to guarantee 5 bullets fit
     font_footer = get_font("bold", 30)
 
     # 1. Top Stripe & Header
@@ -52,13 +52,13 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
     draw.text((930, 30), "2026", fill="#1A1A1A", font=font_brand)
     draw.line([(40, 78), (1040, 78)], fill="#1A1A1A", width=3)
 
-    # 2. Headline (Fits 1 or 2 lines)
+    # 2. Headline (Wraps into exactly 2 lines)
     y_cursor = 94
     words = headline.strip().split()
     lines = []
     cur = ""
     for w in words:
-        if len(cur + " " + w) < 32:  # Adjusted line length limit for larger font
+        if len(cur + " " + w) < 32:  # Wrapped to fit nicely in 2 lines
             cur += " " + w if cur else w
         else:
             lines.append(cur)
@@ -66,19 +66,23 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
     if cur:
         lines.append(cur)
 
+    # Draw exactly 2 lines (pad with empty line if only 1 line was generated)
+    while len(lines) < 2:
+        lines.append("")
+        
     for line in lines[:2]:
         draw.text((40, y_cursor), line, fill="#1A1A1A", font=font_headline)
-        y_cursor += 54  # Increased spacing
+        y_cursor += 54
 
     # Underline
     y_cursor += 12
     draw.rectangle([(40, y_cursor), (260, y_cursor + 6)], fill=accent_color)
     draw.line([(260, y_cursor + 3), (1040, y_cursor + 3)], fill="#1A1A1A", width=2)
 
-    # 3. Fixed Summary Box Proportions (anchored at bottom)
+    # 3. Fixed Taller Summary Box Proportions (anchored at bottom)
     footer_y = 1022
     box_bottom = footer_y - 20
-    box_height = 370  # Increased box height for larger text
+    box_height = 420  # Expanded to 420px to hold up to 5 bullets comfortably
     box_top = box_bottom - box_height
     box_left, box_right = 40, 1040
 
@@ -118,15 +122,15 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
     draw.rounded_rectangle([(box_left, box_top), (box_right, box_bottom)], radius=12, fill="#E0F2FE", outline="#BAE6FD", width=2)
     draw.rectangle([(box_left, box_top), (box_left + 14, box_bottom)], fill=accent_color)
 
-    # Draw Bullets inside box
-    sum_y = box_top + 24
-    line_height = 44  # Increased line height
-    for b in bullets[:3]:
+    # Draw up to 5 Bullets inside box
+    sum_y = box_top + 22
+    line_height = 42  # Spacing adjusted for 5 bullets
+    for b in bullets[:5]:
         draw.text((72, sum_y), b, fill="#0369A1", font=font_bullet)
         sum_y += line_height
 
-    # Draw Why It Matters inside box (Bigger font size)
-    sum_y += 14
+    # Draw Why It Matters inside box
+    sum_y += 10
     draw.text((72, sum_y), f"💡 Why it matters: {why_it_matters[:100]}...", fill="#075985", font=get_font("bold", 26))
 
     # 6. Footer Watermark (📸 @news.nit_iit)
