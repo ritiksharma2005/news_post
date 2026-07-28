@@ -29,9 +29,10 @@ TELEGRAM_BOT_TOKEN = clean_env("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = clean_env("TELEGRAM_CHAT_ID")
 INSTAGRAM_ACCESS_TOKEN = clean_env("INSTAGRAM_ACCESS_TOKEN")
 INSTAGRAM_USER_ID = clean_env("INSTAGRAM_USER_ID")
+RAPIDAPI_KEY = clean_env("RAPIDAPI_KEY")
 
 # AI Models
-GEMINI_MODEL = "gemini-1.5-flash"
+GEMINI_MODEL = "gemini-2.5-flash"
 GROQ_MODEL = "llama-3.1-8b-instant"
 
 # How many top stories to keep after ranking (Set to 3)
