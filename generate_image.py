@@ -4,6 +4,7 @@ Entity-Based Image Decision Engine:
 1. Check Local Asset Cache (Narendra Modi, Rahul Gandhi, Amit Shah, Parliament)
 2. Check Whitelist for Web Search (ISRO, DRDO, IITs, NTA, NEET, JEE, etc.)
 3. Fallback to Flux AI Generation for generic/tech concepts.
+4. Final Fallback to assets/default_fallback.jpg if generation fails or times out.
 Supports both English and Hindi keyword mapping.
 """
 
@@ -48,7 +49,7 @@ REAL_IMAGE_KEYWORDS = [
 # Hindi equivalents mapped to English keywords
 HINDI_KEYWORD_MAPPINGS = {
     "मोदी": "narendra modi", "नरेंद्र मोदी": "narendra modi",
-    "अमित शाह": "amit shah", "अमित": "amit shah",
+    "अमित": "amit shah", "अमित शाह": "amit shah",
     "राहुल": "rahul gandhi", "राहुल गांधी": "rahul gandhi",
     "संसद": "parliament", "लोकसभा": "parliament", "राज्यसभा": "parliament",
     "इसरो": "isro", "आईआईटी": "iit", "एनआईटी": "nit",
@@ -117,6 +118,7 @@ def generate_image(prompt, summary="", output_path="output/images/story.jpg", wi
     1. Local asset cache if it matches Modi, Rahul, Amit Shah, or Parliament.
     2. Web search if it matches whitelisted entities.
     3. Flux AI generation for everything else.
+    4. Copies assets/default_fallback.jpg if all else fails.
     """
     is_quote = (width == 1080 and height == 1080)
     
@@ -171,6 +173,16 @@ def generate_image(prompt, summary="", output_path="output/images/story.jpg", wi
         return output_path
     except Exception as e:
         print(f"  AI generation failed: {e}")
+        # Final fallback to standard template image
+        fallback_path = "assets/default_fallback.jpg"
+        if os.path.exists(fallback_path):
+            print(f"  🚨 All methods failed. Falling back to default image: {fallback_path}")
+            try:
+                os.makedirs(os.path.dirname(output_path), exist_ok=True)
+                shutil.copy(fallback_path, output_path)
+                return output_path
+            except Exception as err:
+                print(f"  Failed to copy default fallback: {err}")
         return None
 
 

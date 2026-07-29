@@ -39,6 +39,24 @@ DEFAULT_COLOR = {
     "tint_border": "#F8C6B9", 
     "text_dark": "#6E2A1A",
 }
+def resize_and_crop(img, target_width, target_height):
+    """Resizes and crops the image to completely fill the target dimensions (cover fit)."""
+    img_width, img_height = img.size
+    scale_x = target_width / img_width
+    scale_y = target_height / img_height
+    scale = max(scale_x, scale_y)
+    
+    new_width = int(img_width * scale)
+    new_height = int(img_height * scale)
+    
+    resized = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+    
+    left = (new_width - target_width) // 2
+    top = (new_height - target_height) // 2
+    right = left + target_width
+    bottom = top + target_height
+    
+    return resized.crop((left, top, right, bottom))
 
 
 def get_font(font_type="bold", size=32):
@@ -177,7 +195,7 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", langua
     if image_path and os.path.exists(image_path):
         try:
             main_img = Image.open(image_path).convert("RGB")
-            main_img = main_img.resize((1000, image_height), Image.Resampling.LANCZOS)
+            main_img = resize_and_crop(main_img, 1000, image_height)
             card.paste(main_img, (40, image_top))
             # Draw a crisp, thin border around the photo to match the editorial template
             draw.rectangle([(40, image_top), (1040, image_top + image_height)], outline="#1A1A1A", width=2)

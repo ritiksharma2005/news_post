@@ -50,6 +50,27 @@ def strip_emojis(text):
     return re.sub(r'[\U00010000-\U0010ffff\u2600-\u27bf\u2b50\u2b06\u2192]', '', text).strip()
 
 
+
+def resize_and_crop(img, target_width, target_height):
+    """Resizes and crops the image to completely fill the target dimensions (cover fit)."""
+    img_width, img_height = img.size
+    scale_x = target_width / img_width
+    scale_y = target_height / img_height
+    scale = max(scale_x, scale_y)
+    
+    new_width = int(img_width * scale)
+    new_height = int(img_height * scale)
+    
+    resized = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+    
+    left = (new_width - target_width) // 2
+    top = (new_height - target_height) // 2
+    right = left + target_width
+    bottom = top + target_height
+    
+    return resized.crop((left, top, right, bottom))
+
+
 def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", output_path="output/cards/hindi_card.png"):
     """Renders a square poster card in Hindi."""
     theme = BUCKET_COLORS.get(bucket, DEFAULT_COLOR)
@@ -69,9 +90,11 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     # 1. Top Accent Stripe
     draw.rectangle([(0, 0), (width, 18)], fill=accent_color)
 
-    # 2. Header Bar (Date top-left, Brand logo top-right)
+    # 2. Header Bar (Date top-left, Brand logo top-right dynamically aligned)
     draw.text((40, 30), "2026", fill="#1A1A1A", font=font_header)
-    draw.text((850, 30), "समाचार.nit_iit", fill="#1A1A1A", font=font_header)
+    logo_w = draw.textlength("समाचार.nit_iit", font=font_header)
+    logo_x = 1040 - logo_w
+    draw.text((logo_x, 30), "समाचार.nit_iit", fill="#1A1A1A", font=font_header)
     draw.line([(40, 78), (1040, 78)], fill="#1A1A1A", width=3)
 
     # 3. DYNAMIC Hindi Headline Section (Centered horizontally!)
@@ -82,7 +105,7 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     headline_lines = []
     cur_line = ""
     for w in words:
-        if len(cur_line + " " + w) < 32:
+        if len(cur_line + " " + w) < 38:
             cur_line += " " + w if cur_line else w
         else:
             headline_lines.append(cur_line)
@@ -108,7 +131,7 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     sum_lines = []
     cur_sum = ""
     for w in sum_words:
-        if len(cur_sum + " " + w) < 46:
+        if len(cur_sum + " " + w) < 52:
             cur_sum += " " + w if cur_sum else w
         else:
             sum_lines.append(cur_sum)
@@ -136,7 +159,7 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     if image_path and os.path.exists(image_path):
         try:
             main_img = Image.open(image_path).convert("RGB")
-            main_img = main_img.resize((1000, image_height), Image.Resampling.LANCZOS)
+            main_img = resize_and_crop(main_img, 1000, image_height)
             card.paste(main_img, (40, image_top))
             draw.rectangle([(40, image_top), (1040, image_top + image_height)], outline="#1A1A1A", width=2)
         except Exception as e:

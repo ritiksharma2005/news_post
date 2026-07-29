@@ -16,8 +16,8 @@ Title: {title}
 Description: {description}
 
 Write:
-1. A detailed 2-line headline in HINDI with emojis (E.g. 🚀 छात्र ऋण पर बड़ा फैसला: केंद्रीय बजट 2026 में नीतिगत बदलावों की घोषणा)
-2. A detailed 3-4 line summary in HINDI (around 50-70 words) explaining the key facts in plain, engaging, young-audience Hindi (E.g. "सरकार ने छात्रों के हितों को ध्यान में रखते हुए काउंसलिंग प्रक्रिया को पहले से आसान बनाने का निर्णय लिया है। नए दिशा-निर्देशों के लागू होने के बाद परीक्षा केंद्रों पर हो रही असुविधा दूर होगी और उम्मीदवारों को राहत मिलेगी।")
+1. A punchy headline in HINDI with emojis (MAX 12 words or 65 characters) so it fits on exactly 2 lines (E.g. 🚀 छात्र ऋण पर बड़ा फैसला: बजट 2026 में बड़ा बदलाव)
+2. A detailed 3-4 line summary in HINDI (around 50-65 words) explaining the key facts in plain, engaging, young-audience Hindi.
 3. A detailed, descriptive image generation prompt IN ENGLISH to generate a photorealistic news photo representing this story (E.g. "A professional news photograph of Indian college students working in a modern computer lab, natural lighting, high detail, editorial look"). Avoid text, words, or logos.
 
 Return ONLY a JSON object in this exact format, nothing else, no markdown fences:
