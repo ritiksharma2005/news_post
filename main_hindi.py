@@ -112,6 +112,7 @@ def run_hindi_pipeline(dry_run=False):
             prompt=image_prompt,
             summary="",
             output_path=f"output/images/story_hindi_{i}.jpg",
+            headline=headline
         )
         
         # 3. Render Hindi Card Poster

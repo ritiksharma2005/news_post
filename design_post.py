@@ -110,12 +110,12 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", langua
     # 1. Top Accent Stripe
     draw.rectangle([(0, 0), (width, 18)], fill=accent_color)
 
-    # 2. Header Bar (News.nit_iit ...... 2026)
-    draw.text((40, 30), "News.nit_iit", fill="#1A1A1A", font=font_header)
-    draw.text((930, 30), "2026", fill="#1A1A1A", font=font_header)
+    # 2. Header Bar (Date top-left, Brand logo top-right)
+    draw.text((40, 30), "2026", fill="#1A1A1A", font=font_header)
+    draw.text((880, 30), "news.nit_iit", fill="#1A1A1A", font=font_header)
     draw.line([(40, 78), (1040, 78)], fill="#1A1A1A", width=3)
 
-    # 3. FULLY DYNAMIC Headline Section (Fits 1, 2, 3, or 4 lines naturally!)
+    # 3. FULLY DYNAMIC Headline Section (Centered horizontally!)
     y_cursor = 94
     clean_headline = strip_emojis(headline)
 
@@ -132,7 +132,10 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", langua
         headline_lines.append(cur_line)
 
     for line in headline_lines:
-        draw.text((40, y_cursor), line, fill="#1A1A1A", font=font_headline)
+        # Calculate line width to center it horizontally
+        line_w = draw.textlength(line, font=font_headline)
+        line_x = max(40, int((width - line_w) // 2))
+        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline)
         y_cursor += 48
 
     # Accent Underline
@@ -189,17 +192,20 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", langua
     draw.rounded_rectangle([(box_left, box_top), (box_right, box_bottom)], radius=12, fill=theme["tint_bg"], outline=theme["tint_border"], width=2)
     draw.rectangle([(box_left, box_top), (box_left + 12, box_bottom)], fill=accent_color)
 
-    # Draw Summary Lines inside box
+    # Draw Summary Lines inside box (Centered horizontally inside the summary box!)
     sum_y = box_top + box_padding_vertical
     for line in display_summary_lines:
-        draw.text((68, sum_y), line, fill=theme["text_dark"], font=font_summary)
+        line_w = draw.textlength(line, font=font_summary)
+        # Center inside the box (from box_left=40 to box_right=1040, center is 540)
+        line_x = max(68, int(box_left + (box_right - box_left - line_w) // 2))
+        draw.text((line_x, sum_y), line, fill=theme["text_dark"], font=font_summary)
         sum_y += line_height
 
     # 6. Footer Watermark (📸 @news.nit_iit)
-    draw_camera_logo(draw, footer_center_x, footer_y + 2, accent_color)
-    draw.text((footer_center_x + 46, footer_y), "@news.nit_iit", fill=accent_color, font=font_footer)
+    draw_camera_logo(draw, footer_center_x, footer_y, accent_color)
+    draw.text((footer_center_x + 46, footer_y + 4), "@news.nit_iit", fill="#1A1A1A", font=font_footer)
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    card.save(output_path)
+    card.save(output_path, "PNG")
     print(f"  Square Poster Generated: {output_path} (Headline: {len(headline_lines)} lines, Summary: {len(display_summary_lines)} lines)")
     return output_path

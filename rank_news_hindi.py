@@ -19,9 +19,9 @@ Below is a list of candidate Hindi news articles fetched from top Indian news ou
 
 TASK: Select EXACTLY 3 top articles—one for each of the following 3 distinct buckets:
 
-1. "IndianPolitics": MUST be a major political or government story involving India's national politics, election updates, parliament bills, BJP, Congress, or Supreme Court decisions.
-2. "StudentEducation": MUST be a student-centric news item (exams like UPSC, SSC, NEET, JEE, GATE, CBSE, admission alerts, placements, paper leaks).
-3. "TechInnovation": MUST be a technology, science, space (ISRO, DRDO), AI development, or startup story.
+1. "IndianPolitics": MUST be a major political news story focusing on Indian national politics, youth policies, political protests, parliament debates (BJP, Congress, leaders), or significant national political controversies.
+2. "StudentEducation": MUST be a youth-centric or student controversy news item (e.g. paper leaks, student protests, college union clashes, campus placement controversies, viral student trends, or major policies affecting youth/teenagers). Avoid dry, official exam notices.
+3. "TechInnovation": MUST be a viral technology, science, space (ISRO, DRDO), AI impact on jobs, or hot Indian startup funding news.
 
 OUTPUT FORMAT (Return a valid JSON array of 3 objects only, no markdown formatting, no conversational text, no triple backticks):
 [

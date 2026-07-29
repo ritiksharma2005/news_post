@@ -2,30 +2,31 @@
   {
     "title": "फायरिंग, गृहमंत्री और इस्तीफा... राहुल के आरोपों का BJP ने दिया जवाब",
     "url": "https://www.aajtak.in/india/news/story/rahul-gandhi-vs-bjp-student-protest-allegation-amit-shah-resignation-demand-ntc-dhrj-dskc-2611348-2026-07-29",
-    "summary": "BJP responds to Rahul Gandhi's allegations",
+    "summary": "BJP responds to Rahul Gandhi's allegations regarding student protests and firing incident",
     "source": "AajTak",
     "bucket": "IndianPolitics",
-    "new_headline": "राजनीतिक तकरार में बीजेपी का पलटवार: राहुल गांधी के आरोपों पर जवाब 📰👊",
-    "new_summary": "कांग्रेस नेता राहुल गांधी के आरोपों पर बीजेपी ने जवाब दिया है। राहुल गांधी ने फायरिंग और गृहमंत्री के इस्तीफे पर सवाल उठाए थे।",
-    "image_prompt": "A professional news photograph of a BJP spokesperson standing at a podium, facing a crowd of journalists with microphones and cameras, in a well-lit conference room with Indian flags in the background, high detail, editorial look"
+    "new_headline": "फायरिंग विवाद: गृहमंत्री पर राहुल के आरोपों का BJP ने दिया जवाब 🚨👮, छात्र प्रदर्शन मामले में सरकार की स्थिति स्पष्ट 📰",
+    "new_summary": "BJP ने राहुल गांधी के आरोपों का जवाब देते हुए कहा कि छात्र प्रदर्शन मामले में सरकार ने सही कदम उठाए हैं। गृहमंत्री ने स्थिति को संभाला और शांति बहाल करने का प्रयास किया।",
+    "image_prompt": "A professional news photograph of a press conference with Indian politicians and officials seated at a table, with a backdrop of Indian flags and microphones, natural lighting, high detail, editorial look"
   },
   {
     "title": "NEET प्रदर्शन मामले में Bihar Police का अजीब कारनामा!",
     "url": "https://www.aajtak.in/short-videos/video/bihar-student-claims-false-fir-despite-staying-in-russia-during-neet-protest-government-withdraws-cases-officially-now-mmta-2611355-2026-07-29",
-    "summary": "Bihar Police's unusual action in NEET protest case",
+    "summary": "Bihar Police's unusual move in the NEET protest case, student claims false FIR despite being in Russia",
     "source": "AajTak",
     "bucket": "StudentEducation",
-    "new_headline": "🚨 परीक्षा विवाद में बिहार पुलिस का आश्चर्यकारी कदम! 🚨 NEET प्रदर्शन मामले में बड़ा फैसला",
-    "new_summary": "बिहार पुलिस ने NEET प्रदर्शन मामले में एक अजीबोगरीब कार्रवाई की है, जिसमें कई छात्रों को हिरासत में लिया गया है। इस कार्रवाई को लेकर कई सवाल उठ रहे हैं।",
-    "image_prompt": "A professional news photograph of a group of Indian students protesting on a street, with police personnel in the background, natural lighting, high detail, editorial look"
+    "new_headline": "🚨 NEET विवाद में बिहार पुलिस का बड़ा कारनामा! 📚 छात्र रूस में होने के बावजूद झूठी FIR का आरोप",
+    "new_summary": "बिहार पुलिस ने NEET प्रदर्शन मामले में एक अजीब कदम उठाया है, एक छात्र ने आरोप लगाया है कि उसके खिलाफ झूठी FIR दर्ज की गई है जबकि वह रूस में है।",
+    "image_prompt": "A professional news photograph of a young Indian student sitting in front of a laptop with a Russian cityscape visible through the window, looking worried and stressed, natural lighting, high detail, editorial look"
   },
   {
     "title": "अब खर्च छुप नहीं पाएगा! Google Pay में AI फीचर्स, आया वर्चुअल कार्ड",
     "url": "https://www.aajtak.in/technology/tech-news/story/google-pay-ai-feature-ask-google-pay-india-ttecm-dskc-2611385-2026-07-29",
+    "summary": "Google Pay introduces AI features and virtual card to track expenses",
     "source": "AajTak",
     "bucket": "TechInnovation",
-    "new_headline": "📈 डिजिटल पेमेंट में क्रांति: Google Pay में आया वर्चुअल कार्ड और AI फीचर्स 🚀, अब खर्च की जानकारी छुपाना मुश्किल!",
-    "new_summary": "गूगल पे में वर्चुअल कार्ड और एआई फीचर्स की शुरुआत हुई है। यह सुविधा यूजर्स के लिए खर्च को ट्रैक करना और पारदर्शिता बढ़ाने में मदद करेगी।",
-    "image_prompt": "A professional news photograph of a young Indian person holding a smartphone with Google Pay open on the screen, with a blurred background of a modern coffee shop or mall, natural lighting, high detail, editorial look"
+    "new_headline": "अब खर्च छुप नहीं पाएगा! 📊💸 Google Pay में AI फीचर्स और वर्चुअल कार्ड की शुरुआत, जानें नए फीचर्स के बारे में",
+    "new_summary": "गूगल पे ने अपने उपयोगकर्ताओं के लिए AI फीचर्स और वर्चुअल कार्ड पेश किए हैं, जिससे वे अपने खर्चों पर आसानी से नज़र रख सकेंगे। यह सुविधा बजट बनाने और प्रबंधन में मदद करेगी।",
+    "image_prompt": "A modern smartphone screen displaying Google Pay app with virtual card and AI features, on a wooden desk with a wallet and credit cards in the background, natural lighting, high detail, editorial look"
   }
 ]

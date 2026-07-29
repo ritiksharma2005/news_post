@@ -69,12 +69,12 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     # 1. Top Accent Stripe
     draw.rectangle([(0, 0), (width, 18)], fill=accent_color)
 
-    # 2. Header Bar
-    draw.text((40, 30), "समाचार.nit_iit", fill="#1A1A1A", font=font_header)
-    draw.text((930, 30), "2026", fill="#1A1A1A", font=font_header)
+    # 2. Header Bar (Date top-left, Brand logo top-right)
+    draw.text((40, 30), "2026", fill="#1A1A1A", font=font_header)
+    draw.text((850, 30), "समाचार.nit_iit", fill="#1A1A1A", font=font_header)
     draw.line([(40, 78), (1040, 78)], fill="#1A1A1A", width=3)
 
-    # 3. DYNAMIC Hindi Headline Section (Wraps Hindi words)
+    # 3. DYNAMIC Hindi Headline Section (Centered horizontally!)
     y_cursor = 94
     clean_headline = strip_emojis(headline)
 
@@ -82,7 +82,6 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     headline_lines = []
     cur_line = ""
     for w in words:
-        # Devanagari characters are wider, use 32 chars wrap length limit
         if len(cur_line + " " + w) < 32:
             cur_line += " " + w if cur_line else w
         else:
@@ -92,7 +91,10 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
         headline_lines.append(cur_line)
 
     for line in headline_lines[:3]:  # Max 3 lines
-        draw.text((40, y_cursor), line, fill="#1A1A1A", font=font_headline)
+        # Calculate line width to center it horizontally
+        line_w = draw.textlength(line, font=font_headline)
+        line_x = max(40, int((width - line_w) // 2))
+        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline)
         y_cursor += 48
 
     # Accent Underline
@@ -148,10 +150,12 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     draw.rounded_rectangle([(box_left, box_top), (box_right, box_bottom)], radius=12, fill=theme["tint_bg"], outline=theme["tint_border"], width=2)
     draw.rectangle([(box_left, box_top), (box_left + 12, box_bottom)], fill=accent_color)
 
-    # Draw Summary Lines inside box
+    # Draw Summary Lines inside box (Centered horizontally inside the summary box!)
     sum_y = box_top + box_padding_vertical
     for line in display_summary_lines:
-        draw.text((68, sum_y), line, fill=theme["text_dark"], font=font_summary)
+        line_w = draw.textlength(line, font=font_summary)
+        line_x = max(68, int(box_left + (box_right - box_left - line_w) // 2))
+        draw.text((line_x, sum_y), line, fill=theme["text_dark"], font=font_summary)
         sum_y += line_height
 
     # 6. Footer (📸 @news.nit_iit)

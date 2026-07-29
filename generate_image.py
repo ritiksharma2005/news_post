@@ -1,8 +1,10 @@
 """
 generate_image.py
-Generates illustrations for news posts and quote posters.
-If a news story mentions a specific leader or organization from the whitelist,
-it downloads a real photo from the web. Otherwise, it generates the image 100% via AI (Flux).
+Entity-Based Image Decision Engine:
+1. Check Local Asset Cache (Narendra Modi, Rahul Gandhi, Amit Shah, Parliament)
+2. Check Whitelist for Web Search (ISRO, DRDO, IITs, NTA, NEET, JEE, etc.)
+3. Fallback to Flux AI Generation for generic/tech concepts.
+Supports both English and Hindi keyword mapping.
 """
 
 import os
@@ -11,12 +13,23 @@ import urllib.parse
 import json
 import re
 import requests
+import shutil
 from PIL import Image
 
 IMAGE_WIDTH = 1080
 IMAGE_HEIGHT = 480
 POLLINATIONS_BASE = "https://image.pollinations.ai/prompt/"
 RATE_LIMIT_SECONDS = 5
+
+# Local asset mappings for famous people/places
+LOCAL_ASSET_CACHE = {
+    "narendra modi": "assets/narendra_modi.jpg",
+    "rahul gandhi": "assets/rahul_gandhi.png",
+    "amit shah": "assets/amit_shah.png",
+    "parliament": "assets/indian_parliament.jpg",
+    "lok sabha": "assets/indian_parliament.jpg",
+    "rajya sabha": "assets/indian_parliament.jpg"
+}
 
 # Whitelist of leaders and organizations for which we want REAL web photos
 REAL_IMAGE_KEYWORDS = [
@@ -31,6 +44,16 @@ REAL_IMAGE_KEYWORDS = [
     "upsc", "ssc", "nta", "neet", "jee", "cbse", "gate", "ugc net", "cuet",
     "clat", "cat", "iit", "nit", "aiims", "isro", "drdo"
 ]
+
+# Hindi equivalents mapped to English keywords
+HINDI_KEYWORD_MAPPINGS = {
+    "मोदी": "narendra modi", "नरेंद्र मोदी": "narendra modi",
+    "अमित शाह": "amit shah", "अमित": "amit shah",
+    "राहुल": "rahul gandhi", "राहुल गांधी": "rahul gandhi",
+    "संसद": "parliament", "लोकसभा": "parliament", "राज्यसभा": "parliament",
+    "इसरो": "isro", "आईआईटी": "iit", "एनआईटी": "nit",
+    "नीट": "neet", "जेईई": "jee", "यूपीएससी": "upsc"
+}
 
 
 def fetch_search_image(query, output_path):
@@ -88,21 +111,40 @@ def fetch_search_image(query, output_path):
     return None
 
 
-def generate_image(prompt, summary="", output_path="output/images/story.jpg", width=IMAGE_WIDTH, height=IMAGE_HEIGHT, model="flux"):
+def generate_image(prompt, summary="", output_path="output/images/story.jpg", width=IMAGE_WIDTH, height=IMAGE_HEIGHT, model="flux", headline=""):
     """
-    Generates a photo for a story.
-    If the prompt/headline mentions a whitelisted leader or organization, it searches and downloads a real photo.
-    Otherwise, it uses Flux to generate the illustration directly.
+    Routes the image selection conditionally:
+    1. Local asset cache if it matches Modi, Rahul, Amit Shah, or Parliament.
+    2. Web search if it matches whitelisted entities.
+    3. Flux AI generation for everything else.
     """
     is_quote = (width == 1080 and height == 1080)
     
-    # 1. For non-quotes, check if the prompt mentions any of the whitelisted entities
     if not is_quote:
-        lower_prompt = prompt.lower()
-        matched_kws = [kw for kw in REAL_IMAGE_KEYWORDS if kw in lower_prompt]
+        # Combine prompt and headline to ensure robust matching across translations
+        search_text = (prompt + " " + headline).lower()
         
+        # Inject mapped English keywords if Hindi equivalent is present
+        for hi_kw, en_kw in HINDI_KEYWORD_MAPPINGS.items():
+            if hi_kw in search_text:
+                search_text += " " + en_kw
+        
+        # 1. Check Local Asset Cache first!
+        for key, asset_path in LOCAL_ASSET_CACHE.items():
+            if key in search_text:
+                if os.path.exists(asset_path):
+                    print(f"  🎯 Local Asset matched for '{key}' -> {asset_path}. Copying to output...")
+                    try:
+                        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+                        shutil.copy(asset_path, output_path)
+                        return output_path
+                    except Exception as e:
+                        print(f"  Error loading local asset: {e}")
+        
+        # 2. Check Whitelist for Web Search
+        matched_kws = [kw for kw in REAL_IMAGE_KEYWORDS if kw in search_text]
         if matched_kws:
-            # Construct a clean entity-based search query (e.g. "Rahul Gandhi news photo")
+            matched_kws = list(set(matched_kws)) # Deduplicate
             search_query = " ".join([k.upper() if len(k) <= 5 else k.title() for k in matched_kws]) + " news photo"
             print(f"  Leader/Org detected: {matched_kws}. Redirecting to web search...")
             local_photo = fetch_search_image(search_query, output_path)
@@ -110,7 +152,7 @@ def generate_image(prompt, summary="", output_path="output/images/story.jpg", wi
                 return local_photo
             print("  ⚠️ Web search download failed. Falling back to AI generation...")
 
-    # 2. Generate 100% via AI (Flux)
+    # 3. Generate 100% via AI (Flux)
     if is_quote:
         print(f"  🎨 Generating Author portrait via Flux: '{prompt[:50]}...'")
     else:
@@ -136,10 +178,11 @@ def generate_images_for_stories(stories, output_dir="output/images"):
     """Batch generates images for a list of stories."""
     for i, story in enumerate(stories):
         image_prompt = story.get("image_prompt", story.get("new_headline", ""))
+        headline = story.get("new_headline", "")
         output_path = os.path.join(output_dir, f"story_{i}.jpg")
 
         print(f"  Generating image {i + 1}/{len(stories)}: {image_prompt[:50]}...")
-        result = generate_image(image_prompt, "", output_path=output_path)
+        result = generate_image(image_prompt, "", output_path=output_path, headline=headline)
         story["image_path"] = result
 
         if i < len(stories) - 1:
@@ -150,7 +193,7 @@ def generate_images_for_stories(stories, output_dir="output/images"):
 
 if __name__ == "__main__":
     path = generate_image(
-        prompt="A professional news photograph of Rahul Gandhi speaking, natural lighting",
+        prompt="A professional news photograph of Amit Shah speaking, natural lighting",
         output_path="output/images/test_web_image.jpg",
     )
     if path:

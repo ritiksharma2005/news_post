@@ -144,6 +144,7 @@ def run_news_pipeline(dry_run=False):
             prompt=image_prompt,
             summary="",
             output_path=f"output/images/story_{i}.jpg",
+            headline=headline
         )
 
         card_path = design_post.create_card(
