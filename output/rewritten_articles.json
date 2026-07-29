@@ -1,13 +1,13 @@
 [
   {
-    "title": "Rijiju accuses Congress of avoiding debate on anti-paper leak Bill, slams Rahul Gandhi's 'abusive' language",
-    "url": "https://www.newindianexpress.com/india/2026/07/29/rijiju-accuses-congress-of-avoiding-debate-on-anti-paper-leak-bill-slams-rahul-gandhis-abusive-language",
-    "summary": "Rijiju accused the Opposition of politicising the Bill debate and hoped Rahul Gandhi would speak on the legislation on Wednesday.",
-    "source": "NewsData",
+    "title": "'Where is Amit Shah?': Lok Sabha adjourned amid Opposition protests",
+    "url": "https://www.onmanorama.com/news/india/2026/07/29/opposition-protest-over-neet-issue-lok-sabha-amit-shah-statement.html",
+    "summary": "Opposition MPs disrupted the Lok Sabha, demanding a statement from the Home Minister on NEET student protests, leading to adjournment.",
+    "source": "GNews",
     "bucket": "IndianPolitics",
-    "new_headline": "BJP vs Congress: Paper Leak Bill Debate 📰 Heats Up, Rahul Gandhi Faces Criticism 🚫",
-    "new_summary": "BJP and Congress clash over anti-paper leak Bill, Rahul Gandhi's language sparks controversy",
-    "image_query": "Indian Parliament"
+    "new_headline": "Lok Sabha Adjourned 🕊️: Opposition Protests Erupt 🚨 Over Amit Shah's Absence",
+    "new_summary": "Opposition protests in Lok Sabha led to adjournment. Amit Shah's absence sparked the unrest.",
+    "image_query": "Amit Shah"
   },
   {
     "title": "Fast-track court takes CBI’s chargesheet on record in NEET paper leak case",
@@ -15,18 +15,18 @@
     "summary": "Special Judge Anu Grover Baliga of Rouse Avenue courts took on record the agency’s final report filed against the 13 accused on Tuesday",
     "source": "GNews",
     "bucket": "StudentEducation",
-    "new_headline": "🚨 NEET Paper Leak: 📝 CBI Chargesheet Filed 🚨",
-    "new_summary": "CBI's chargesheet is on record in NEET paper leak case",
-    "image_query": "NEET Exam"
+    "new_headline": "🚨 NEET Paper Leak 📝: Court Takes Action",
+    "new_summary": "A fast-track court is taking action in the NEET paper leak case. Justice is being served!",
+    "image_query": "NEET paper leak"
   },
   {
-    "title": "Daon wins patent for real-time AI agent authorisation",
-    "url": "https://securitybrief.in/story/daon-wins-patent-for-real-time-ai-agent-authorisation",
-    "summary": "Banks and insurers could soon grant AI agents narrower, time-limited access to sensitive systems under Daon's new patent.",
-    "source": "NewsData",
+    "title": "Amritsar gets seamless airlink to 27 global destinations via Delhi",
+    "url": "https://www.tribuneindia.com/news/punjab/amritsar-gets-seamless-airlink-to-27-global-destinations-via-delhi/",
+    "summary": "Air India launched its “Easy Connect” service from Sri Guru Ram Dass Jee International Airport, Amritsar, under the Centre’s hub-and-spoke model",
+    "source": "GNews",
     "bucket": "TechInnovation",
-    "new_headline": "🚀 Daon wins patent 📈 for AI tech",
-    "new_summary": "Daon gets patent for real-time AI authorisation, a big tech win!",
-    "image_query": "AI robot"
+    "new_headline": "Amritsar flights 🛫️ now connected to 27 global destinations 🗺️ via Delhi seamlessly",
+    "new_summary": "Amritsar gets easy airlinks to 27 global spots via Delhi",
+    "image_query": "IGI Airport Delhi"
   }
 ]

@@ -39,7 +39,9 @@ def run_quote_pipeline(dry_run=False):
     portrait_path = generate_image.generate_image(
         headline=f"Minimalist black and white sketch portrait illustration of {author_name}, high quality line art",
         summary="pencil sketch line art background",
-        output_path=f"output/images/portrait_{author_name.replace(' ', '_')}.jpg"
+        output_path=f"output/images/portrait_{author_name.replace(' ', '_')}.jpg",
+        width=1080,
+        height=1080
     )
 
     print("\n🎨 STEP 3: Rendering Life Mantra Poster...")

@@ -1,7 +1,7 @@
 """
 generate_image.py
 Fetches a real news photo matching the story headline using Bing Image Search.
-Falls back to Pollinations.ai (AI illustration) if no real photo can be downloaded.
+Falls back to Pollinations.ai (Flux model) if no real photo can be downloaded or if generating quote portraits.
 """
 
 import os
@@ -86,22 +86,29 @@ def craft_image_prompt(headline, summary=""):
     return f"{base}, {style}"
 
 
-def generate_image(headline, summary="", output_path="output/images/story.jpg", width=IMAGE_WIDTH, height=IMAGE_HEIGHT):
+def generate_image(headline, summary="", output_path="output/images/story.jpg", width=IMAGE_WIDTH, height=IMAGE_HEIGHT, model="flux"):
     """
-    Tries fetching a real photo from the web first.
-    Falls back to Pollinations.ai if no web photo is found or successfully downloaded.
+    Tries fetching a real photo from the web first (if not quote generation).
+    Falls back to Pollinations.ai (Flux) if no web photo is found or for square quote portraits.
     """
-    # 1. Try fetching a real photo matching the news title
-    local_photo = fetch_search_image(headline, output_path)
-    if local_photo:
-        return local_photo
+    # 1. Skip search engine lookup for 1080x1080 square cards (Quotes)
+    is_quote = (width == 1080 and height == 1080)
+    
+    if not is_quote:
+        local_photo = fetch_search_image(headline, output_path)
+        if local_photo:
+            return local_photo
 
-    # 2. Fallback to Pollinations AI Illustration
-    print(f"  ⚠️ No real photo found. Falling back to AI Image generation...")
-    prompt = craft_image_prompt(headline, summary)
+    # 2. Fallback to Pollinations AI (Flux)
+    if is_quote:
+        print(f"  🎨 Generating Author portrait via Flux: '{headline[:50]}...'")
+    else:
+        print(f"  ⚠️ No real photo found. Generating news illustration via Flux...")
+        
+    prompt = craft_image_prompt(headline, summary) if not is_quote else headline
     encoded_prompt = urllib.parse.quote(prompt)
     url = f"{POLLINATIONS_BASE}{encoded_prompt}"
-    params = {"width": width, "height": height, "nologo": "true"}
+    params = {"width": width, "height": height, "nologo": "true", "model": model}
 
     try:
         resp = requests.get(url, params=params, timeout=30)
