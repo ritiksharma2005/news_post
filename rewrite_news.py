@@ -1,20 +1,13 @@
 """
 rewrite_news.py
 Takes the top-ranked stories from rank_news.py and rewrites each one into
-an original headline + 2-3 line summary, in your own words (never copying
-the source article's exact phrasing). Uses Gemini, falling back to Groq
-automatically if Gemini is unavailable.
-
-Run directly to test: python rewrite_news.py
-(Requires output/ranked_articles.json to already exist — run rank_news.py first)
+an original headline, summary, and a detailed visual prompt for AI image generation.
 """
 
 import json
 import os
-
 import ai_client
 import config
-
 
 REWRITE_PROMPT = """You are a news editor writing for an Indian social media audience. Rewrite the following news story completely in your own original words — do not reuse phrasing from the description given to you.
 
@@ -25,13 +18,13 @@ Description: {description}
 Write:
 1. A detailed 2-line headline with emojis (Make it long enough to span exactly two lines, around 15-20 words, 60-80 characters total. E.g. 🚀 Union Budget 2026: Key Policy Decisions Announced for Student Loans)
 2. A 2-3 line summary (max 50 words) explaining the key facts in plain, engaging language suitable for an Instagram/social media audience
-3. A short, highly relevant 2-4 word search query targeting the main visual subject, person, or historical event (E.g. "Indira Gandhi Emergency 1975" or "JP Nadda portrait" or "Lok Sabha Parliament India"). Focus on famous, recognizable entities rather than conversational sentences.
+3. A detailed, descriptive image generation prompt to generate a photorealistic news photo representing this story (E.g. "A professional news photograph of Indian college students working in a modern computer lab, natural lighting, high detail, editorial look" or "A professional news photograph of an Indian political leader speaking in the Rajya Sabha chamber, Delhi, photorealistic"). Avoid text, words, or logos.
 
 Return ONLY a JSON object in this exact format, nothing else, no markdown fences:
 {{
   "headline": "...",
   "summary": "...",
-  "image_query": "..."
+  "image_prompt": "..."
 }}
 """
 
@@ -48,7 +41,7 @@ def parse_gemini_json(text):
 
 
 def rewrite_story(story):
-    """Send one story to the AI (Gemini, falling back to Groq) and get back an original headline + summary."""
+    """Send one story to the AI (Gemini, falling back to Groq) and get back rewritten details."""
     prompt = REWRITE_PROMPT.format(
         title=story["title"],
         description=story.get("description", "")[:400],
@@ -69,7 +62,7 @@ def rewrite_story(story):
     return {
         "new_headline": parsed.get("headline", story["title"]),
         "new_summary": parsed.get("summary", ""),
-        "image_query": parsed.get("image_query", ""),
+        "image_prompt": parsed.get("image_prompt", ""),
     }
 
 

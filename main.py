@@ -136,13 +136,13 @@ def run_news_pipeline(dry_run=False):
 
     for i, story in enumerate(captioned):
         headline = story.get("new_headline", story.get("title", ""))
-        image_query = story.get("image_query") or headline
+        image_prompt = story.get("image_prompt") or headline
         bucket = story.get("bucket", "StudentEducation")
         print(f"\n  Story {i + 1}/{len(captioned)} [{bucket}]: {headline[:60]}")
 
         image_path = generate_image.generate_image(
-            headline=image_query,
-            summary=story.get("new_summary", ""),
+            prompt=image_prompt,
+            summary="",
             output_path=f"output/images/story_{i}.jpg",
         )
 
