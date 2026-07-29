@@ -5,6 +5,7 @@ Master Orchestrator for @news.nit_iit:
 - Scheduled 8:00 AM IST   -> Morning News Brief (3 posts)
 - Scheduled 6:00 PM IST   -> Evening News Brief (3 posts)
 - Manual "Run workflow"   -> BOTH Life Mantra Quote + 3 News Briefs (4 posts total!)
+- Dry Run mode supported  -> Test locally without posting: python main.py --mode news --dry-run
 """
 
 import sys
@@ -23,11 +24,10 @@ import instagram_publisher
 import generate_quote
 import design_quote_post
 
-# 🛑 Toggle True to publish live to Instagram!
 ENABLE_INSTAGRAM_POSTING = True
 
 
-def run_quote_pipeline():
+def run_quote_pipeline(dry_run=False):
     """Runs the Life Mantra Quote Pipeline."""
     print("=" * 50)
     print("🌅 STEP 1: Fetching today's Life Mantra Quote")
@@ -68,6 +68,13 @@ def run_quote_pipeline():
         "hashtags": []
     }
 
+    if dry_run:
+        print("\n" + "=" * 50)
+        print("🔒 [DRY RUN ACTIVE] Quote card generated at output/cards/quote_today.png")
+        print("=" * 50)
+        print(f"Caption draft:\n{caption_text}")
+        return
+
     print("\n" + "=" * 50)
     print("STEP 4: Sending Life Mantra to Telegram")
     print("=" * 50)
@@ -86,7 +93,7 @@ def run_quote_pipeline():
     print("=" * 50)
 
 
-def run_news_pipeline():
+def run_news_pipeline(dry_run=False):
     """Runs the 3-Bucket Student News Pipeline."""
     print("=" * 50)
     print("STEP 1: Fetching news & RSS feeds")
@@ -127,11 +134,12 @@ def run_news_pipeline():
 
     for i, story in enumerate(captioned):
         headline = story.get("new_headline", story.get("title", ""))
+        image_query = story.get("image_query") or headline
         bucket = story.get("bucket", "StudentEducation")
         print(f"\n  Story {i + 1}/{len(captioned)} [{bucket}]: {headline[:60]}")
 
         image_path = generate_image.generate_image(
-            headline=headline,
+            headline=image_query,
             summary=story.get("new_summary", ""),
             output_path=f"output/images/story_{i}.jpg",
         )
@@ -147,6 +155,14 @@ def run_news_pipeline():
         )
         story["card_path"] = card_path
         print(f"    Card Ready: {card_path}")
+
+    if dry_run:
+        print("\n" + "=" * 50)
+        print("🔒 [DRY RUN ACTIVE] 3 News cards generated at output/cards/")
+        print("=" * 50)
+        for i, s in enumerate(captioned):
+            print(f"\n--- Story {i+1} Caption draft: ---\n{s.get('caption')}")
+        return
 
     print("\n" + "=" * 50)
     print("STEP 6: Sending to Telegram")
@@ -168,6 +184,8 @@ def run_news_pipeline():
 
 if __name__ == "__main__":
     mode = "auto"
+    dry_run = "--dry-run" in sys.argv or "-d" in sys.argv
+
     for arg in sys.argv[1:]:
         if arg.startswith("--mode="):
             mode = arg.split("=")[1]
@@ -175,26 +193,25 @@ if __name__ == "__main__":
             mode = arg
 
     if mode == "quote":
-        run_quote_pipeline()
+        run_quote_pipeline(dry_run)
     elif mode == "news":
-        run_news_pipeline()
+        run_news_pipeline(dry_run)
     elif mode == "manual":
-        print("🚀 Manual Trigger: Publishing Life Mantra Quote + 3 News Briefs...")
-        run_quote_pipeline()
-        run_news_pipeline()
+        print("🚀 Manual Trigger: Testing Quote + 3 News Briefs...")
+        run_quote_pipeline(dry_run)
+        run_news_pipeline(dry_run)
     else:  # mode == "auto"
         utc_hour = datetime.datetime.utcnow().hour
         if utc_hour == 1:
-            print("🌅 Scheduled 7:00 AM IST Run: Publishing Life Mantra Quote...")
-            run_quote_pipeline()
+            print("🌅 Scheduled 7:00 AM IST Run...")
+            run_quote_pipeline(dry_run)
         elif utc_hour == 2:
-            print("📰 Scheduled 8:00 AM IST Run: Publishing Morning News Brief...")
-            run_news_pipeline()
+            print("📰 Scheduled 8:00 AM IST Run...")
+            run_news_pipeline(dry_run)
         elif utc_hour == 12:
-            print("🌆 Scheduled 6:00 PM IST Run: Publishing Evening News Brief...")
-            run_news_pipeline()
+            print("🌆 Scheduled 6:00 PM IST Run...")
+            run_news_pipeline(dry_run)
         else:
-            print("🚀 Manual Run Detected: Publishing Life Mantra Quote + 3 News Briefs...")
-            run_quote_pipeline()
-            run_news_pipeline()
-            
+            print("🚀 Manual Run Detected...")
+            run_quote_pipeline(dry_run)
+            run_news_pipeline(dry_run)

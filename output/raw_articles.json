@@ -1,162 +1,938 @@
 [
   {
-    "source": "RSS_NDTV_Politics",
-    "bucket": "GovtPolicy",
-    "title": "March To Delhi Stopped At Haryana Border, Farmers Return After Assurance",
-    "description": "Hundreds of farmers have been stopped at Shambhu border",
-    "url": "https://www.ndtv.com/india-news/shambhu-again-farmers-march-to-delhi-stopped-at-haryana-border-11799216#publisher=newsstand",
-    "published_at": "Tue, 21 Jul 2026 16:34:44 +0530"
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "We don't need NEET or CUET. School-leaving exams should be enough",
+    "description": "NEET and JEE have created a format that has caused untold damage to the meaning and purpose of true education.",
+    "url": "https://theprint.in/opinion/we-dont-need-neet-or-cuet-school-leaving-exams-should-be-enough/2999424/",
+    "published_at": "2026-07-29T05:30:31Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Amritsar gets seamless airlink to 27 global destinations via Delhi",
+    "description": "Air India launched its “Easy Connect” service from Sri Guru Ram Dass Jee International Airport, Amritsar, under the Centre’s hub-and-spoke model, enabling passengers from Punjab to access 27 international destinations thorough seamless connections via Delhi.",
+    "url": "https://www.tribuneindia.com/news/punjab/amritsar-gets-seamless-airlink-to-27-global-destinations-via-delhi/",
+    "published_at": "2026-07-28T20:25:55Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Harsh Goenka wants India to study China's Gaokao for NEET. Here's how tough the Chinese exam really is",
+    "description": "Harsh Goenka proposed adopting China's Gaokao exam security for India's NEET and JEE. China employs extensive measures like surveillance and biometric verification for its exams. This approach treats national exams as critical security events for India. Both Gaokao and JEE are considered highly challenging entrance examinations globally. Millions of students face immense pressure and sacrifice for these crucial tests.",
+    "url": "https://economictimes.indiatimes.com/news/new-updates/harsh-goenka-wants-india-to-study-chinas-gaokao-for-neet-heres-how-tough-the-chinese-exam-really-is/articleshow/132687103.cms",
+    "published_at": "2026-07-28T14:35:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Before H.C. Verma wrote Concepts of Physics, Indian JEE aspirants were struggling with one huge problem; the IIT Kanpur professor changed that",
+    "description": "Before H.C. Verma wrote Concepts of Physics: Long before online coaching and AI study tools, IIT Kanpur professor H.C. Verma identified a gap that was quietly failing generations of Indian physics students and filled it with a book that became a rite of passage for JEE and NEET aspirants. This is the story behind Concepts of Physics and the man who wrote it.",
+    "url": "https://economictimes.indiatimes.com/news/new-updates/before-h-c-verma-wrote-concepts-of-physics-indian-jee-aspirants-were-struggling-with-one-huge-problem-the-iit-kanpur-professor-changed-that/articleshow/132678149.cms",
+    "published_at": "2026-07-28T07:41:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "17-Year-Old NEET, JEE Aspirant Hangs Self In Hostel Room On Birthday In Bhopal",
+    "description": "A 17-year-old Class 12 student from Alirajpur allegedly died by suicide in a private hostel under Katara Hills police limits on her birthday. Police recovered a suicide note indicating depression. The incident comes 10 months after another Class 12 student, Vandana Markam of Balaghat, died by suicide in the same hostel, raising fresh concerns.",
+    "url": "https://www.freepressjournal.in/bhopal/17-year-old-neet-jee-aspirant-hangs-self-in-hostel-room-on-birthday-in-bhopal",
+    "published_at": "2026-07-28T06:38:22Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Rakhi Sawant calls Kangana Ranaut gutter mouth in fiery rant for attacking Gen Z",
+    "description": "Rakhi Sawant hit back at Kangana Ranaut in an Instagram video over her remarks on Gen Z and women at the NEET protest. The exchange escalated an online row that also revived references to Kangana’s security cover and past controversies.",
+    "url": "https://www.indiatoday.in/movies/celebrities/story/rakhi-sawant-kangana-ranaut-gutter-mouth-fiery-rant-gen-z-women-protesting-students-neet-protest-security-cover-past-controversies-2958724-2026-07-29",
+    "published_at": "2026-07-29T06:57:59Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "After 'DP' change, BJP taps F.R.I.E.N.D.S. nostalgia to reconnect with angry Gen Z",
+    "description": "The BJP used a Friends-themed Instagram Reel and informal videos to connect with young voters following NEET exam protests, signalling a shift.NEET paper leak, BJP social media, PM Modi student outreach, F.R.I.E.N.D.S. political reel, youth voter engagement, examination irregularities, student protests Delhi, political communication strategy, Gen Z political engagement, Narendra Modi informal videos, paper leak controversy response, digital outreach tactics, government policy communication, social media campaign effectiveness, political messaging trends",
+    "url": "https://www.onmanorama.com/news/india/2026/07/29/bjp-reels-genz-connection-friends-modi-selfie-cam.html",
+    "published_at": "2026-07-29T06:57:16Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'Where is Amit Shah?': Lok Sabha adjourned amid Opposition protests",
+    "description": "Opposition MPs disrupted the Lok Sabha, demanding a statement from the Home Minister on NEET student protests, leading to adjournment. A Bill to.NEET paper leak, Lok Sabha adjournment, Amit Shah statement, student protests, police action, Opposition demands, Parliament disruptions, Public Examinations Bill, anti-paper leak law, stricter punishment, Dharmendra Pradhan resignation, legislative business, NEET controversy, education policy, parliamentary proceedings",
+    "url": "https://www.onmanorama.com/news/india/2026/07/29/opposition-protest-over-neet-issue-lok-sabha-amit-shah-statement.html",
+    "published_at": "2026-07-29T06:51:40Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Keralam Cyber Police book Hindutva idealogue T G Mohandas over alleged remarks against NEET protesters",
+    "description": "Keralam Cyber Police have registered a case against RSS leader T G Mohandas over his alleged derogatory remarks against students who protested in Delhi over the alleged NEET question paper leak.",
+    "url": "https://www.aninews.in/news/national/general-news/keralam-cyber-police-book-hindutva-idealogue-t-g-mohandas-over-alleged-remarks-against-neet-protesters20260729122051/",
+    "published_at": "2026-07-29T06:50:51Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Fast-track court takes CBI chargesheet on record in NEET paper leak case",
+    "description": "A special court accepted the CBI's chargesheet concerning the NEET-UG paper leak. Thirteen individuals face charges including conspiracy and cheating under new laws. The agency informed the court about extensive annexures requiring scanning and submission. Further proceedings in this significant case are scheduled for August third. Public prosecutors have been appointed to represent the CBI's interests.",
+    "url": "https://economictimes.indiatimes.com/news/india/neet-paper-leak-cbi-charges-13-in-fast-track-court/articleshow/132703666.cms",
+    "published_at": "2026-07-29T06:39:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Income inequality, Ganga water treaty and K Radhakrishnan Committee",
+    "description": "UPSC Key-28th July, 2026: What news you should read in the today's edition of the Indian Express for UPSC Civil Services Preparation? know in today's UPSC key of the Indian Express",
+    "url": "https://indianexpress.com/article/upsc-current-affairs/upsc-key-income-inequality-ganga-water-treaty-and-k-radhakrishnan-committee-10807769/",
+    "published_at": "2026-07-28T14:36:22Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "OPINION | Better late than never: Let anti-paper leak law be enforced soon",
+    "description": "Jitendra Singh said special fast-track courts have been set up in Delhi, Maharashtra, Madhya Pradesh and Uttarakhand for speedy hearing of paper leak cases. The bill will be applicable not only to the National Testing Agency, but also to all examinations conducted by UPSC, SSC, Railway among others.",
+    "url": "https://www.indiatvnews.com/news/india/opinion-better-late-than-never-let-anti-paper-leak-law-be-enforced-soon-2026-07-28-1049639",
+    "published_at": "2026-07-28T11:10:03Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Chandipura Virus: A Silent Viral Threat Behind India’s Recent Outbreaks",
+    "description": "Discover the recent threat of the Chandipura virus, its spread, symptoms and management. Stay informed with our daily UPSC Current Affairs knowledge nugget.",
+    "url": "https://indianexpress.com/article/upsc-current-affairs/upsc-essentials/knowledge-nugget-chandipura-virus-upsc-10807138/",
+    "published_at": "2026-07-28T10:20:15Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "BJP demands CBI probe into KPSC irregularities; urges UPSC",
+    "description": "BJP demands CBI probe into KPSC irregularities; urges UPSC-style transparent recruitment system - Bengaluru, July 28 BJP supporting the protest by students and job aspirants against the Karnataka government over the ... Get Latest News on National only on lokmattimes.com",
+    "url": "https://www.lokmattimes.com/national/bjp-demands-cbi-probe-into-kpsc-irregularities-urges-upsc-style-transparent-recruitment-system/",
+    "published_at": "2026-07-28T09:58:01Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Mains answer practice - GS 3 (Week 165)",
+    "description": "Practice UPSC Mains GS-3 with questions on Ecologically Sensitive Areas and India's foreign exchange resilience.",
+    "url": "https://indianexpress.com/article/upsc-current-affairs/upsc-essentials/upsc-mains-answer-practice-gs-3-week-165-10807024/",
+    "published_at": "2026-07-28T08:52:17Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "OPINION | Better late than never: Let anti-paper leak law be enforced soon",
+    "description": "Jitendra Singh said special fast-track courts have been set up in Delhi, Maharashtra, Madhya Pradesh and Uttarakhand for speedy hearing of paper leak cases. The bill will be applicable not only to the National Testing Agency, but also to all examinations conducted by UPSC, SSC, Railway among others.",
+    "url": "https://www.indiatvnews.com/news/india/opinion-better-late-than-never-let-anti-paper-leak-law-be-enforced-soon-2026-07-28-1049639",
+    "published_at": "2026-07-28T11:10:03Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "0 win over Defenders; Indian Army FT beat SSC",
+    "description": "RANCHI, July 26: Raynier Fernandes produced a brilliant hat-trick on debut as Jamshedpur FC made a flying start to their Group C campaign in the Durand Cup with a comprehensive 5-0 win over Defenders FC of the Sri Lankan Armed...",
+    "url": "https://www.dailyexcelsior.com/fernandes-hat-trick-powers-jamshedpur-to-5-0-win-over-defenders-indian-army-ft-beat-ssc/",
+    "published_at": "2026-07-26T22:30:29Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Washington Ruled Out of 1st Test; Reddy, Harshit Unlikely For Entire Sri Lanka Tour",
+    "description": "India will tour Sri Lanka for a two-Test series next month with the first Test to be played from August 15-19 at Galle, followed by the second at Colombo (SSC) from August 23-27",
+    "url": "https://www.deccanchronicle.com/sports/washington-ruled-out-of-1st-test-reddy-harshit-unlikely-for-entire-sri-lanka-tour-1974049",
+    "published_at": "2026-07-26T09:38:37Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "India vs Sri Lanka Test Series: BCCI Squad Announcement Date, Time And Latest Update on Jasprit Bumrah, Ravindra Jadeja",
+    "description": "Team India will resume their quest to reach the World Test Championship (WTC) final when they face Sri Lanka in a crucial away two-Test series next month at the Galle International Cricket Stadium in Galle and the Sinhalese Sports Club (SSC) in Colombo.",
+    "url": "https://www.newsx.com/sports/india-vs-sri-lanka-test-series-bcci-squad-announcement-date-time-and-latest-update-on-jasprit-bumrah-ravindra-jadeja-252371/",
+    "published_at": "2026-07-25T08:17:24Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "NEET Paper Leak: Anger Spills Across Madhya Pradesh",
+    "description": "The NEET paper leak is not the only issue. Several examination paper leaks and irregularities have surfaced in the last two years, including SSC and CBSE,\" the protesters said. Protests were also reported from several other districts. In Barwani, students erected a temporary plastic-sheet shelter to continue their sit-in despite the rain.",
+    "url": "https://www.freepressjournal.in/bhopal/neet-paper-leak-anger-spills-across-madhya-pradesh",
+    "published_at": "2026-07-25T04:28:38Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "13 Accused, 320 Witnesses: What Does CBI's 20,000-Page Chargesheet In NEET-UG Leak Case Reveal?",
+    "description": "The CBI has filed a comprehensive 20,000-page chargesheet against 13 individuals involved in the NEET-UG 2026 paper leak case, including coaching centre links and middlemen. , India News, Times Now",
+    "url": "https://www.timesnownews.com/india/13-accused-320-witnesses-20000-pages-cbi-files-chargesheet-in-neet-ug-leak-case-what-does-it-reveal-article-155206687",
+    "published_at": "2026-07-29T05:37:12Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "NEET-UG leak probe: CBI gets 3 more days to file annexures in chargesheet, hearing on August 3",
+    "description": "India News: NEW DELHI: A special fast-track court on Wednesday listed the CBI's chargesheet in the NEET-UG 2026 paper leak case for consideration on August 3 and .",
+    "url": "https://timesofindia.indiatimes.com/india/neet-paper-leak-probe-court-gives-cbi-3-days-to-file-chargesheet-annexures-hearing-on-august-3/articleshow/132701147.cms",
+    "published_at": "2026-07-29T05:06:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "YSRCP MP M Gurumoorthy demands CBI probe into AP DSC, seeks inclusion of state exams under Anti-Paper Leak Bill",
+    "description": "YSRCP MP Gurumoorthy supported the Public Examinations Bill in Lok Sabha. He urged the government to include state recruitment boards within its scope. The MP cited past paper leaks affecting millions of students across India. He highlighted alleged irregularities in Andhra Pradesh's Mega DSC recruitment process. Gurumoorthy demanded a CBI inquiry and the Education Minister's resignation.",
+    "url": "https://economictimes.indiatimes.com/news/politics-and-nation/ysrcp-mp-m-gurumoorthy-demands-cbi-probe-into-ap-dsc-seeks-inclusion-of-state-exams-under-anti-paper-leak-bill/articleshow/132701259.cms",
+    "published_at": "2026-07-29T04:57:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Latest Breaking News From India, Delhi, Mumbai & Around the World",
+    "description": "India News Today Live Updates, 29 July 2026: Follow breaking news live updates on The Indian Express — Assam flood death toll rising to 75 with CM Himanta Biswa Sarma announcing Rs 9 lakh relief for affected families, the CBI filing a chargesheet against 13 accused in the NEET UG paper leak, and the US Senate clearing a Russia sanctions bill that puts India at risk of 100 per cent tariffs, along with top headlines, politics, business, sports and city updates from India and around the world.",
+    "url": "https://indianexpress.com/article/world/today-india-breaking-news-live-updates-29-july-2026-assam-floods-neet-cbi-chargesheet-us-russia-sanctions-india-10808335/",
+    "published_at": "2026-07-29T04:00:17Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Latest Breaking News From India, Delhi, Mumbai & Around the World",
+    "description": "India News Today Live Updates, 29 July 2026: Follow breaking news live updates on The Indian Express — Assam flood death toll rising to 75 with CM Himanta Biswa Sarma announcing Rs 9 lakh relief for affected families, the CBI filing a chargesheet against 13 accused in the NEET UG paper leak, and the US Senate clearing a Russia sanctions bill that puts India at risk of 100 per cent tariffs, along with top headlines, politics, business, sports and city updates from India and around the world.",
+    "url": "https://indianexpress.com/article/india/today-india-breaking-news-live-updates-29-july-2026-assam-floods-neet-cbi-chargesheet-us-russia-sanctions-india-10808335/",
+    "published_at": "2026-07-29T04:00:17Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'I don't care if it's a B.Tech or not': Ex-Google recruiter reveals what actually gets candidates hired",
+    "description": "News News: For years, aspiring engineers across India have viewed admission to a top engineering college and a B.Tech degree as the surest path to a successful c.",
+    "url": "https://timesofindia.indiatimes.com/education/news/i-would-lose-faith-in-the-system-if-this-resume-didnt-get-hired-ex-google-recruiter-explains-why/articleshow/132680514.cms",
+    "published_at": "2026-07-28T09:36:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Top Medical Colleges in Tamil Nadu: Christian Medical College, Amrita among state’s best in NIRF Ranking",
+    "description": "For students vying for admission in India, the National Institutional Ranking Framework (NIRF) rankings serve as one of the key indicators while comparing medical colleges. Here are the top medical colleges in Tamil Nadu as per the NIRF medical college rankings.",
+    "url": "https://indianexpress.com/article/education/mcc-counselling-date-top-medical-colleges-tamil-nadu-2026-cmc-vellore-amrita-nirf-rankings-neet-ug-2026-mbbs-admissions-10805472/",
+    "published_at": "2026-07-27T08:07:55Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "ICAI launches 65th Campus Placement Programme for newly qualified CAs with 5,339 vacancies announced",
+    "description": "News News: The Institute of Chartered Accountants of India (ICAI) has announced the 65th Campus Placement Programme for newly qualified Chartered Accountants, pr.",
+    "url": "https://timesofindia.indiatimes.com/education/news/icai-launches-65th-campus-placement-programme-for-newly-qualified-cas-with-5339-vacancies-announced/articleshow/132658973.cms",
+    "published_at": "2026-07-27T10:39:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "The Success of the Students’ Movement and the Road Ahead",
+    "description": "From Protest to Policy Ashok Bhan The recent student-led protests in Delhi have emerged as one of the most significant democratic movements witnessed in contemporary India. What began as an expression of anguish over systemic failures has evolved into a...",
+    "url": "https://www.dailyexcelsior.com/the-success-of-the-students-movement-and-the-road-ahead/",
+    "published_at": "2026-07-28T23:15:11Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'Not acceptable': CJP claims Supreme Court order on student FIRs contradicts govt assurances",
+    "description": "CJP founder Abhijeet Dipke also warned of fresh protest if the government missed the Tuesday deadline on FIR withdrawal. | India News",
+    "url": "https://www.hindustantimes.com/india-news/not-acceptable-cjp-claims-supreme-court-order-on-student-firs-contradicts-govt-assurances-101785247359795.html",
+    "published_at": "2026-07-28T16:04:23Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'Uninformed, unacceptable': CJP claims SC order contradicts govt assurance; warns of protest",
+    "description": "India News: NEW DELHI: The Cockroach Janta Party (CJP) has threatened to restart its nationwide agitation if the government fails to withdraw FIRs against student.",
+    "url": "https://timesofindia.indiatimes.com/india/uninformed-unacceptable-cjp-claims-sc-order-contradicts-govt-assurance-warns-of-protest/articleshow/132687788.cms",
+    "published_at": "2026-07-28T15:00:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "\"Delhi protest a historic movement that forced PM Modi, Amit Shah to retreat\": CPI(M) state secretary MV Govindan",
+    "description": "Communist Party of India (Marxist) (CPI(M)) Kerala state secretary MV Govindan on Tuesday described the recent Delhi student protests as a \"new chapter\" in national politics, claiming that the agitation forced Prime Minister Narendra Modi and Union Home Minister Amit Shah to retreat.",
+    "url": "https://www.aninews.in/news/national/politics/delhi-protest-a-historic-movement-that-forced-pm-modi-amit-shah-to-retreat-cpim-state-secretary-mv-govindan20260728175252/",
+    "published_at": "2026-07-28T12:22:52Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'His personal thoughts': RSS distances itself from Kerala right-wing activist over Delhi student protest remarks",
+    "description": "India News: NEW DELHI: The Rashtriya Swayamsevak Sangh (RSS) on Tuesday distanced itself from right-wing political commentator TG Mohandas over his remarks on the.",
+    "url": "https://timesofindia.indiatimes.com/india/his-personal-thoughts-rss-distances-itself-from-kerala-right-wing-activist-over-delhi-student-protest-remarks/articleshow/132683875.cms",
+    "published_at": "2026-07-28T12:06:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Gen-AI may replace 8-12% of Indias non-agricultural jobs: Goldman Sachs",
+    "description": "Generative Artificial Intelligence (Gen-AI) could substitute 8-12 per cent of India's non-agricultural employment, while complementing 42-48 per cent of the workforce by enhancing productivity rather than replacing workers, according to a Goldman Sachs report.",
+    "url": "https://www.livemint.com/technology/genai-may-replace-8-12-of-indias-non-agricultural-jobs-goldman-sachs-11785307373774.html",
+    "published_at": "2026-07-29T06:42:53Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Gen-AI may replace 8-12% of India's non-agricultural jobs: Goldman Sachs",
+    "description": "Generative Artificial Intelligence (Gen-AI) could substitute 8-12 per cent of India's non-agricultural employment, while complementing 42-48 per cent of the workforce by enhancing productivity rather than replacing workers, according to a Goldman Sachs report.",
+    "url": "https://www.aninews.in/news/business/gen-ai-may-replace-8-12-of-indias-non-agricultural-jobs-goldman-sachs20260729120712/",
+    "published_at": "2026-07-29T06:37:12Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "AI to boost India's labour productivity by 0.4 percentage points annually over next decade: Goldman Sachs",
+    "description": "Generative Artificial Intelligence (Gen-AI) is poised to become a significant driver of labour productivity growth in India over the coming decade, even as its impact on jobs is expected to be uneven across sectors, according to a Goldman Sachs report.",
+    "url": "https://www.tribuneindia.com/news/business/gen-ai-to-boost-indias-labour-productivity-by-0-4-percentage-points-annually-over-next-decade-goldman-sachs/",
+    "published_at": "2026-07-29T05:53:28Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Gen-AI to boost India's labour productivity by 0.4 percentage points annually over next decade: Goldman Sachs",
+    "description": "Generative Artificial Intelligence (Gen-AI) is poised to become a significant driver of labour productivity growth in India over the coming decade, even as its impact on jobs is expected to be uneven across sectors, according to a Goldman Sachs report.",
+    "url": "https://www.aninews.in/news/business/gen-ai-to-boost-indias-labour-productivity-by-04-percentage-points-annually-over-next-decade-goldman-sachs20260729112157/",
+    "published_at": "2026-07-29T05:51:57Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Global Market: China stocks slip as AI-linked selloff deepens; Hong Kong gains on internet shares",
+    "description": "Chinese stocks fell Wednesday as artificial intelligence shares faced selling pressure. Hong Kong shares outperformed, driven by strong gains in internet platform companies. Investors shifted funds away from technology hardware into traditional sectors like real estate. New United States trade restrictions targeting Chinese robots also weighed on sentiment. This rotation reflects reassessment of artificial intelligence investment returns and geopolitical concerns.",
+    "url": "https://economictimes.indiatimes.com/markets/us-stocks/news/global-market-china-stocks-slip-as-ai-linked-selloff-deepens-hong-kong-gains-on-internet-shares/articleshow/132701866.cms",
+    "published_at": "2026-07-29T05:37:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "ChatGPT, Claude face cheaper Chinese rivals as rising AI token costs reshape spending",
+    "description": "Companies are moving away from the AI trend of \"tokenmaxxing\" as soaring token costs fail to deliver matching productivity. Firms are now prioritising cheaper AI models and smarter routing.",
+    "url": "https://www.cnbctv18.com/technology/workplaces-cheaper-ai-tokenmaxxing-chatgpt-open-source-ai-enterprise-ai-costs-productivity-19956593.htm",
+    "published_at": "2026-07-29T06:57:22Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Rogue OpenAI agent didn't stop at Hugging Face, third-party accounts also hit",
+    "description": "OpenAI's investigation has revealed that its rogue AI agent went beyond Hugging Face, accessing four third-party accounts during the same incident. The ChatGPT maker says it is tightening security controls and reviewing its testing practices to prevent similar incidents in the future.",
+    "url": "https://www.indiatoday.in/technology/news/story/openai-says-its-ai-agent-hacked-more-than-just-hugging-face-third-party-accounts-were-also-compromised-2958738-2026-07-29",
+    "published_at": "2026-07-29T06:44:57Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Devina Mehra: Some market dynamics don’t change-playing the pioneer has always been a brave call",
+    "description": "We’ve seen it across industries. A pioneer risks becoming a victim of its own success as others waltz into the market it worked hard to open up. Hindustan Lever’s launch of branded atta was an early example. OpenAI's ChatGPT looks like the latest.",
+    "url": "https://www.livemint.com/opinion/online-views/devina-mehra-market-dynamics-pioneer-openai-chatgpt-hindustan-lever-unilever-nykaa-11785231973830.html",
+    "published_at": "2026-07-29T06:31:11Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "What Are the Best ChatGPT Work Prompts? OpenAI Reveals 5 Time-Saving Tips",
+    "description": "OpenAI shares five ChatGPT Work prompts that can save hours every week by streamlining emails, meetings, reports and other everyday office tasks.",
+    "url": "https://in.mashable.com/tech/112320/what-are-the-best-chatgpt-work-prompts-openai-reveals-5-time-saving-tips",
+    "published_at": "2026-07-29T06:00:55Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'Be bold. Be a changemaker': Vita Dani on building UTT, Butterfly's trust, and the Olympics validation",
+    "description": "On the sidelines of UTT Season 7, Vita Dani tells HT how building the league, Butterfly's backing and ChatGPT's partnership are reshaping Indian table tennis.",
+    "url": "https://www.hindustantimes.com/sports/others/be-bold-be-a-changemaker-vita-dani-on-building-utt-butterflys-trust-and-the-olympics-validation-101785246660036.html",
+    "published_at": "2026-07-28T14:10:25Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Paytm founder Vijay Shekhar Sharma calls AI a once-in-a-generation opportunity for India",
+    "description": "Sharma said he felt bad when new job creation and new economy creation opportunities were viewed primarily as risks of the technology.",
+    "url": "https://www.aninews.in/news/business/paytm-founder-vijay-shekhar-sharma-calls-ai-a-once-in-a-generation-opportunity-for-india20260729120338/",
+    "published_at": "2026-07-29T06:33:38Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "AI to boost India's labour productivity by 0.4 percentage points annually over next decade: Goldman Sachs",
+    "description": "Over the next decade, generative AI is poised to significantly enhance India's labour productivity, particularly in knowledge-driven sectors such as healthcare and education where improvements are set to be most notable. By automating routine tasks, workers can focus on more value-added activities. Although manufacturing and construction are likely to see lesser benefits, the overall success hinges on crucial investments in digital infrastructure and technology.",
+    "url": "https://economictimes.indiatimes.com/tech/artificial-intelligence/gen-ai-to-boost-indias-labour-productivity-by-0-4-percentage-points-annually-over-next-decade-goldman-sachs/articleshow/132702423.cms",
+    "published_at": "2026-07-29T06:26:46Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "NSDC and AVPL International Collaborate to Establish 350 Advanced Skill Centres for Drones Across India",
+    "description": "New Delhi [India], July 29: In a major boost to India's emerging drone ecosystem and higher education landscape, the National Skill Development Corporation (NSDC) and AVPL International have entered into a strategic collaboration to establish 350 Advanced Skill Centres (ASCs) for Drone Technology across India over the next three years. The initiative aims to create one of the country's largest industry-integrated skilling networks, preparing thousands of students for careers in the rapidly expanding drone and advanced technology sectors.",
+    "url": "https://www.tribuneindia.com/news/business/nsdc-and-avpl-international-collaborate-to-establish-350-advanced-skill-centres-for-drones-across-india/",
+    "published_at": "2026-07-29T06:13:17Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "NSDC and AVPL International Collaborate to Establish 350 Advanced Skill Centres for Drones Across India",
+    "description": "New Delhi [India], July 29: In a major boost to India's emerging drone ecosystem and higher education landscape, the National Skill Development Corporation (NSDC) and AVPL International have entered into a strategic collaboration to establish 350 Advanced Skill Centres (ASCs) for Drone Technology across India over the next three years. The initiative aims to create one of the country's largest industry-integrated skilling networks, preparing thousands of students for careers in the rapidly expanding drone and advanced technology sectors.",
+    "url": "https://www.aninews.in/news/business/nsdc-and-avpl-international-collaborate-to-establish-350-advanced-skill-centres-for-drones-across-india20260729113800/",
+    "published_at": "2026-07-29T06:08:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "The Blueprint for Fairness: What the Nilekani Task Force Must Deliver for India’s Students",
+    "description": "As the Nandan Nilekani-led task force begins work on reforming India's examination system, Dr Jyoti Gupta outlines six technology-driven, student-centric reforms that could make paper leaks impossible, restore trust, and ensure merit..., Opinion - India, Times Now",
+    "url": "https://www.timesnownews.com/opinion/india/the-blueprint-for-fairness-what-the-nilekani-task-force-must-deliver-for-indias-students-article-155207020",
+    "published_at": "2026-07-29T05:55:54Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'Grass looking greener in India': Mumbai startup founder claims reverse brain drain is rising as Indians studying abroad look to return home",
+    "description": "International graduates are increasingly considering returning to India after their studies abroad. Students cite India's economic growth and investor confidence as key influencing factors. A salary of fifty lakh rupees in India offers similar savings as one hundred fifty thousand pounds in London. Growth opportunities and stability appear stronger in India for these graduates. This trend suggests a potential \"reverse brain drain\" is emerging for the nation.",
+    "url": "https://economictimes.indiatimes.com/news/new-updates/grass-looking-greener-in-india-mumbai-startup-founder-claims-reverse-brain-drain-is-rising-as-indians-studying-abroad-look-to-return-home/articleshow/132701217.cms",
+    "published_at": "2026-07-29T05:44:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Six years after privatising space, India has a unicorn, orbital launcher and $871 million in startup funding",
+    "description": "Skyroot Aerospace's Vikram-1 launch marks the outcome of policy changes introduced in 2020, when India opened space sector to private companies. Skyroot plans another test flight later in 2026 before beginning commercial launch operations.",
+    "url": "https://www.newindianexpress.com/business/2026/Jul/28/six-years-after-privatising-space-india-has-a-unicorn-orbital-launcher-and-871-million-in-startup-funding",
+    "published_at": "2026-07-28T15:57:30Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Indus Towers’ Africa foray on track, operations to start in September quarter",
+    "description": "Indus Towers is launching its Africa expansion in September after securing necessary approvals. The company sees this as its largest growth opportunity outside of India. Operations will begin with an anchor customer, likely Airtel Africa, ensuring faster startup. Initial capital expenditure in Africa will be moderate and largely debt-funded. This expansion occurs alongside strong growth potential within the Indian market.",
+    "url": "https://economictimes.indiatimes.com/industry/telecom/telecom-news/indus-towers-africa-foray-on-track-operations-to-start-in-september-quarter/articleshow/132684870.cms",
+    "published_at": "2026-07-28T13:00:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Cursor launches Rs 649 India-only ‘Start’ plan: What you get, and what stays locked",
+    "description": "Tech News News: AI coding startup Cursor has launched its first country-specific subscription, and India is the test case. Cursor Start costs Rs 649 a month, tax incl.",
+    "url": "https://timesofindia.indiatimes.com/technology/tech-news/cursor-launches-rs-649-india-only-start-plan-what-you-get-and-what-stays-locked/articleshow/132682786.cms",
+    "published_at": "2026-07-28T11:06:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Cursor AI targets Indian developers with localized pricing",
+    "description": "AI coding startup Cursor launches its first localized subscription in India, targeting the vast developer market weeks before its anticipated acquisition by SpaceX.",
+    "url": "https://www.newsbytesapp.com/news/science/cursor-ai-targets-indian-developers-with-localized-pricing/story",
+    "published_at": "2026-07-28T09:07:09Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Why India’s youth compete fiercely for government jobs",
+    "description": "Explore why India's youth fiercely pursue government jobs amid rising education levels and a struggling job market.",
+    "url": "https://www.thehindu.com/data/why-indias-youth-compete-fiercely-for-government-jobs/article71278105.ece",
+    "published_at": "2026-07-28T15:39:16Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Govt considering proposal to ease FDI norms for downstream investments: Sources",
+    "description": "Government reviews FDI norms to enhance downstream investments, aiming to boost foreign inflows and create jobs in India.",
+    "url": "https://www.thehindubusinessline.com/economy/govt-considering-proposal-to-ease-fdi-norms-for-downstream-investments-sources/article71277515.ece",
+    "published_at": "2026-07-28T14:08:18Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Govt considering proposal to ease FDI norms for downstream investments: Sources",
+    "description": "The government is considering easing foreign direct investment norms for downstream investments. This move aims to boost overseas fund inflows and create new jobs. Most sectors are already open to 100 percent foreign investment under the automatic route. India has attracted significant FDI inflows between 2014-15 and 2025-26. Continuous policy reviews ensure India remains an attractive investment destination.",
+    "url": "https://economictimes.indiatimes.com/news/economy/policy/govt-considering-proposal-to-ease-fdi-norms-for-downstream-investments-sources/articleshow/132685726.cms",
+    "published_at": "2026-07-28T13:31:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "73 Sports Medal Winners of Chandigarh University get government jobs in 2025",
+    "description": "Chandigarh [India], July 28: With outstanding performances in the sports arena, Chandigarh University's 73 medal-winning student-athletes, including 29 females, have been selected for government jobs in the Indian Army, Central Armed Police Forces (CAPFs), Paramilitary Forces and various government institutions under the Sports Quota during 2025-26 academic year.",
+    "url": "https://www.tribuneindia.com/news/business/73-sports-medal-winners-of-chandigarh-university-get-government-jobs-in-2025-26/",
+    "published_at": "2026-07-28T12:23:22Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "73 Sports Medal Winners of Chandigarh University get government jobs in 2025-26",
+    "description": "Chandigarh [India], July 28: With outstanding performances in the sports arena, Chandigarh University's 73 medal-winning student-athletes, including 29 females, have been selected for government jobs in the Indian Army, Central Armed Police Forces (CAPFs), Paramilitary Forces and various government institutions under the Sports Quota during 2025-26 academic year.",
+    "url": "https://www.aninews.in/news/business/73-sports-medal-winners-of-chandigarh-university-get-government-jobs-in-2025-2620260728175002/",
+    "published_at": "2026-07-28T12:20:02Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "SBI Summer Internship Program 2026: Check eligibility, application process, stipend and key details",
+    "description": "News News: The State Bank of India (SBI) offers internship opportunities to students through its SBI Summer Internship Program 2026. The internship gives student.",
+    "url": "https://timesofindia.indiatimes.com/education/news/sbi-summer-internship-program-2026-check-eligibility-application-process-stipend-and-key-details/articleshow/132579475.cms",
+    "published_at": "2026-07-23T12:11:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "SPPU teacher recruitment by Dec, law colleges get six months for Bar Council of India recognition",
+    "description": "SPPU teacher recruitment to finish by Dec; 200+ Maharashtra law colleges get six months for BCI recognition. Patil also plans finance portal and NEP internship workshop.",
+    "url": "https://timesofindia.indiatimes.com/city/pune/sppu-teacher-recruitment-by-dec-law-colleges-get-six-months-for-bar-council-of-india-recognition/articleshow/132486231.cms",
+    "published_at": "2026-07-18T18:58:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Indian Institute of Internship Expands Industry",
+    "description": "Kolkata (West Bengal) [India], July 11: As the demand for practical, industry-oriented education continues to grow under the framework of the National Education Policy (NEP 2020), the Indian Institute of Internship (III) has emerged as a recognized name in internship training and skill development. According to the organization, it is a university-empanelled internship provider committed to bridging the gap between academic learning and real-world industry requirements by offering structured internship programmes across diverse disciplines.",
+    "url": "https://www.tribuneindia.com/news/business/indian-institute-of-internship-expands-industry-focused-internship-opportunities/",
+    "published_at": "2026-07-11T07:38:38Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Israeli Embassy's 6-Month Internship Offer In India Sparks Outrage Over THIS One Detail",
+    "description": "The Israeli Embassy in India is facing online criticism after advertising a six-month unpaid political internship, with many questioning the fairness of expecting interns to work without pay., Viral, Times Now",
+    "url": "https://www.timesnownews.com/viral/israeli-embassy-6-month-internship-offer-in-india-sparks-outrage-over-this-one-detail-article-154851069",
+    "published_at": "2026-07-02T07:47:55Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Israel Embassy India internship: Check how to apply, last date and eligibility criteria",
+    "description": "The internship also involves attending and reporting on political events, parliamentary sessions, press briefings, and conferences",
+    "url": "https://www.businesstoday.in/jobs/story/israel-embassy-india-internship-check-how-to-apply-last-date-and-eligibility-criteria-540465-2026-07-02",
+    "published_at": "2026-07-02T07:22:16Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Hack of the day: Apply and track scholarship status before deadlines close",
+    "description": "Hack Of Day News: For thousands of students across India, scholarships are a lifeline that helps them continue their education without financial strain. Yet every year,.",
+    "url": "https://timesofindia.indiatimes.com/technology/hack-of-day/hack-of-the-day-apply-and-track-scholarship-status-before-deadlines-close/articleshow/132680410.cms",
+    "published_at": "2026-07-28T09:19:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'Speaking Sculptures: Karanas in Kathak is an attempt to bring together the evidence preserved in sculptures'",
+    "description": "An enriching evening celebrating the intersection of dance, history, archaeology and scholarship unfolded at the India International Centre (IIC), New.",
+    "url": "https://timesofindia.indiatimes.com/entertainment/events/delhi/speaking-sculptures-karanas-in-kathak-is-an-attempt-to-bring-together-the-evidence-preserved-in-sculptures/articleshow/132660556.cms",
+    "published_at": "2026-07-27T11:44:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'Speaking Sculptures: Karanas in Kathak is an attempt to bring together the evidence preserved in sculptures'",
+    "description": "An enriching evening celebrating the intersection of dance, history, archaeology and scholarship unfolded at the India International Centre (IIC), New.",
+    "url": "https://timesofindia.indiatimes.com/city/delhi/speaking-sculptures-karanas-in-kathak-is-an-attempt-to-bring-together-the-evidence-preserved-in-sculptures/articleshow/132660683.cms",
+    "published_at": "2026-07-27T11:44:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "166 MITS Students Receive AICTE Scholarships Worth Rs 83 Lakh",
+    "description": "The scholarships were awarded under the All India Council for Technical Education (AICTE) Pragati Scholarship Scheme, which provides financial assistance to meritorious girl students pursuing technical education.",
+    "url": "https://www.deccanchronicle.com/southern-states/andhra-pradesh/166-mits-students-receive-aicte-scholarships-worth-rs-83-lakh-1972563",
+    "published_at": "2026-07-20T18:21:27Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Science students face uncertainty as flagship ₹80,000-a-year scholarship remains in limbo",
+    "description": "The cycle of applications begins every year around September – after college admissions and competitive exam results – and ends by October-November. | India News",
+    "url": "https://www.hindustantimes.com/india-news/science-students-face-uncertainty-as-flagship-80-000-a-year-scholarship-remains-in-limbo-101784080001058.html",
+    "published_at": "2026-07-15T02:04:30Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "‘Different flags, same playbook’: Sonam Wangchuk's wife slams BJP, Congress over labels",
+    "description": "“India needs more than just a change of government. It needs a change in the very grammar of politics,” Angmo said. | India News",
+    "url": "https://www.hindustantimes.com/india-news/sonam-wangchuk-wife-gitanjali-angmo-slams-bjp-congress-india-politics-different-flags-same-playbook-101785163415991.html",
+    "published_at": "2026-07-27T16:00:56Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Congress to join NC’s Jantar Mantar protest on Monday, BJP plans secretariat gherao",
+    "description": "India News: SRINAGAR: Politics is heating up in J&K ahead of NC’s proposed protest at Jantar Mantar in New Delhi on July 20 over restoration of statehood, wit.",
+    "url": "https://timesofindia.indiatimes.com/india/congress-to-join-ncs-jantar-mantar-protest-on-monday-bjp-plans-secretariat-gherao/articleshow/132469303.cms",
+    "published_at": "2026-07-17T19:48:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Congress is ceding ground to BJP on nationalism. It’s pushing India towards one-party system",
+    "description": "The Congress party’s abandonment of nationalism is the most intriguing aspect of its post-2014 politics. The real Congress was never a party of bleeding heart pacifists.",
+    "url": "https://theprint.in/national-interest/congress-nationalism-bjp-rahul-gandhi-narendra-modi/2977031/",
+    "published_at": "2026-07-04T05:31:23Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Adityanath Blames Congress’s ‘Lust for Power’ for Partition, Hails CAA and BJP Governance in Uttar Pradesh",
+    "description": "Uttar Pradesh Chief Minister Yogi Adityanath blames Congress’s ‘lust for power’ for India’s Partition, accuses Congress and Samajwadi Party of appeasement politics, and hails the Citizenship Amendment Act while distributing citizenship certificates to displaced families in Pilibhit.",
+    "url": "https://www.outlookindia.com/national/congresss-lust-for-power-led-to-partition-says-adityanath",
+    "published_at": "2026-06-29T10:56:31Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Parliament monsoon session 2026 LIVE: Rahul Gandhi to speak on anti-paper leak bill in Lok Sabha day after fiery debate",
+    "description": "Parliament monsoon session 2026 LIVE: Union Minister Jitendra Singh is scheduled to move Paper Leak Amendment Bill, aimed at curbing examination malpractices, be taken into consideration and subsequently passed. | India News",
+    "url": "https://www.hindustantimes.com/india-news/parliament-monsoon-session-live-updates-bjp-congress-rahul-gandhi-paper-leak-bill-amit-shah-pm-modi-congress-bjp-genz-101785294256938.html",
+    "published_at": "2026-07-29T03:42:22Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "‘Clock it’, 'waste-guna-huiya': Gen Z phrases echo in Lok Sabha as MPs hold fierce debate on anti-paper leak bill",
+    "description": "NDA and Opposition MPs have been using popular Gen-Z expressions in Parliament to debate over the allegations of exam irregularities. | India News",
+    "url": "https://www.hindustantimes.com/india-news/clock-it-gen-z-phrases-lok-sabha-debate-anti-paper-leak-bill-deepender-hooda-waste-guna-huiya-meaning-101785291953423.html",
+    "published_at": "2026-07-29T03:33:34Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'First of kind' vs 'showpiece amendment': Fiery paper leak bill debate in Parliament",
+    "description": "Lok Sabha debated a bill proposing tougher punishment and fast-track trials for exam paper leaks as the Opposition targeted the government. | India News",
+    "url": "https://www.hindustantimes.com/india-news/first-of-kind-vs-showpiece-amendment-fiery-paper-leak-bill-debate-in-parliament-101785287392973.html",
+    "published_at": "2026-07-29T01:23:13Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'Clock it', 'delulu': How Gen Z lingo took over Parliament during anti-paper leak Bill debate",
+    "description": "India News: NEW DELHI: The Lok Sabha debate on the Public Examinations (Prevention of Unfair Means) Amendment Bill, 2026 on Tuesday wasn't just about examination .",
+    "url": "https://timesofindia.indiatimes.com/india/clock-it-delulu-how-gen-z-lingo-took-over-parliament-during-anti-paper-leak-bill-debate/articleshow/132684933.cms",
+    "published_at": "2026-07-28T13:52:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "In Rare Move, LS Speaker Refuses To Expunge Oppn's Remark; Disallows Treasury's Demand",
+    "description": "The Parliament experienced a heated debate over the NEET paper leak, featuring sharp exchanges over the Bilkis Bano case. But in a rare move, the Lok Sabha Speaker refused to expunge Priyanka Gandhi's remarks., India News, Times Now",
+    "url": "https://www.timesnownews.com/india/in-rare-move-ls-speaker-refuses-to-expunge-oppns-remark-disallows-treasurys-demand-article-155192656",
+    "published_at": "2026-07-28T13:32:22Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "SC Reserves Verdict on Gangster Abu Salem's Plea Seeking Premature Release in 1993 Mumbai Serial Blasts Case",
+    "description": "The Supreme Court has reserved its decision on gangster Abu Salem's petition for release after serving 25 years in Indian custody, as per his extradition agreement from Portugal., India News, Times Now",
+    "url": "https://www.timesnownews.com/india/sc-reserves-verdict-on-gangster-abu-salems-plea-seeking-premature-release-in-1993-mumbai-serial-blasts-case-article-155188706",
+    "published_at": "2026-07-27T17:09:02Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "SC rejects Centre's plea against HC order quashing consular, passport and visa services",
+    "description": "The Supreme Court dismissed the Centre's plea challenging a Delhi High Court verdict. This verdict had quashed the tender process for consular, passport, and visa services abroad. The Ministry of External Affairs and Engineers India Limited can make temporary arrangements for service continuity. These arrangements are to ensure uninterrupted delivery while a fresh tender process is completed.",
+    "url": "https://economictimes.indiatimes.com/nri/latest-updates/sc-rejects-centres-plea-against-hc-order-quashing-consular-passport-and-visa-services-in-abu-dhabi-kuwait-singapore-canberra/articleshow/132512594.cms",
+    "published_at": "2026-07-20T10:15:27Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'Appropriate representation' denied: Nirmohi Akhara moves SC over Ram temple trust",
+    "description": "Nirmohi Akhara moved the Supreme Court, seeking implementation of the 2019 Ayodhya verdict and representation in the Ram temple trust. | India News",
+    "url": "https://www.hindustantimes.com/india-news/appropriate-representation-denied-nirmohi-akhara-moves-sc-over-ram-temple-trust-101784403001199.html",
+    "published_at": "2026-07-18T19:30:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'Ayodhya verdict not fully implemented': Nirmohi Akhara moves Supreme Court, seeks reconstitution of Ram Temple trust",
+    "description": "India News: NEW DELHI: The Nirmohi Akhara has moved the Supreme Court seeking directions for what it calls the \\\"proper implementation\\\" of a Constitution bench's N.",
+    "url": "https://timesofindia.indiatimes.com/india/ayodhya-verdict-not-fully-implemented-nirmohi-akhara-moves-supreme-court-seeks-reconstitution-of-ram-temple-trust/articleshow/132482848.cms",
+    "published_at": "2026-07-18T16:01:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "SC To Hear Centre Plea Against HC Verdict Nullifying Tenders For Visa Services At 4 Indian Missions",
+    "description": "The Supreme Court will review the Centre's appeal against a Delhi High Court ruling that annulled a tender for outsourcing Consular, Passport, and Visa services at Indian missions in four cities. , India News, Times Now",
+    "url": "https://www.timesnownews.com/india/sc-to-hear-centre-plea-against-hc-verdict-nullifying-tenders-for-visa-services-at-4-indian-missions-article-155127721",
+    "published_at": "2026-07-18T05:01:23Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "HC declines to interfere with ECI’s timeline for SIR exercise",
+    "description": "The state high court on Tuesday declined to interfere with the Election Commission of India’s (ECI) timeline for the ongoing Special Intensive Revision (SIR) of electoral rolls, saying that the poll body alone must decide whether the schedule allows enough time to complete the exercise | India News",
+    "url": "https://www.hindustantimes.com/india-news/hc-declines-to-interfere-with-eci-s-timeline-for-sir-exercise-101785268266989.html",
+    "published_at": "2026-07-29T03:42:41Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Delhi HC tells ECI not to ‘burden’ govt school teachers with SIR duty, raps threatening letter",
+    "description": "New DelhiThe Delhi High Court on Tuesday directed the Election Commission of India (ECI) to ensure that no government school teacher is assigned duty pertaining to the Special Intensive Revision (SIR) of electoral rolls in the national capital in a manner that places an excessive burden on them or causes undue stress, affecting their ability to teach students | Latest News Delhi",
+    "url": "https://www.hindustantimes.com/cities/delhi-news/delhi-hc-tells-eci-not-to-burden-govt-school-teachers-with-sir-duty-raps-threatening-letter-101785261913658.html",
+    "published_at": "2026-07-29T02:34:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Stalin moves EC: EVM verification in Kolathur to begin on Wednesday",
+    "description": "CHENNAI: Election Commission of India will begin checking and verifying electronic voting machines (EVMs) from 14 polling stations in the Kolathur ass.",
+    "url": "https://timesofindia.indiatimes.com/city/chennai/stalin-moves-ec-evm-verification-in-kolathur-to-begin-on-wednesday/articleshow/132691918.cms",
+    "published_at": "2026-07-28T17:54:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Delhi HC asks ECI to ensure SIR duties do not impose 'unbearable' burden on teachers",
+    "description": "Delhi HC asks ECI to ensure SIR duties do not impose 'unbearable' burden on teachers - New Delhi, July 28 The Delhi High Court on Tuesday directed the Election Commission of India (ECI) to ... Get Latest News on National only on lokmattimes.com",
+    "url": "https://www.lokmattimes.com/national/delhi-hc-asks-eci-to-ensure-sir-duties-do-not-impose-unbearable-burden-on-teachers/",
+    "published_at": "2026-07-28T11:47:23Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Delhi HC says ECI can deploy teachers for election work, but must avoid 'unbearable' stress; RTE mandate cannot be ignored",
+    "description": "The Delhi High Court on Tuesday observed that while the Election Commission of India (ECI) has the constitutional authority to requisition government school teachers for election-related work, it must ensure that such duties do not impose \"unbearable\" stress on them or adversely affect classroom teaching.",
+    "url": "https://www.aninews.in/news/national/general-news/delhi-hc-says-eci-can-deploy-teachers-for-election-work-but-must-avoid-unbearable-stress-rte-mandate-cannot-be-ignored20260728145037/",
+    "published_at": "2026-07-28T09:20:37Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "India bonds tiptoe along ahead of Fed meet; oil prices weigh",
+    "description": "Indian government bonds traded range-bound early Wednesday as investors awaited the Fed's rate decision. Oil prices climbed, reviving concerns about the Gulf conflict and global economic impact. The Reserve Bank of India's policy decision is due next week, with rates expected to remain unchanged. India's financial conditions have tightened recently due to oil price surges. Economic growth is expected to slow while inflation surpasses the central bank's target.",
+    "url": "https://economictimes.indiatimes.com/markets/bonds/india-bonds-tiptoe-along-ahead-of-fed-meet-oil-prices-weigh/articleshow/132703905.cms",
+    "published_at": "2026-07-29T06:40:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Cable TV body withdraws challenge to TV ratings policy",
+    "description": "The All India Digital Cable Federation withdrew its petition challenging the Centre's Television Ratings Policy. This action followed a Kerala High Court interim order upholding the government's decision. The policy excludes landing-page viewership from television audience measurement. This withdrawal clears the path for the resumption of television ratings. However, BARC awaits registration under the new policy framework.",
+    "url": "https://economictimes.indiatimes.com/industry/media/entertainment/media/cable-tv-body-withdraws-challenge-to-tv-ratings-policy/articleshow/132697502.cms",
+    "published_at": "2026-07-29T01:50:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "PM Modi's post removed briefly on Facebook; Meta apologises but Govt says explanation not adequate",
+    "description": "NEW DELHI, Jul 28 : The government on Tuesday summoned Meta's public policy head after Prime Minister Narendra Modi's post of July 23 - addressing India's youth and promising stringent measures against paper leaks - was briefly restricted by the...",
+    "url": "https://www.dailyexcelsior.com/pm-modis-post-removed-briefly-on-facebook-meta-apologises-but-govt-says-explanation-not-adequate/",
+    "published_at": "2026-07-28T23:00:24Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "People must remain at centre of governance, every policy: PM to top bureaucrats",
+    "description": "New Delhi, Jul 28 (PTI) Prime Minister Narendra Modi on Tuesday asked the country’s top bureaucrats to keep people at the centre of governance, stressing that every policy and decision should be guided by the interests and aspirations of the common citizen. Chairing the second high-level meeting with secretaries to the Government of India, Modi […]",
+    "url": "https://theprint.in/india/people-must-remain-at-centre-of-governance-every-policy-pm-to-top-bureaucrats/2999406/",
+    "published_at": "2026-07-28T16:15:20Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "India bonds pause rally as large debt supply, Fed decision loom",
+    "description": "Indian government bonds ended the day unchanged on Tuesday after a recent rally, as an influx of ten-year notes and the Federal Reserve's policy decision dampened risk appetite. Market participants kept a close eye on oil prices and U.S. Treasury yields for guidance. There is an expectation of a rate increase in September from the Federal Reserve, with geopolitical tensions lingering due to Oman's proposed fees in the Hormuz Strait.",
+    "url": "https://economictimes.indiatimes.com/markets/bonds/india-bonds-pause-rally-as-large-debt-supply-fed-decision-loom/articleshow/132688391.cms",
+    "published_at": "2026-07-28T15:24:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Parliament Monsoon Session Live: Rahul Gandhi to take on govt at 12:30 pm as anti-paper leak debate resumes at 12",
+    "description": "Parliament Monsoon Session Live Updates: After a heated Day 1 debate on the anti-paper leak bill, proceedings intensified as Priyanka Gandhi Vadra criticised the new amendments and mocked the members of the high-powered national task force announced by Prime Minister Narendra Modi to reform India’s examination system. Today, all eyes will be on Lok Sabha Leader of Opposition Rahul Gandhi, who is scheduled to speak around 12:30 pm.\nOn the first day of debate, Parliamentary Affairs Minister Kiren Rijiju said the government was prepared to extend the discussion on the anti-paper leak legislation in the Lok Sabha to 10 hours. The House resumed proceedings at 2 pm on Tuesday.\nAt the end of the day’s proceedings, Rijiju accused Opposition parties of “politicising” the issue of paper leaks in competitive examinations.\nThe Public Examinations (Prevention of Unfair Means) Amendment Bill, 2026, was introduced in the Lok Sabha on Monday by Minister of State for Personnel Jitendra Singh. The proposed legislation seeks to amend the Public Examinations (Prevention of Unfair Means) Act, 2024.",
+    "url": "https://www.indiatoday.in/india/story/parliament-monsoon-session-2026-live-updates-rajya-sabha-lok-sabha-paper-leak-bill-rahul-gandhi-2958573-2026-07-29",
+    "published_at": "2026-07-29T01:52:57Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "Centre may table bill to make deepfakes, digital arrest separate offences",
+    "description": "India News: NEW DELHI: Government on Tuesday said it may introduce a bill in the ongoing session of Parliament making digital arrest and AI-generated deepfakes a .",
+    "url": "https://timesofindia.indiatimes.com/india/centre-may-table-bill-to-make-deepfakes-digital-arrest-separate-offences/articleshow/132694735.cms",
+    "published_at": "2026-07-28T23:42:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "'Clock it', 'delulu': How Gen Z lingo took over Parliament during anti-paper leak Bill debate",
+    "description": "India News: NEW DELHI: The Lok Sabha debate on the Public Examinations (Prevention of Unfair Means) Amendment Bill, 2026 on Tuesday wasn't just about examination .",
+    "url": "https://timesofindia.indiatimes.com/india/clock-it-delulu-how-gen-z-lingo-took-over-parliament-during-anti-paper-leak-bill-debate/articleshow/132684933.cms",
+    "published_at": "2026-07-28T13:52:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "PM Modi, NDA leaders meet amid Parliament logjam over exam reforms",
+    "description": "The NDA Parliamentary Party convened its 'Mangal Milan' meeting today in Parliament. The Nationalist Citizens Party of India, a new ally, also attended the significant gathering. Disruptions marked the Monsoon Session, with exam reforms and student protests being key issues. The Public Examinations Amendment Bill was introduced, aiming to prevent unfair means. The meeting occurred as the opposition continued to disrupt parliamentary proceedings.",
+    "url": "https://economictimes.indiatimes.com/news/politics-and-nation/pm-modi-nda-leaders-meet-amid-parliament-logjam-over-exam-reforms/articleshow/132675230.cms",
+    "published_at": "2026-07-28T04:34:00Z"
+  },
+  {
+    "source": "GNews",
+    "bucket": "StudentNews",
+    "title": "End to Parliament impasse in sight, Lok Sabha may take up bill on exam reforms today",
+    "description": "India News: NEW DELHI: On a day the opposition's protest over Delhi Police's alleged excesses against protesting students washed out proceedings in both Houses of.",
+    "url": "https://timesofindia.indiatimes.com/india/end-to-parliament-impasse-in-sight-lok-sabha-may-take-up-bill-on-exam-reforms-today/articleshow/132670551.cms",
+    "published_at": "2026-07-27T21:01:00Z"
   },
   {
     "source": "RSS_NDTV_Politics",
     "bucket": "GovtPolicy",
-    "title": "CJP Parliament March LIVE Updates: Minister Reaches PM Modi's House Amid Protest",
-    "description": "CJP Parliament March LIVE",
-    "url": "https://www.ndtv.com/india-news/cjp-protest-in-delhi-live-cockroach-janta-party-parliament-protest-abhijeet-dipke-jantar-mantar-sonam-wangchuk-parliament-monsoon-session-saurav-das-11794314#publisher=newsstand",
-    "published_at": "Tue, 21 Jul 2026 16:34:16 +0530"
+    "title": "How Social Influencers, Non-Profits Are Helping Assam Flood Relief Efforts",
+    "description": "Garima Saikia Garg, wife of late Assamese music icon Zubeen Garg, has also joined the relief initiative.",
+    "url": "https://www.ndtv.com/india-news/how-social-influencers-non-profits-are-helping-assam-flood-relief-efforts-11840259#publisher=newsstand",
+    "published_at": "Wed, 29 Jul 2026 23:57:00 +0530"
   },
   {
     "source": "RSS_NDTV_Politics",
     "bucket": "GovtPolicy",
-    "title": "Char Dham Yatra Resumes In Uttarakhand After Temporary Suspension",
-    "description": "Routes are being monitored, and vigilance is being maintained in vulnerable areas. (Representational)",
-    "url": "https://www.ndtv.com/india-news/char-dham-yatra-resumes-in-uttarakhand-after-temporary-suspension-11800880#publisher=newsstand",
-    "published_at": "Tue, 21 Jul 2026 16:32:41 +0530"
+    "title": "Out For 3 Months, Sonam Raghuvanshi Surrenders After Top Court Cancels Bail",
+    "description": "Raja Raghuvanshi's brother, Vipin Raghuvanshi, welcomed the Supreme Court's decision.",
+    "url": "https://www.ndtv.com/india-news/out-for-3-months-sonam-raghuvanshi-surrenders-after-top-court-cancels-bail-11840255#publisher=newsstand",
+    "published_at": "Wed, 29 Jul 2026 23:50:40 +0530"
   },
   {
     "source": "RSS_NDTV_Politics",
     "bucket": "GovtPolicy",
-    "title": "Rahul, Priyanka Gandhi Protest Outside PM's House Over Paper Leaks",
-    "description": "Rahul Gandhi said the protest was to demand accountability for the \"brutality\" against students.",
-    "url": "https://www.ndtv.com/india-news/neet-paper-leak-row-rahul-gandhi-sister-priyanka-lead-congress-protest-to-pm-modi-s-house-11800745#publisher=newsstand",
-    "published_at": "Tue, 21 Jul 2026 16:31:58 +0530"
+    "title": "Broken Promises, Empty Skies: Why NRIs Aren't Flying Home For Punjab Polls",
+    "description": "In 2012, Manpreet Singh Badal launched his 'People's Party of Punjab' and in 2017 the Aam Aadmi Party forayed into the state's election process. Both parties were seen as new hope for the state, which was experiencing agrarian and social distress",
+    "url": "https://www.ndtv.com/india-news/broken-promises-empty-skies-why-nris-arent-flying-home-for-punjab-polls-11840200#publisher=newsstand",
+    "published_at": "Wed, 29 Jul 2026 23:48:48 +0530"
   },
   {
     "source": "RSS_NDTV_Politics",
     "bucket": "GovtPolicy",
-    "title": "One Launch A Month Our Next Goal After Vikram-1 Success: Skyroot CEO",
-    "description": "In an exclusive interview with NDTV, Pawan Kumar Chandana spoke about Vikram-1's success.",
-    "url": "https://www.ndtv.com/india-news/one-launch-a-month-our-next-goal-after-vikram-1-success-skyroot-ceo-11799473#publisher=newsstand",
-    "published_at": "Tue, 21 Jul 2026 16:27:52 +0530"
+    "title": "Man Stabbed To Death, Woman Injured In Delhi Park, Minor Detained",
+    "description": "The Delhi Police said that multiple teams have been formed to identify and arrest the accused.",
+    "url": "https://www.ndtv.com/india-news/man-stabbed-to-death-woman-injured-in-delhi-park-minor-detained-11840215#publisher=newsstand",
+    "published_at": "Wed, 29 Jul 2026 23:38:52 +0530"
+  },
+  {
+    "source": "RSS_NDTV_Politics",
+    "bucket": "GovtPolicy",
+    "title": "Gujarat Man Poisoned, Buried By Wife. Family Believed He Was In Australia",
+    "description": "Police said the skeletal remains recovered from the site have been sent for DNA analysis.",
+    "url": "https://www.ndtv.com/india-news/gujarat-man-poisoned-buried-by-wife-family-believed-he-was-in-australia-11840201#publisher=newsstand",
+    "published_at": "Wed, 29 Jul 2026 23:34:19 +0530"
   },
   {
     "source": "RSS_TOI_Politics",
     "bucket": "GovtPolicy",
-    "title": "CJP removes spokesperson Vijeta Dahiya, condemns 'deeply insensitive actions'",
-    "description": "",
-    "url": "https://timesofindia.indiatimes.com/india/cjp-removes-spokesperson-vijeta-dahiya-condemns-deeply-insensitive-actions/articleshow/132534529.cms",
-    "published_at": "2026-07-21T16:32:48+05:30"
+    "title": "Tourists no longer sleep in taxis, Farooq Abdullah hails hotel boom in Kashmir",
+    "description": "In a recent statement, LG Manoj Sinha commended hotels for their role as facilitators of peace and their significant financial commitments to the sector. He pointed out that numerous hotels had overlooked crucial construction regulations. Farooq Abdullah highlighted the employment opportunities gene",
+    "url": "https://timesofindia.indiatimes.com/india/tourists-no-longer-sleep-in-taxis-farooq-abdullah-hails-hotel-boom-in-kashmir/articleshow/132720164.cms",
+    "published_at": "2026-07-30T00:01:32+05:30"
   },
   {
     "source": "RSS_TOI_Politics",
     "bucket": "GovtPolicy",
-    "title": "Times Prime's Aeonic partners with Sisters in Sweat to host premium mixed football tournament",
-    "description": "Times Prime and Sisters In Sweat announced a mixed-gender football tournament in Mumbai. This event is curated by Aeonic, Times Prime's new wellness membership. The tournament will take place on Saturday, July 25, 2026, at the Wings Sports Centre. It aims to integrate holistic well-being and active ",
-    "url": "https://timesofindia.indiatimes.com/india/times-primes-aeonic-partners-with-sisters-in-sweat-to-host-premium-mixed-football-tournament/articleshow/132534486.cms",
-    "published_at": "2026-07-21T16:30:40+05:30"
+    "title": "Jammu &amp; Kashmir politicians urge UN, PM Modi to intervene over PoK killings",
+    "description": "Political parties in Jammu and Kashmir are urging intervention over alleged killings. Over two dozen people were reportedly killed in firing by Pakistani security forces. National Conference president Farooq Abdullah called for a UN Human Rights Council team. CPM legislator MY Tarigami demanded an e",
+    "url": "https://timesofindia.indiatimes.com/india/jammu-kashmir-politicians-urge-un-pm-modi-to-intervene-over-pok-killings/articleshow/132720119.cms",
+    "published_at": "2026-07-29T23:54:25+05:30"
   },
   {
     "source": "RSS_TOI_Politics",
     "bucket": "GovtPolicy",
-    "title": "Quote of the day by Aristotle: 'A tyrant must appear deeply religious. People are less likely to rebel because they think God is on his side'",
-    "description": "Ancient philosopher Aristotle observed that tyrants often feign piety to quell fears of injustice among their subjects. This deception leads the populace to believe their ruler is favored by the divine, thus discouraging any thoughts of rebellion. Aristotle's reflections in Politics illuminate the s",
-    "url": "https://timesofindia.indiatimes.com/india/quote-of-the-day-by-aristotle-a-tyrant-must-appear-deeply-religious-people-are-less-likely-to-rebel-because-they-think-god-is-on-his-side/articleshow/132533163.cms",
-    "published_at": "2026-07-21T16:30:00+05:30"
+    "title": "Jammu and Kashmir: Schools closed in Kishtwar, Doda amid inclement weather",
+    "description": "Authorities ordered school closures in Doda and Kishtwar districts due to inclement weather.  The Amarnath pilgrimage continued solely on the Baltal route with many devotees.  Vaishno Devi yatra also proceeded but only via the traditional Ardhkuwari track.  The Jammu-Srinagar national highway remain",
+    "url": "https://timesofindia.indiatimes.com/india/jammu-and-kashmir-schools-closed-in-kishtwar-doda-amid-inclement-weather/articleshow/132720003.cms",
+    "published_at": "2026-07-29T23:48:13+05:30"
   },
   {
     "source": "RSS_TOI_Politics",
     "bucket": "GovtPolicy",
-    "title": "'If someone dies .... ': Delhi Police probes alleged chats ahead of CJP's 'Sansad Chalo' march",
-    "description": "Delhi Police are examining alleged chat messages from the Cockroach Janta Party's protest march.  These conversations reportedly discussed maintaining communication during potential internet shutdowns.  Some messages also referred to participants being prepared to sacrifice their lives for the cause",
-    "url": "https://timesofindia.indiatimes.com/india/if-someone-dies-delhi-police-probes-alleged-chats-ahead-of-cjps-sansad-chalo-march/articleshow/132533757.cms",
-    "published_at": "2026-07-21T15:58:35+05:30"
+    "title": "Rahul Gandhi demands Amit Shah's sacking, seeks SC-monitored probe into protest crackdown",
+    "description": "",
+    "url": "https://timesofindia.indiatimes.com/india/rahul-gandhi-demands-amit-shahs-sacking-seeks-sc-monitored-probe-into-protest-crackdown/articleshow/132718444.cms",
+    "published_at": "2026-07-29T23:04:44+05:30"
   },
   {
     "source": "RSS_TOI_Politics",
     "bucket": "GovtPolicy",
-    "title": "Stopped at Shambhu border on way to Delhi: Why are farmers protesting again",
-    "description": "Farmers from Punjab were stopped at the Shambhu border while heading to Delhi. They are protesting the proposed India-United States trade deal announced in February. Their primary concern involves the agriculture and dairy sectors within the agreement. Farmers fear cheaper US imports will lower dome",
-    "url": "https://timesofindia.indiatimes.com/india/stopped-at-shambhu-border-on-way-to-delhi-why-are-farmers-protesting-again/articleshow/132533704.cms",
-    "published_at": "2026-07-21T15:58:00+05:30"
+    "title": "Relief for automakers as Centre proposes easy easing emission compliance testing regime",
+    "description": "The road transport ministry proposes changes to emission compliance testing for vehicle manufacturers.  New passenger cars and two-wheelers will undergo annual testing for three years after approval.  Larger vehicles will continue with annual emission compliance testing.  Existing models will see te",
+    "url": "https://timesofindia.indiatimes.com/india/relief-for-automakers-as-centre-proposes-easy-easing-emission-compliance-testing-regime/articleshow/132718724.cms",
+    "published_at": "2026-07-29T23:04:28+05:30"
   },
   {
     "source": "RSS_TheHindu_National",
     "bucket": "GovtPolicy",
-    "title": "Gujarat records 49.79 million-tonnes drop in carbon emissions in 2025-26",
-    "description": "The reduction coincides with a record 67,655 million units of electricity generated from renewable energy sources",
-    "url": "https://www.thehindu.com/news/national/gujarat/gujarat-records-4979-million-tonnes-drop-in-carbon-emissions-in-2025-26/article71248948.ece",
-    "published_at": "Tue, 21 Jul 2026 16:47:02 +0530"
+    "title": "Will Rahul Gandhi speak for the rights of Tamil Nadu on Cauvery, asks Anbumani Ramadoss",
+    "description": "PMK leader slams the Congress and the BJP for “conspiring” against Tamil Nadu on Mekedatu",
+    "url": "https://www.thehindu.com/news/national/tamil-nadu/will-rahul-gandhi-speak-for-the-rights-of-tamil-nadu-on-cauvery-asks-anbumani-ramadoss/article71281956.ece",
+    "published_at": "Thu, 30 Jul 2026 00:15:03 +0530"
   },
   {
     "source": "RSS_TheHindu_National",
     "bucket": "GovtPolicy",
-    "title": "Tamil Nadu scales up ABHA creation, 2.54 crore people covered so far",
-    "description": "ABHA, a 14-digit unique health identifier created using an Aadhaar number, is a key feature of the Union government’s Ayushman Bharat Digital Mission (ABDM), launched in 2021, enabling a digital health records ecosystem",
-    "url": "https://www.thehindu.com/news/national/tamil-nadu/tamil-nadu-scales-up-abha-creation-254-crore-people-covered-so-far/article71246052.ece",
-    "published_at": "Tue, 21 Jul 2026 16:45:49 +0530"
+    "title": "Illegal sale of Palani math land: CB-CID arrests four persons including seller and buyers",
+    "description": "Three persons were arrested shortly after former AIADMK MLA approached the High Court seeking a CBI probe",
+    "url": "https://www.thehindu.com/news/national/tamil-nadu/illegal-sale-of-palani-math-land-cb-cid-arrests-three-persons/article71279794.ece",
+    "published_at": "Thu, 30 Jul 2026 00:08:00 +0530"
   },
   {
     "source": "RSS_TheHindu_National",
     "bucket": "GovtPolicy",
-    "title": "CJP protest in Delhi LIVE: Thousands regroup at protest site in Jantar Mantar",
-    "description": "Congress MPs, including Mallikarjun Kharge, Rahul Gandhi and Priyanka Gandhi, marched to PM Modi's residence over the police brutality on students; Delhi High Court has allowed Sonam Wangchuk to shift to Medanta Hospital",
-    "url": "https://www.thehindu.com/news/national/cjp-protest-delhi-jantar-mantar-sonam-wangchuk-july-21-2026/article71247869.ece",
-    "published_at": "Tue, 21 Jul 2026 16:43:42 +0530"
+    "title": "Expert committee to inspect autonomous colleges in Calicut varsity",
+    "description": "Syndicate standing committee on exams to conduct inquiry into 93 students graduating after getting moderation marks in an unauthorised manner",
+    "url": "https://www.thehindu.com/news/national/kerala/expert-committee-to-inspect-autonomous-colleges-in-calicut-varsity/article71282428.ece",
+    "published_at": "Thu, 30 Jul 2026 00:05:23 +0530"
   },
   {
     "source": "RSS_TheHindu_National",
     "bucket": "GovtPolicy",
-    "title": "Farmers stopped at Punjab-Haryana border en route to Delhi rally against India-U.S. trade deal",
-    "description": "Farmers wanted to peacefully go to Delhi and participate in the rally but the BJP-led Haryana government has stopped them by erecting barricades, Sarwan Singh Pandher, farmer leader and coordinator of the Desh Bachao Morcha, says",
-    "url": "https://www.thehindu.com/news/national/haryana-police-close-shambu-border-ahead-of-farmers-motorcycle-rally/article71248028.ece",
-    "published_at": "Tue, 21 Jul 2026 16:42:17 +0530"
+    "title": "Two days on, Bihar families wait for protesters’ release",
+    "description": "",
+    "url": "https://www.thehindu.com/news/national/bihar/two-days-on-bihar-families-wait-for-protesters-release/article71282860.ece",
+    "published_at": "Thu, 30 Jul 2026 00:03:41 +0530"
   },
   {
     "source": "RSS_TheHindu_National",
     "bucket": "GovtPolicy",
-    "title": "Cauvery Water Management Authority to meet on July 22 amid Tamil Nadu’s growing deficit in water realisation",
-    "description": "Since June 1, the start of the current water year, four reservoirs of the Cauvery basin have received around 30 tmc ft, whereas Tamil Nadu has not even received four tmc ft, says an expert in Chennai",
-    "url": "https://www.thehindu.com/news/national/tamil-nadu/cauverywater-management-authority-is-meeting-on-wednesday-amid-a-growing-deficit-in-water-realisation-by-tamil-nadu/article71245268.ece",
-    "published_at": "Tue, 21 Jul 2026 16:41:57 +0530"
+    "title": "Kerala Headload Workers’ Act will be modernised, says  Bindhu",
+    "description": "",
+    "url": "https://www.thehindu.com/news/national/kerala/kerala-headload-workers-act-will-be-modernised-says-bindhu/article71282410.ece",
+    "published_at": "Wed, 29 Jul 2026 23:58:10 +0530"
   },
   {
     "source": "RSS_IndianExpress_India",
     "bucket": "GovtPolicy",
-    "title": "Rahul Gandhi, Priyanka on sit-in outside PM’s home over Delhi crackdown",
+    "title": "Opposition’s next move in House: Raising Ram temple ‘donation theft’ while continuing to target Amit Shah",
     "description": "",
-    "url": "https://indianexpress.com/article/india/rahul-gandhi-priyanka-gandhi-vadra-sit-in-pm-modi-residence-crackdown-student-delhi-10796664/",
-    "published_at": "Tue, 21 Jul 2026 10:11:38 +0000"
+    "url": "https://indianexpress.com/article/india/oppositions-next-move-in-house-raising-ram-temple-donation-theft-while-continuing-to-target-amit-shah-10809544/",
+    "published_at": "Wed, 29 Jul 2026 18:46:11 +0000"
   },
   {
     "source": "RSS_IndianExpress_India",
     "bucket": "GovtPolicy",
-    "title": "IIT-Roorkee tells students not to ‘show affinity to political movements like the one currently’",
+    "title": "IPS trainee sent to judicial custody; fellow trainee claimed he tried to kill her",
     "description": "",
-    "url": "https://indianexpress.com/article/india/iit-roorkee-bans-students-staff-cjp-protest-mahua-moitra-reacts-10796637/",
-    "published_at": "Tue, 21 Jul 2026 10:09:49 +0000"
+    "url": "https://indianexpress.com/article/india/ips-trainee-judicial-custody-fellow-trainee-claimed-tried-kill-her-10809466/",
+    "published_at": "Wed, 29 Jul 2026 16:49:12 +0000"
   },
   {
     "source": "RSS_IndianExpress_India",
     "bucket": "GovtPolicy",
-    "title": "He couldn’t find anyone to fund his movie. Now this Adivasi filmmaker has won a National Film Award",
+    "title": "Bihar withdraws 64 FIRs against NEET protesters but cases against 21 in Siwan remain",
     "description": "",
-    "url": "https://indianexpress.com/article/india/angen-national-film-award-ravi-raj-murmu-first-santhali-film-winner-10796628/",
-    "published_at": "Tue, 21 Jul 2026 10:07:19 +0000"
+    "url": "https://indianexpress.com/article/india/bihar-withdraws-fir-against-neet-protesters-cases-against-siwan-remain-10809346/",
+    "published_at": "Wed, 29 Jul 2026 15:11:38 +0000"
   },
   {
     "source": "RSS_IndianExpress_India",
     "bucket": "GovtPolicy",
-    "title": "Water levels ‘unseen in half a century’: Flooding sends thousands to relief camps in Assam",
+    "title": "The Daily Catch-Up: The NEET row returns to Centre stage",
     "description": "",
-    "url": "https://indianexpress.com/article/india/assam-floods-upper-assam-water-levels-himanta-biswa-sarma-evacuations-simalguri-trains-10796438/",
-    "published_at": "Tue, 21 Jul 2026 08:43:52 +0000"
+    "url": "https://indianexpress.com/article/india/daily-catch-up-paper-leak-parliament-virat-anushka-mumbai-property-10809324/",
+    "published_at": "Wed, 29 Jul 2026 14:57:01 +0000"
   },
   {
     "source": "RSS_IndianExpress_India",
     "bucket": "GovtPolicy",
-    "title": "Have your say on Aravallis: Supreme Court panel opens 21-day window for feedback",
+    "title": "Amit Shah ‘culpable or incompetent’, sack him for crackdown on students: Rahul Gandhi",
     "description": "",
-    "url": "https://indianexpress.com/article/india/supreme-court-aravalli-hills-committee-public-suggestions-10796350/",
-    "published_at": "Tue, 21 Jul 2026 07:37:10 +0000"
+    "url": "https://indianexpress.com/article/india/rahul-gandhi-amit-shah-chalo-sansad-cjp-protests-anti-paper-leak-bill-10809224/",
+    "published_at": "Wed, 29 Jul 2026 14:36:33 +0000"
   }
 ]

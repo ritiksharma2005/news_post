@@ -5,7 +5,7 @@ Main Runner for Campus Digest Workflow:
 2. AI selects the best post and rewrites it
 3. Downloads the original post photo
 4. Generates branded 1080x1080 Campus Digest poster
-5. Publishes to Telegram & Instagram
+5. Publishes to Telegram & Instagram (Skipped in Dry Run mode)
 """
 
 import sys
@@ -42,7 +42,7 @@ def download_source_image(media_url, output_path):
     return None
 
 
-def run_digest_pipeline():
+def run_digest_pipeline(dry_run=False):
     print("=" * 50)
     print("🎓 STEP 1: Scraping target Instagram profiles...")
     print("=" * 50)
@@ -101,6 +101,13 @@ def run_digest_pipeline():
         "hashtags": []
     }
 
+    if dry_run:
+        print("\n" + "=" * 50)
+        print("🔒 [DRY RUN ACTIVE] Digest card generated at output/cards/digest_today.png")
+        print("=" * 50)
+        print(f"Caption draft:\n{caption_text}")
+        return
+
     print("\n" + "=" * 50)
     print("🎓 STEP 4: Sending Digest to Telegram")
     print("=" * 50)
@@ -120,5 +127,5 @@ def run_digest_pipeline():
 
 
 if __name__ == "__main__":
-    run_digest_pipeline()
-    
+    dry_run = "--dry-run" in sys.argv or "-d" in sys.argv
+    run_digest_pipeline(dry_run)

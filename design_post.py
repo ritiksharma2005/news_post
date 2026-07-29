@@ -81,6 +81,13 @@ def draw_camera_logo(draw, x, y, color):
     draw.ellipse([(x + 14, y + 14), (x + 22, y + 22)], fill=color)
 
 
+def strip_emojis(text):
+    """Removes all emojis and special dingbat symbols to prevent box rendering bugs."""
+    import re
+    # Match standard emoji Unicode ranges, CJK symbols, and dingbats
+    return re.sub(r'[\U00010000-\U0010ffff\u2600-\u27bf\u2b50\u2b06\u2192]', '', text).strip()
+
+
 def create_card(headline, summary, image_path, bucket="StudentEducation", language="en", emoji=None, output_path="output/card.png"):
     """
     Renders a 1080x1080 Square Poster with fully dynamic headline, summary, and auto-filling image.
@@ -110,7 +117,7 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", langua
 
     # 3. FULLY DYNAMIC Headline Section (Fits 1, 2, 3, or 4 lines naturally!)
     y_cursor = 94
-    clean_headline = headline.strip()
+    clean_headline = strip_emojis(headline)
 
     words = clean_headline.split()
     headline_lines = []
@@ -134,7 +141,7 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", langua
     draw.line([(260, y_cursor + 3), (1040, y_cursor + 3)], fill="#1A1A1A", width=2)
 
     # 4. FULLY DYNAMIC Summary Box Calculation
-    clean_summary = summary.strip()
+    clean_summary = strip_emojis(summary)
     sum_words = clean_summary.split()
     sum_lines = []
     cur_sum = ""

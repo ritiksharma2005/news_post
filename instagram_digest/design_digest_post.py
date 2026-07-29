@@ -22,6 +22,13 @@ def get_font(font_type="bold", size=32):
     return ImageFont.load_default()
 
 
+def strip_emojis(text):
+    """Removes all emojis and special dingbat symbols to prevent box rendering bugs."""
+    import re
+    # Match standard emoji Unicode ranges, CJK symbols, and dingbats
+    return re.sub(r'[\U00010000-\U0010ffff\u2600-\u27bf\u2b50\u2b06\u2192]', '', text).strip()
+
+
 def draw_camera_logo(draw, x, y, color):
     """Draws a camera logo icon directly in RGB mode."""
     draw.rounded_rectangle([(x, y + 5), (x + 36, y + 29)], radius=4, fill=color)
@@ -46,15 +53,16 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
     font_bullet = get_font("regular", 30)  # Font adjusted to 30 to guarantee 5 bullets fit
     font_footer = get_font("bold", 30)
 
-    # 1. Top Stripe & Header
+    # 1. Top Stripe & Header (Removed emoji to prevent box glitch)
     draw.rectangle([(0, 0), (width, 18)], fill=accent_color)
-    draw.text((40, 30), "🎓 CAMPUS DIGEST", fill="#1A1A1A", font=font_brand)
+    draw.text((40, 30), "CAMPUS DIGEST", fill="#1A1A1A", font=font_brand)
     draw.text((930, 30), "2026", fill="#1A1A1A", font=font_brand)
     draw.line([(40, 78), (1040, 78)], fill="#1A1A1A", width=3)
 
     # 2. Headline (Wraps into exactly 2 lines)
     y_cursor = 94
-    words = headline.strip().split()
+    clean_headline = strip_emojis(headline)
+    words = clean_headline.split()
     lines = []
     cur = ""
     for w in words:
@@ -126,12 +134,12 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
     sum_y = box_top + 22
     line_height = 42  # Spacing adjusted for 5 bullets
     for b in bullets[:5]:
-        draw.text((72, sum_y), b, fill="#0369A1", font=font_bullet)
+        draw.text((72, sum_y), strip_emojis(b), fill="#0369A1", font=font_bullet)
         sum_y += line_height
 
-    # Draw Why It Matters inside box
+    # Draw Why It Matters inside box (Removed lightbulb emoji)
     sum_y += 10
-    draw.text((72, sum_y), f"💡 Why it matters: {why_it_matters[:100]}...", fill="#075985", font=get_font("bold", 26))
+    draw.text((72, sum_y), f"Insight: {strip_emojis(why_it_matters)[:100]}...", fill="#075985", font=get_font("bold", 26))
 
     # 6. Footer Watermark (📸 @news.nit_iit)
     footer_center_x = 420
