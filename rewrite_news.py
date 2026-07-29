@@ -17,7 +17,7 @@ Description: {description}
 
 Write:
 1. A detailed 2-line headline with emojis (Make it long enough to span exactly two lines, around 15-20 words, 60-80 characters total. E.g. 🚀 Union Budget 2026: Key Policy Decisions Announced for Student Loans)
-2. A 2-3 line summary (max 50 words) explaining the key facts in plain, engaging language suitable for an Instagram/social media audience
+2. A detailed 3-4 line summary (around 50-70 words) explaining the key facts in plain, engaging language suitable for an Instagram/social media audience
 3. A detailed, descriptive image generation prompt to generate a photorealistic news photo representing this story (E.g. "A professional news photograph of Indian college students working in a modern computer lab, natural lighting, high detail, editorial look" or "A professional news photograph of an Indian political leader speaking in the Rajya Sabha chamber, Delhi, photorealistic"). Avoid text, words, or logos.
 
 Return ONLY a JSON object in this exact format, nothing else, no markdown fences:
