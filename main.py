@@ -37,7 +37,7 @@ def run_quote_pipeline(dry_run=False):
     author_name = quote_data.get("author", "Wise Leader")
     print(f"\n🎨 STEP 2: Fetching background portrait for {author_name}...")
     portrait_path = generate_image.generate_image(
-        headline=f"Minimalist black and white sketch portrait illustration of {author_name}, high quality line art",
+        prompt=f"Minimalist black and white sketch portrait illustration of {author_name}, high quality line art",
         summary="pencil sketch line art background",
         output_path=f"output/images/portrait_{author_name.replace(' ', '_')}.jpg",
         width=1080,
