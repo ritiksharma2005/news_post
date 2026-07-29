@@ -174,13 +174,15 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", langua
     if image_path and os.path.exists(image_path):
         try:
             main_img = Image.open(image_path).convert("RGB")
-            main_img = main_img.resize((1080, image_height), Image.Resampling.LANCZOS)
-            card.paste(main_img, (0, image_top))
+            main_img = main_img.resize((1000, image_height), Image.Resampling.LANCZOS)
+            card.paste(main_img, (40, image_top))
+            # Draw a crisp, thin border around the photo to match the editorial template
+            draw.rectangle([(40, image_top), (1040, image_top + image_height)], outline="#1A1A1A", width=2)
         except Exception as e:
             print(f"Error placing image: {e}")
-            draw.rectangle([(0, image_top), (1080, image_top + image_height)], fill="#CBD5E1")
+            draw.rectangle([(40, image_top), (1040, image_top + image_height)], fill="#CBD5E1", outline="#1A1A1A", width=2)
     else:
-        draw.rectangle([(0, image_top), (1080, image_top + image_height)], fill="#CBD5E1")
+        draw.rectangle([(40, image_top), (1040, image_top + image_height)], fill="#CBD5E1", outline="#1A1A1A", width=2)
         draw.text((460, image_top + (image_height // 2) - 15), "news.nit_iit", fill="#64748B", font=font_header)
 
     # Draw Dynamic Summary Box

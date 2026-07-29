@@ -2,31 +2,31 @@
   {
     "title": "Rahul Gandhi demands Amit Shah's sacking, seeks SC-monitored probe into protest crackdown",
     "url": "https://timesofindia.indiatimes.com/india/rahul-gandhi-demands-amit-shahs-sacking-seeks-sc-monitored-probe-into-protest-crackdown/articleshow/132718444.cms",
-    "summary": "Rahul Gandhi demands Amit Shah's sacking and a SC-monitored probe into the protest crackdown",
-    "source": "The Times of India",
+    "summary": "Rahul Gandhi demands Amit Shah's sacking and a Supreme Court-monitored probe into the protest crackdown",
+    "source": "RSS_TOI_Politics",
     "bucket": "IndianPolitics",
-    "new_headline": "📰 Rahul Gandhi Seeks Justice 🚨: Amit Shah's Resignation Demanded Over Protest Crackdown 🕊️ now",
-    "new_summary": "Rahul Gandhi demands action against Amit Shah. He seeks a probe into protest crackdowns",
-    "image_prompt": "A professional news photograph of Rahul Gandhi speaking at a crowded press conference in New Delhi, with microphones and journalists in the foreground, natural lighting, high detail, editorial look"
+    "new_headline": "🚨 Protest Crackdown: Rahul Gandhi 🗣️ Demands Action Against Amit Shah 🚫, SC Probe 🕊️ Launched Soon",
+    "new_summary": "Rahul Gandhi seeks justice, demands Amit Shah's removal and a Supreme Court-monitored probe into the protest crackdown.",
+    "image_prompt": "A professional news photograph of a determined Rahul Gandhi speaking at a crowded press conference in Delhi, with microphones and Indian flags in the background, natural lighting, high detail, editorial look"
   },
   {
     "title": "Govt. simplifies NEET-UG 2026 counselling process",
     "url": "https://www.thehindu.com/news/national/nadda-reviews-neet-ug-counselling-2026-preparedness/article71282356.ece",
-    "summary": "Centre introduces one-time physical reporting framework and online seat resignation for NEET-UG 2026 counselling",
-    "source": "The Hindu",
+    "summary": "The government introduces a one-time physical reporting framework and online seat resignation for NEET-UG 2026 counselling",
+    "source": "RSS_TheHindu_National",
     "bucket": "StudentEducation",
-    "new_headline": "📚 Simplified NEET-UG 2026 👉 Easier Counselling Ahead 🚀",
-    "new_summary": "NEET-UG counselling process now easier. Students rejoice!",
-    "image_prompt": "A professional news photograph of relieved Indian medical students checking their NEET-UG counselling results on laptops in a crowded college library, natural lighting, high detail, editorial look"
+    "new_headline": "📚👍 NEET-UG 2026 Counselling Simplified: 🚀 Easier Process Ahead 📊 Union Decision",
+    "new_summary": "Big relief for students! The government simplifies NEET-UG counselling process, making it easier and more accessible.",
+    "image_prompt": "A professional news photograph of happy Indian students gathered around a computer screen, displaying the NEET-UG counselling website, in a bright and modern college counselling room, natural lighting, high detail, editorial look"
   },
   {
-    "title": "WPP Media partners with Kily to advance AI-led ecom in India",
-    "url": "https://www.mxmindia.com/news/wpp-media-partners-with-kily-to-advance-ai-led-ecom-in-india/",
-    "summary": "WPP Media partners with Kily to enable brands to drive scale, agility, and measurable business outcomes using AI-led ecom",
-    "source": "MXM India",
+    "title": "XAU/USD Update: Gold Breaks the Downtrend — Buyers Are Back",
+    "url": "https://in.tradingview.com/chart/XAUUSD/JEIQLTl8-XAU-USD-Update-Gold-Breaks-the-Downtrend-Buyers-Are-Back/",
+    "summary": "Gold has broken its downtrend, and buyers are back in the market",
+    "source": "NewsData",
     "bucket": "TechInnovation",
-    "new_headline": "🚀💻 WPP Media Partners with Kily 📈 India's Ecom Sector",
-    "new_summary": "WPP Media joins Kily to boost e-commerce with AI in India, enhancing online shopping experiences",
-    "image_prompt": "A professional news photograph of a modern Indian e-commerce warehouse with boxes and packages being processed by workers, with a large screen displaying AI analytics in the background, natural lighting, high detail, editorial look"
+    "new_headline": "🚀 Gold Prices Soar: 📈 Bullish Trend Begins 📊",
+    "new_summary": "Gold breaks downtrend, buyers return. Prices surge upward.",
+    "image_prompt": "A professional news photograph of a bustling Indian gold market, people buying and selling gold, natural lighting, high detail, editorial look"
   }
 ]
