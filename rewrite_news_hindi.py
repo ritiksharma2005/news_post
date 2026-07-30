@@ -16,7 +16,7 @@ Title: {title}
 Description: {description}
 
 Write:
-1. A punchy headline in HINDI with emojis (MAX 12 words or 65 characters) so it fits on exactly 2 lines (E.g. 🚀 छात्र ऋण पर बड़ा फैसला: बजट 2026 में बड़ा बदलाव)
+1. A detailed headline in HINDI with emojis spanning EXACTLY 2 lines (around 12-16 words, 60-70 characters total) so it occupies both lines and fills the template header space (E.g. 🚀 छात्र ऋण पर बड़ा फैसला: केंद्रीय बजट 2026 में महत्वपूर्ण बदलावों की घोषणा)
 2. A detailed 3-4 line summary in HINDI (around 50-65 words) explaining the key facts in plain, engaging, young-audience Hindi.
 3. A detailed, descriptive image generation prompt IN ENGLISH to generate a photorealistic news photo representing this story (E.g. "A professional news photograph of Indian college students working in a modern computer lab, natural lighting, high detail, editorial look"). Avoid text, words, or logos.
 
