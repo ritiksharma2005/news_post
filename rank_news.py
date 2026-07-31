@@ -21,7 +21,7 @@ Below is a list of candidate news articles fetched from top Indian news outlets:
 TASK: Select EXACTLY 3 top articles—one for each of the following 3 distinct buckets:
 
 1. "IndianPolitics": MUST be a major Indian political or party story involving Union Govt, Parliament, BJP, Congress, Opposition, Supreme Court verdicts, Election Commission, or key national bills/protests.
-2. "StudentEducation": MUST be a student-centric story (JEE, NEET, UPSC, GATE, IIT/NIT updates, paper leaks, campus placements, or exam alerts).
+2. "StudentEducation": MUST be a student-centric story (university guidelines, job vacancies, internships, placements, student current affairs, student protests, or campus hiring news). Avoid dry notices focused strictly on JEE/NEET.
 3. "TechInnovation": MUST be a technology or science story (AI developments, ISRO rocket launches, DRDO, Tech news, or Indian startup funding).
 
 OUTPUT FORMAT (Return valid JSON array of 3 objects only, no markdown or extra text):

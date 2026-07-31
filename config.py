@@ -47,8 +47,8 @@ NEWSDATA_TIMEFRAME_HOURS = 24
 
 # ---- GNews Keywords ----
 GNEWS_PRIORITY_1 = [
-    "JEE",
-    "NEET",
+    "University news India",
+    "student current affairs",
     "UPSC",
     "SSC",
     "Paper leak India",

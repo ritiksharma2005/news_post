@@ -155,12 +155,25 @@ def generate_image(prompt, summary="", output_path="output/images/story.jpg", wi
             print("  ⚠️ Web search download failed. Falling back to AI generation...")
 
     # 3. Generate 100% via AI (Flux)
+    # Sanitize prompt to filter out vulgar or suggestive terms
+    suggestive_blacklist = [
+        "nude", "naked", "sexual", "vulgar", "lingerie", "cleavage", "undressed",
+        "erotic", "porn", "underwear", "sexy", "hot girl", "hot woman", "sensual",
+        "bikini", "topless"
+    ]
+    sanitized_prompt = prompt
+    for bad_word in suggestive_blacklist:
+        sanitized_prompt = re.sub(rf"\b{bad_word}\b", "professional person", sanitized_prompt, flags=re.IGNORECASE)
+
+    # Append safe-for-work and editorial styling keywords
     if is_quote:
-        print(f"  🎨 Generating Author portrait via Flux: '{prompt[:50]}...'")
+        sanitized_prompt += ", professional portrait, clean conservative style, sfw"
+        print(f"  🎨 Generating Author portrait via Flux: '{sanitized_prompt[:50]}...'")
     else:
-        print(f"  📸 Generating news photo via Flux: '{prompt[:50]}...'")
+        sanitized_prompt += ", professional news photo, editorial style, conservative clothing, sfw"
+        print(f"  📸 Generating news photo via Flux: '{sanitized_prompt[:50]}...'")
         
-    encoded_prompt = urllib.parse.quote(prompt)
+    encoded_prompt = urllib.parse.quote(sanitized_prompt)
     url = f"{POLLINATIONS_BASE}{encoded_prompt}"
     params = {"width": width, "height": height, "nologo": "true", "model": model}
 
