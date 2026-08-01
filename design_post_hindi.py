@@ -100,25 +100,42 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     # 3. DYNAMIC Hindi Headline Section (Centered horizontally!)
     y_cursor = 94
     clean_headline = strip_emojis(headline)
-
     words = clean_headline.split()
-    headline_lines = []
-    cur_line = ""
-    for w in words:
-        if len(cur_line + " " + w) < 38:
-            cur_line += " " + w if cur_line else w
-        else:
-            headline_lines.append(cur_line)
-            cur_line = w
-    if cur_line:
-        headline_lines.append(cur_line)
 
-    for line in headline_lines[:3]:  # Max 3 lines
+    # Dynamic wrapping & scaling to ensure it fits in exactly 1 or 2 bold lines
+    headline_size = 38
+    headline_lines = []
+    font_headline = get_font("bold", headline_size)
+
+    while headline_size >= 28:
+        font_headline = get_font("bold", headline_size)
+        headline_lines = []
+        cur_line = ""
+        # Adjust char wrap limit based on font size (smaller font size = more chars per line!)
+        wrap_limit = int(1292 // headline_size) 
+        
+        for w in words:
+            if len(cur_line + " " + w) < wrap_limit:
+                cur_line += " " + w if cur_line else w
+            else:
+                headline_lines.append(cur_line)
+                cur_line = w
+        if cur_line:
+            headline_lines.append(cur_line)
+            
+        if len(headline_lines) <= 2:
+            break
+        # Decrease font size to fit within 2 lines
+        headline_size -= 2
+
+    # Draw the bold headline (Max 2 lines)
+    for line in headline_lines[:2]:
         # Calculate line width to center it horizontally
         line_w = draw.textlength(line, font=font_headline)
         line_x = max(40, int((width - line_w) // 2))
-        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline)
-        y_cursor += 48
+        # Use stroke_width=2 to ensure it is thick, crisp and bold!
+        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline, stroke_width=2, stroke_fill="#1A1A1A")
+        y_cursor += (headline_size + 10)
 
     # Accent Underline
     y_cursor += 10
