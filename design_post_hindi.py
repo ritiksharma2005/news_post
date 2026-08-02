@@ -140,7 +140,7 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
         line_x = max(40, int((width - line_w) // 2))
         # Use stroke_width=2 to ensure it is thick, crisp and bold!
         draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline, stroke_width=2, stroke_fill="#1A1A1A")
-        y_cursor += (headline_size + 10)
+        y_cursor += (headline_size + 14)
 
     # Accent Underline
     y_cursor += 10
