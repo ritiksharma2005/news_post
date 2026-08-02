@@ -18,8 +18,13 @@ DEFAULT_COLOR = {"accent": "#0284C7", "tint_bg": "#F0F9FF", "tint_border": "#E0F
 
 
 def get_font(style="regular", size=24):
-    """Retrieves Noto Sans Devanagari font for high-quality Hindi rendering."""
-    font_file = "NotoSansDevanagari-Regular.ttf" if style == "regular" else "NotoSansDevanagari-Bold.ttf"
+    """Retrieves Noto Devanagari fonts for high-quality Hindi rendering."""
+    if style == "serif":
+        font_file = "NotoSerifDevanagari-Bold.ttf"
+    elif style == "regular":
+        font_file = "NotoSansDevanagari-Regular.ttf"
+    else:
+        font_file = "NotoSansDevanagari-Bold.ttf"
     
     # Try multiple path resolutions
     paths_to_try = [
@@ -105,10 +110,10 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     # Dynamic wrapping & scaling to ensure it fits in exactly 1 or 2 bold lines
     headline_size = 38
     headline_lines = []
-    font_headline = get_font("bold", headline_size)
+    font_headline = get_font("serif", headline_size)
 
     while headline_size >= 28:
-        font_headline = get_font("bold", headline_size)
+        font_headline = get_font("serif", headline_size)
         headline_lines = []
         cur_line = ""
         # Adjust char wrap limit based on font size (smaller font size = more chars per line!)
