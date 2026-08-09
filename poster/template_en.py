@@ -26,11 +26,16 @@ CATEGORY_BADGES = {
 }
 
 def get_font(style="regular", size=24):
-    """Retrieves standard system fonts or falls back cleanly."""
-    font_file = "NotoSans-Regular.ttf" if style == "regular" else "NotoSans-Bold.ttf"
+    """Retrieves Arial or standard system fonts or falls back cleanly."""
+    if style == "bold":
+        font_file = "Arial Bold.ttf"
+    else:
+        font_file = "Arial.ttf"
+        
     paths_to_try = [
+        "/System/Library/Fonts/Supplemental/Arial Bold.ttf" if style == "bold" else "/System/Library/Fonts/Supplemental/Arial.ttf",
+        "/Library/Fonts/Arial Bold.ttf" if style == "bold" else "/Library/Fonts/Arial.ttf",
         os.path.join("fonts", font_file),
-        os.path.join(os.path.dirname(__file__), "..", "fonts", font_file),
         font_file
     ]
     for p in paths_to_try:
@@ -38,6 +43,20 @@ def get_font(style="regular", size=24):
             return ImageFont.truetype(p, size)
         except Exception:
             continue
+            
+    # Fallback to NotoSans-Regular / NotoSans-Bold
+    fallback_file = "NotoSans-Regular.ttf" if style == "regular" else "NotoSans-Bold.ttf"
+    paths_fallback = [
+        os.path.join("fonts", fallback_file),
+        os.path.join(os.path.dirname(__file__), "..", "fonts", fallback_file),
+        fallback_file
+    ]
+    for p in paths_fallback:
+        try:
+            return ImageFont.truetype(p, size)
+        except Exception:
+            continue
+            
     try:
         return ImageFont.load_default(size=size)
     except Exception:
@@ -132,7 +151,7 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", catego
     for line in headline_lines[:2]:
         line_w = draw.textlength(line, font=font_headline)
         line_x = max(40, int((width - line_w) // 2))
-        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline, stroke_width=2, stroke_fill="#1A1A1A")
+        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline)
         y_cursor += (headline_size + 14)
         
     y_cursor += 12
