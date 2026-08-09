@@ -134,14 +134,16 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
         headline_size -= 2
         
     for line in headline_lines[:2]:
-        # Left-aligned drawing starting at x=60
-        draw.text((60, y_cursor), line, fill="#1A1A1A", font=font_headline)
+        # Center-aligned drawing with bold outline stroke (stroke_width=1)
+        text_w = draw.textlength(line, font=font_headline)
+        line_x = (width - text_w) // 2
+        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline, stroke_width=1, stroke_fill="#1A1A1A")
         y_cursor += (headline_size + 14)
         
     y_cursor += 10
-    # Left aligned stripe and line below headline
-    draw.rectangle([(60, y_cursor), (220, y_cursor + 6)], fill=accent_color)
-    draw.line([(220, y_cursor + 3), (1020, y_cursor + 3)], fill="#1A1A1A", width=2)
+    # Centered stripe and line below headline
+    draw.line([(60, y_cursor + 3), (1020, y_cursor + 3)], fill="#1A1A1A", width=2)
+    draw.rectangle([(460, y_cursor), (620, y_cursor + 6)], fill=accent_color)
     
     # 4. Image Section (Height: 480px, crop-to-fill)
     y_image_start = y_cursor + 20
@@ -196,9 +198,14 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
         summary_lines.append(cur_line)
         
     y_sum_text = y_summary_start + 24
+    box_center_x = (60 + 1020) // 2
     for line in summary_lines[:4]:  # Max 4 lines
-        # Left-aligned summary text
-        draw.text((96, y_sum_text), line, fill="#2D3748", font=font_summary)
+        # Center-aligned summary text
+        text_w = draw.textlength(line, font=font_summary)
+        line_x = box_center_x - (text_w // 2)
+        if line_x < 96:
+            line_x = 96
+        draw.text((line_x, y_sum_text), line, fill="#2D3748", font=font_summary)
         y_sum_text += 38
         
     # 7. Footer Separator Line
