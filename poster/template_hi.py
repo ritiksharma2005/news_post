@@ -29,8 +29,6 @@ def get_font(style="regular", size=24):
     """Retrieves Devanagari or English font files."""
     if style == "english_bold":
         font_file = "NotoSans-Bold.ttf"
-    elif style == "extrabold":
-        font_file = "NotoSansDevanagari-ExtraBold.ttf"
     elif style == "bold":
         font_file = "NotoSansDevanagari-Bold.ttf"
     else:
@@ -83,37 +81,6 @@ def draw_camera_logo(draw, x, y, color):
     draw.ellipse([(x + 10, y + 10), (x + 26, y + 26)], fill="#F5EFEB", outline=color, width=2)
     draw.ellipse([(x + 14, y + 14), (x + 22, y + 22)], fill=color)
 
-def get_mixed_line_width(draw, text, font_eng, font_hi):
-    """Calculates the total pixel width of a mixed English/Hindi line of text."""
-    tokens = re.split(r'([\u0900-\u097F]+)', text)
-    total_w = 0
-    for token in tokens:
-        if not token:
-            continue
-        if re.search(r'[\u0900-\u097F]', token):
-            font = font_hi
-        else:
-            font = font_eng
-        total_w += draw.textlength(token, font=font)
-    return total_w
-
-def draw_centered_mixed_line(draw, y, text, font_eng, font_hi, width=1080, fill="#1A1A1A"):
-    """Draws a mixed English/Hindi line centered horizontally on the canvas."""
-    total_w = get_mixed_line_width(draw, text, font_eng, font_hi)
-    start_x = (width - total_w) // 2
-    
-    tokens = re.split(r'([\u0900-\u097F]+)', text)
-    current_x = start_x
-    for token in tokens:
-        if not token:
-            continue
-        if re.search(r'[\u0900-\u097F]', token):
-            font = font_hi
-        else:
-            font = font_eng
-        draw.text((current_x, y), token, fill=fill, font=font)
-        current_x += draw.textlength(token, font=font)
-
 def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", category="Student", output_path="output/card_hindi.png"):
     """Renders a 1080x1080 Devanagari Square Poster matching the user's ideal template."""
     theme = BUCKET_COLORS.get(bucket, DEFAULT_COLOR)
@@ -145,10 +112,10 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     
     headline_size = 38
     headline_lines = []
-    font_headline = get_font("extrabold", headline_size)
+    font_headline = get_font("bold", headline_size)
     
     while headline_size >= 28:
-        font_headline = get_font("extrabold", headline_size)
+        font_headline = get_font("bold", headline_size)
         headline_lines = []
         cur_line = ""
         wrap_limit = int(1150 // headline_size)  # Wrap boundaries for x=60 margin
@@ -166,10 +133,11 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
             break
         headline_size -= 2
         
-    font_headline_eng = get_font("english_bold", headline_size)
     for line in headline_lines[:2]:
-        # Center-aligned drawing with mixed ExtraBold font (no stroke outline to keep it clear and crisp)
-        draw_centered_mixed_line(draw, y_cursor, line, font_headline_eng, font_headline, width=width, fill="#1A1A1A")
+        # Center-aligned drawing with bold outline stroke (stroke_width=1)
+        text_w = draw.textlength(line, font=font_headline)
+        line_x = (width - text_w) // 2
+        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline, stroke_width=1, stroke_fill="#1A1A1A")
         y_cursor += (headline_size + 14)
         
     y_cursor += 10
@@ -204,7 +172,7 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     
     # 6. Left-Aligned Summary Section (with light tint background)
     y_summary_start = y_image_start + image_h + 16
-    summary_h = 190
+    summary_h = 230
     
     draw.rounded_rectangle(
         [(60, y_summary_start), (1020, y_summary_start + summary_h)],
@@ -231,7 +199,7 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
         
     y_sum_text = y_summary_start + 24
     box_center_x = (60 + 1020) // 2
-    for line in summary_lines[:4]:  # Max 4 lines
+    for line in summary_lines[:5]:  # Max 5 lines
         # Center-aligned summary text
         text_w = draw.textlength(line, font=font_summary)
         line_x = box_center_x - (text_w // 2)
