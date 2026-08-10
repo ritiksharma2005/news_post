@@ -26,37 +26,29 @@ CATEGORY_BADGES = {
 }
 
 def get_font(style="regular", size=24):
-    """Retrieves Arial or standard system fonts or falls back cleanly."""
+    """Retrieves system Arial fonts or falls back cleanly to NotoSans."""
     if style == "bold":
         font_file = "Arial Bold.ttf"
+        fallback_file = "NotoSans-Bold.ttf"
     else:
         font_file = "Arial.ttf"
+        fallback_file = "NotoSans-Regular.ttf"
         
     paths_to_try = [
-        "/System/Library/Fonts/Supplemental/Arial Bold.ttf" if style == "bold" else "/System/Library/Fonts/Supplemental/Arial.ttf",
-        "/Library/Fonts/Arial Bold.ttf" if style == "bold" else "/Library/Fonts/Arial.ttf",
+        f"/System/Library/Fonts/Supplemental/{font_file}",
+        f"/Library/Fonts/{font_file}",
         os.path.join("fonts", font_file),
-        font_file
+        os.path.join(os.path.dirname(__file__), "..", "fonts", font_file),
+        os.path.join("fonts", fallback_file),
+        os.path.join(os.path.dirname(__file__), "..", "fonts", fallback_file),
+        font_file,
+        fallback_file
     ]
     for p in paths_to_try:
         try:
             return ImageFont.truetype(p, size)
         except Exception:
             continue
-            
-    # Fallback to NotoSans-Regular / NotoSans-Bold
-    fallback_file = "NotoSans-Regular.ttf" if style == "regular" else "NotoSans-Bold.ttf"
-    paths_fallback = [
-        os.path.join("fonts", fallback_file),
-        os.path.join(os.path.dirname(__file__), "..", "fonts", fallback_file),
-        fallback_file
-    ]
-    for p in paths_fallback:
-        try:
-            return ImageFont.truetype(p, size)
-        except Exception:
-            continue
-            
     try:
         return ImageFont.load_default(size=size)
     except Exception:
