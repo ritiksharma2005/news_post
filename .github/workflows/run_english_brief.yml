@@ -1,15 +1,16 @@
-name: 📰 Run Morning English News Brief
+name: 📰 Run English News Brief
 
 on:
   schedule:
-    # 8:00 AM IST = 02:30 AM UTC
+    # 8:00 AM IST (02:30 AM UTC)
     - cron: "30 2 * * *"
-  workflow_dispatch:
+    # 6:00 PM IST (12:30 PM UTC)
+    - cron: "30 12 * * *"
+  workflow_dispatch: {}
 
 jobs:
-  run-morning-news:
+  run-english-news:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -20,9 +21,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install Devanagari Hindi Fonts
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y fonts-deva fonts-noto-core
+        run: sudo apt-get update && sudo apt-get install -y fonts-deva fonts-noto-core
 
       - name: Install dependencies
         run: |
@@ -30,8 +29,11 @@ jobs:
           pip install -r requirements.txt
           playwright install --with-deps chromium
 
-      - name: Run Morning News Brief
+      - name: Run English News Brief
         env:
+          GNEWS_API_KEY: ${{ secrets.GNEWS_API_KEY }}
+          GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
+          NEWSDATA_API_KEY: ${{ secrets.NEWSDATA_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -39,4 +41,8 @@ jobs:
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
         run: |
-          python main.py --type=morning
+          if [ "$(date -u +%H)" -eq "02" ]; then
+            python main.py --type=morning
+          else
+            python main.py --type=evening
+          fi
