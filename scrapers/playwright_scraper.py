@@ -106,8 +106,8 @@ def scrape_google_news(query, lang="en", limit=10):
             page.set_extra_http_headers({
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             })
-            page.goto(url, timeout=30000)
-            page.wait_for_timeout(4000)  # Wait for dynamic lists to settle
+            page.goto(url, timeout=60000, wait_until="domcontentloaded")
+            page.wait_for_timeout(3000)  # Wait for dynamic lists to settle
             
             links = page.query_selector_all("a")
             seen_titles = set()

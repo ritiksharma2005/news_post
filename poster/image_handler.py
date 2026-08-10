@@ -113,10 +113,18 @@ def prepare_image(story, output_path, width=IMAGE_WIDTH, height=IMAGE_HEIGHT):
     
     # 1. Try Featured Image first
     if not is_quote and featured_url:
-        print(f"  Trying featured image download: {featured_url[:60]}...")
-        path = download_image(featured_url, output_path)
-        if path:
-            return path
+        # Ignore generic publisher placeholder images (logos, fallbacks, headers, etc.)
+        blacklist = ["logo", "fallback", "default", "header", "banner", "favicon", "background"]
+        featured_url_lower = featured_url.lower()
+        is_generic = any(term in featured_url_lower for term in blacklist)
+        
+        if is_generic:
+            print(f"  Ignoring generic publisher image URL: {featured_url[:60]}...")
+        else:
+            print(f"  Trying featured image download: {featured_url[:60]}...")
+            path = download_image(featured_url, output_path)
+            if path:
+                return path
 
     if not is_quote:
         search_text = headline.lower()

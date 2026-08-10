@@ -88,6 +88,24 @@ def draw_camera_logo(draw, x, y, color):
     draw.ellipse([(x + 10, y + 10), (x + 26, y + 26)], fill="#F5EFEB", outline=color, width=2)
     draw.ellipse([(x + 14, y + 14), (x + 22, y + 22)], fill=color)
 
+def wrap_text_by_pixels(text, font, max_width, draw):
+    """Wraps text into lines based on rendered pixel width."""
+    words = text.split()
+    lines = []
+    current_line = ""
+    for word in words:
+        test_line = current_line + " " + word if current_line else word
+        width = draw.textlength(test_line, font=font)
+        if width <= max_width:
+            current_line = test_line
+        else:
+            if current_line:
+                lines.append(current_line)
+            current_line = word
+    if current_line:
+        lines.append(current_line)
+    return lines
+
 def create_card(headline, summary, image_path, bucket="StudentEducation", category="Student", output_path="output/card.png"):
     """Renders a 1080x1080 Square Poster with Category Badges and professional layouts."""
     theme = BUCKET_COLORS.get(bucket, DEFAULT_COLOR)
@@ -115,7 +133,6 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", catego
     # 3. Dynamic Headline Section (Centered horizontally, exactly 2 lines max)
     y_cursor = 94
     clean_headline = strip_emojis(headline)
-    words = clean_headline.split()
     
     headline_size = 40
     headline_lines = []
@@ -123,19 +140,7 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", catego
     
     while headline_size >= 28:
         font_headline = get_font("bold", headline_size)
-        headline_lines = []
-        cur_line = ""
-        wrap_limit = int(1292 // headline_size)
-        
-        for w in words:
-            if len(cur_line + " " + w) < wrap_limit:
-                cur_line += " " + w if cur_line else w
-            else:
-                headline_lines.append(cur_line)
-                cur_line = w
-        if cur_line:
-            headline_lines.append(cur_line)
-            
+        headline_lines = wrap_text_by_pixels(clean_headline, font_headline, 1000, draw)
         if len(headline_lines) <= 2:
             break
         headline_size -= 2
