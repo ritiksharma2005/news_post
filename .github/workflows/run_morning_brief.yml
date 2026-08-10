@@ -39,4 +39,4 @@ jobs:
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
         run: |
-          python main.py --mode news
+          python main.py --type=morning
