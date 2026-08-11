@@ -19,45 +19,66 @@ TARGET_ACCOUNTS = ["iit__nit__iiit"]
 
 
 def fetch_via_rapidapi(target_username):
-    """Fetches latest posts using APIDojo Instagram Scraper on RapidAPI."""
+    """Fetches latest posts using thetechguy32744's Instagram Scraper Stable API on RapidAPI."""
     rapidapi_key = getattr(config, "RAPIDAPI_KEY", os.getenv("RAPIDAPI_KEY", ""))
 
     if not rapidapi_key:
         print("  ⚠️ RAPIDAPI_KEY is missing. Check your local .env or GitHub Secrets.")
         return []
 
-    url = "https://instagram-scraper-api2.p.rapidapi.com/v1/user_posts"
-    querystring = {"username_or_id_or_url": target_username}
+    url = "https://instagram-scraper-stable-api.p.rapidapi.com/get_ig_user_posts.php"
     headers = {
-        "X-RapidAPI-Key": rapidapi_key,
-        "X-RapidAPI-Host": "instagram-scraper-api2.p.rapidapi.com"
+        "x-rapidapi-key": rapidapi_key,
+        "x-rapidapi-host": "instagram-scraper-stable-api.p.rapidapi.com",
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    payload = {
+        "username_or_url": target_username,
+        "amount": "12",
+        "pagination_token": ""
     }
 
     try:
         print(f"  Querying RapidAPI for @{target_username} posts...")
-        response = requests.get(url, headers=headers, params=querystring, timeout=20)
+        response = requests.post(url, headers=headers, data=payload, timeout=20)
         
         if response.status_code != 200:
             print(f"  RapidAPI returned status code: {response.status_code} ({response.text})")
             return []
 
         res_json = response.json()
-        items = res_json.get("data", {}).get("items", [])
+        items = res_json.get("posts", [])
         posts = []
         
         for item in items[:6]:
-            caption_text = item.get("caption", {}).get("text", "")
+            node = item.get("node", item) if isinstance(item, dict) else {}
             
+            # Extract caption
+            caption_text = ""
+            caption_obj = node.get("caption") or {}
+            if isinstance(caption_obj, dict):
+                caption_text = caption_obj.get("text", "")
+            elif isinstance(caption_obj, str):
+                caption_text = caption_obj
+                
+            if not caption_text and isinstance(node.get("edge_media_to_caption"), dict):
+                edges = node["edge_media_to_caption"].get("edges", [])
+                if edges and isinstance(edges[0], dict):
+                    caption_text = edges[0].get("node", {}).get("text", "")
+
             # Extract highest quality image version
-            image_items = item.get("image_versions", {}).get("items", [])
-            media_url = image_items[0].get("url") if image_items else None
+            media_url = node.get("display_url") or node.get("image")
+            if not media_url and isinstance(node.get("image_versions2"), dict):
+                candidates = node["image_versions2"].get("candidates", [])
+                if candidates:
+                    media_url = candidates[0].get("url")
             
             # Shortcode link
-            shortcode = item.get("code")
+            shortcode = node.get("code")
             permalink = f"https://www.instagram.com/p/{shortcode}/" if shortcode else f"https://www.instagram.com/{target_username}/"
             
             # Timestamp conversion
-            taken_at = item.get("taken_at")
+            taken_at = node.get("taken_at")
             timestamp = str(datetime.date.fromtimestamp(taken_at)) if taken_at else str(datetime.date.today())
 
             if caption_text:

@@ -118,7 +118,7 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     draw.rectangle([(0, 0), (width, 18)], fill=accent_color)
     
     # 2. Header Bar (News.nit_iit on left, 2026 on right)
-    draw.text((60, 30), "News.nit_iit", fill="#1A1A1A", font=font_header_eng)
+    draw.text((60, 30), "NIT IIT", fill="#1A1A1A", font=font_header_eng)
     logo_w = draw.textlength("2026", font=font_header_eng)
     draw.text((1020 - logo_w, 30), "2026", fill="#1A1A1A", font=font_header_eng)
     draw.line([(60, 78), (1020, 78)], fill="#1A1A1A", width=3)

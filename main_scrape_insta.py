@@ -151,7 +151,7 @@ def process_instagram_post(post, username, lang="hi", dry_run=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Convert Instagram posts to news cards.")
-    parser.add_argument("--username", type=str, default="iit_nit_iiit", help="Target Instagram username")
+    parser.add_argument("--username", type=str, default="iit__nit__iiit", help="Target Instagram username")
     parser.add_argument("--lang", type=str, default="hi", choices=["en", "hi"], help="Output card language")
     parser.add_argument("--dry-run", action="store_true", help="Generate card locally without posting")
     
