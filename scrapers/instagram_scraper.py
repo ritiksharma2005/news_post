@@ -19,21 +19,22 @@ def fetch_instagram_posts(username, limit=3):
         print("[Instagram Scraper] Error: RAPIDAPI_KEY is not set in .env or config.")
         return []
         
-    url = "https://instagram-scraper-stable-api.p.rapidapi.com/profile/posts"
+    url = "https://instagram-scraper-stable-api.p.rapidapi.com/get_ig_user_posts.php"
     headers = {
         "x-rapidapi-key": api_key,
-        "x-rapidapi-host": "instagram-scraper-stable-api.p.rapidapi.com"
+        "x-rapidapi-host": "instagram-scraper-stable-api.p.rapidapi.com",
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     
-    # Try different parameter names that different RapidAPI scraper versions use
-    params = {
-        "username_or_id_or_url": username,
-        "username": username
+    payload = {
+        "username_or_url": username,
+        "amount": "12",
+        "pagination_token": ""
     }
     
     try:
         print(f"[Instagram Scraper] Requesting posts for '{username}'...")
-        response = requests.get(url, headers=headers, params=params, timeout=15)
+        response = requests.post(url, headers=headers, data=payload, timeout=15)
         if response.status_code == 200:
             data = response.json()
             
@@ -48,7 +49,7 @@ def fetch_instagram_posts(username, limit=3):
                     items = data_root
                 
                 if not items:
-                    items = data.get("items", []) or data.get("edges", []) or data.get("response", {}).get("items", [])
+                    items = data.get("posts", []) or data.get("items", []) or data.get("edges", []) or data.get("response", {}).get("items", [])
             elif isinstance(data, list):
                 items = data
                 
