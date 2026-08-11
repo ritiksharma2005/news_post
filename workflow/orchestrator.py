@@ -10,6 +10,7 @@ import config
 from scrapers.playwright_scraper import scrape_google_news
 from poster import image_handler, template_en, template_hi
 from publisher import telegram, instagram
+from workflow.history_manager import is_duplicate_news, add_published_news
 
 def clean_and_truncate(text, max_len):
     """Truncates text safely on word boundaries."""
@@ -74,6 +75,10 @@ def run_pipeline(language="en", run_type="morning", dry_run=False):
                 if get_similarity(s["title"], m_title) > 0.6:
                     is_dup = True
                     break
+            # Check similarity with global published history
+            if not is_dup and is_duplicate_news(s["title"], s.get("link")):
+                is_dup = True
+                
             if not is_dup:
                 fresh.append(s)
         return fresh
@@ -204,6 +209,11 @@ def run_pipeline(language="en", run_type="morning", dry_run=False):
     print("\nPublishing stories to Instagram...")
     instagram.publish_all_stories(final_posters)
     
+    # 7. Save to global history
+    print("\nSaving published news to history...")
+    for s in final_posters:
+        add_published_news(s["title"], s.get("link"))
+        
     print("\n" + "=" * 60)
     print(f"🏁 {language.upper()} {run_type.upper()} RUN COMPLETE!")
     print("=" * 60)

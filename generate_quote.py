@@ -258,6 +258,8 @@ def save_used_quote(quote_data):
 
 def fetch_daily_quote():
     """Generates today's fresh quote + Hindi translation + Student Reflection."""
+    from workflow.history_manager import is_duplicate_quote, add_published_quote
+    
     today_name = datetime.datetime.now().strftime("%A")
     theme_info = DAY_THEMES.get(today_name, DAY_THEMES["Monday"])
 
@@ -274,26 +276,38 @@ def fetch_daily_quote():
 
     print(f"🌅 Generating Life Mantra for {today_name} ({theme_info['theme']})...")
 
-    try:
-        response_text = ai_client.ask_ai(prompt)
-        clean_text = response_text.strip()
-        if "```json" in clean_text:
-            clean_text = clean_text.split("```json")[1].split("```")[0].strip()
-        elif "```" in clean_text:
-            clean_text = clean_text.split("```")[1].split("```")[0].strip()
+    for attempt in range(3):
+        try:
+            response_text = ai_client.ask_ai(prompt)
+            clean_text = response_text.strip()
+            if "```json" in clean_text:
+                clean_text = clean_text.split("```json")[1].split("```")[0].strip()
+            elif "```" in clean_text:
+                clean_text = clean_text.split("```")[1].split("```")[0].strip()
 
-        quote_data = json.loads(clean_text)
-        save_used_quote(quote_data)
-        return quote_data
-    except Exception as e:
-        print(f"❌ Error fetching daily quote from AI: {e}")
-        return {
-            "quote_en": "Arise, awake and stop not till the goal is reached.",
-            "quote_hi": "उठो, जागो और तब तक मत रुको जब तक लक्ष्य प्राप्त न हो जाए।",
-            "author": "Swami Vivekananda",
-            "theme": theme_info["theme"],
-            "reflection": "Consistency matters more than occasional bursts of motivation. Keep showing up for your exams and goals every single day."
-        }
+            quote_data = json.loads(clean_text)
+            quote_en = quote_data.get("quote_en", "")
+            
+            # Check global similarity history and recent local list
+            if not is_duplicate_quote(quote_en) and quote_en not in used_titles:
+                add_published_quote(quote_en)
+                save_used_quote(quote_data)
+                return quote_data
+            else:
+                print(f"  ⚠️ Generated quote is a duplicate. Retrying (Attempt {attempt+1}/3)...")
+        except Exception as e:
+            print(f"  Attempt {attempt+1} failed: {e}")
+
+    # Fallback if all attempts fail
+    fallback_quote = "Arise, awake and stop not till the goal is reached."
+    add_published_quote(fallback_quote)
+    return {
+        "quote_en": fallback_quote,
+        "quote_hi": "उठो, जागो और तब तक मत रुको जब तक लक्ष्य प्राप्त न हो जाए।",
+        "author": "Swami Vivekananda",
+        "theme": theme_info["theme"],
+        "reflection": "Consistency matters more than occasional bursts of motivation. Keep showing up for your exams and goals every single day."
+    }
 
 
 if __name__ == "__main__":

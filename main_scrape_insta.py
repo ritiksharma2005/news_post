@@ -17,6 +17,7 @@ import config
 from scrapers.instagram_scraper import fetch_instagram_posts
 from poster import image_handler, template_en, template_hi
 from publisher import telegram, instagram
+from workflow.history_manager import is_duplicate_insta, add_published_insta
 
 def clean_and_truncate(text, max_len):
     """Truncates text safely on word boundaries."""
@@ -146,6 +147,11 @@ def process_instagram_post(post, username, lang="hi", dry_run=False):
     print("\nPublishing story to Instagram...")
     instagram.publish_all_stories([story])
     
+    # Save to global history
+    post_code = post.get("code")
+    if post_code:
+        add_published_insta(post_code)
+        
     print("\n🏁 INSTAGRAM SCRAPE-TO-NEWS WORKFLOW COMPLETE!")
     return True
 
@@ -164,7 +170,13 @@ if __name__ == "__main__":
         print(f"\n[Error] Could not fetch any posts for @{args.username}. Check your RapidAPI key or username.")
         sys.exit(1)
         
+    post = posts[0]
+    post_code = post.get("code")
+    if post_code and is_duplicate_insta(post_code):
+        print(f"\n[Instagram Scraper] Notice: Latest post '{post_code}' is already published. Stopping workflow to avoid duplicates.")
+        sys.exit(0)
+        
     # 2. Process the latest post
-    success = process_instagram_post(posts[0], args.username, lang=args.lang, dry_run=args.dry_run)
+    success = process_instagram_post(post, args.username, lang=args.lang, dry_run=args.dry_run)
     if not success:
         sys.exit(1)
