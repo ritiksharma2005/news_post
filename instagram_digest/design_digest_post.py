@@ -55,7 +55,7 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
 
     # 1. Top Stripe & Header (Removed emoji to prevent box glitch)
     draw.rectangle([(0, 0), (width, 18)], fill=accent_color)
-    draw.text((40, 30), "CAMPUS DIGEST", fill="#1A1A1A", font=font_brand)
+    draw.text((30, 20), "News.nit_iit", fill="#1A1A1A", font=font_brand)
     draw.text((930, 30), "2026", fill="#1A1A1A", font=font_brand)
     draw.line([(40, 78), (1040, 78)], fill="#1A1A1A", width=3)
 
