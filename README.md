@@ -8,8 +8,7 @@
    ```
 
 2. **Get your API keys:**
-   - GNews: sign up at https://gnews.io → copy your API key
-   - The Guardian: sign up at https://open-platform.theguardian.com/access/ → copy your API key
+   - fetch news from top hindi and Eng News web , ilke Aaj tak and NDTV and Hindu
    - Gemini (free): sign up at https://aistudio.google.com → "Get API key" → create key
    - Telegram bot: message @BotFather on Telegram → `/newbot` → copy the token
 
