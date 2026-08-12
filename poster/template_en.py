@@ -126,8 +126,8 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", catego
     
     # 2. Header Bar
     draw.text((40, 30), "2026", fill="#1A1A1A", font=font_header)
-    logo_w = draw.textlength("NIT IIT", font=font_header)
-    draw.text((1040 - logo_w, 30), "NIT IIT", fill="#1A1A1A", font=font_header)
+    logo_w = draw.textlength("News.NIT_IIT", font=font_header)
+    draw.text((1040 - logo_w, 30), "News.nit_iit", fill="#1A1A1A", font=font_header)
     draw.line([(40, 78), (1040, 78)], fill="#1A1A1A", width=3)
     
     # 3. Dynamic Headline Section (Centered horizontally, exactly 2 lines max)
