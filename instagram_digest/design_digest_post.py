@@ -25,7 +25,6 @@ def get_font(font_type="bold", size=32):
 def strip_emojis(text):
     """Removes all emojis and special dingbat symbols to prevent box rendering bugs."""
     import re
-    # Match standard emoji Unicode ranges, CJK symbols, and dingbats
     return re.sub(r'[\U00010000-\U0010ffff\u2600-\u27bf\u2b50\u2b06\u2192]', '', text).strip()
 
 
@@ -37,9 +36,27 @@ def draw_camera_logo(draw, x, y, color):
     draw.ellipse([(x + 14, y + 14), (x + 22, y + 22)], fill=color)
 
 
+def wrap_text_by_pixels(text, font, max_width, draw):
+    """Wraps text into multiple lines such that no line exceeds max_width in pixels."""
+    words = text.split()
+    lines = []
+    current_line = ""
+    for word in words:
+        test_line = current_line + " " + word if current_line else word
+        if draw.textlength(test_line, font=font) <= max_width:
+            current_line = test_line
+        else:
+            if current_line:
+                lines.append(current_line)
+            current_line = word
+    if current_line:
+        lines.append(current_line)
+    return lines
+
+
 def create_digest_card(headline, bullets, why_it_matters, image_path=None, output_path="output/digest_card.png"):
     """
-    Renders a 1080x1080 Square Campus Digest Poster with centered image (reduced height)
+    Renders a 1080x1080 Square Campus Digest Poster with centered image (increased height)
     and space for a 2-line headline and 4-5 bullet points.
     """
     width, height = 1080, 1080
@@ -50,36 +67,33 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
 
     font_brand = get_font("bold", 34)
     font_headline = get_font("bold", 48)
-    font_bullet = get_font("regular", 26)  # Font adjusted to 30 to guarantee 5 bullets fit
+    font_bullet = get_font("regular", 22)  # Highly readable size for bullets
+    font_insight = get_font("bold", 22)
     font_footer = get_font("bold", 30)
 
-    # 1. Top Stripe & Header (Removed emoji to prevent box glitch)
+    # 1. Top Stripe & Header
     draw.rectangle([(0, 0), (width, 18)], fill=accent_color)
-    draw.text((30, 20), "News.nit_iit", fill="#1A1A1A", font=font_brand)
-    draw.text((930, 30), "2026", fill="#1A1A1A", font=font_brand)
+    
+    # news.nit_iit on left, 2026 on right
+    draw.text((40, 30), "2026", fill="#1A1A1A", font=font_brand)
+    logo_w = draw.textlength("news.nit_iit", font=font_brand)
+    draw.text((1040 - logo_w, 30), "news.nit_iit", fill="#1A1A1A", font=font_brand)
     draw.line([(40, 78), (1040, 78)], fill="#1A1A1A", width=3)
 
-    # 2. Headline (Wraps into exactly 2 lines)
+    # 2. Headline (Wraps into exactly 2 lines using pixel width limits)
     y_cursor = 94
     clean_headline = strip_emojis(headline)
-    words = clean_headline.split()
-    lines = []
-    cur = ""
-    for w in words:
-        if len(cur + " " + w) < 32:  # Wrapped to fit nicely in 2 lines
-            cur += " " + w if cur else w
-        else:
-            lines.append(cur)
-            cur = w
-    if cur:
-        lines.append(cur)
+    lines = wrap_text_by_pixels(clean_headline, font_headline, 1000, draw)
 
     # Draw exactly 2 lines (pad with empty line if only 1 line was generated)
     while len(lines) < 2:
         lines.append("")
         
     for line in lines[:2]:
-        draw.text((40, y_cursor), line, fill="#1A1A1A", font=font_headline)
+        # Centered headline with a stroke for maximum crispness
+        line_w = draw.textlength(line, font=font_headline)
+        line_x = max(40, int((width - line_w) // 2))
+        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline, stroke_width=1, stroke_fill="#1A1A1A")
         y_cursor += 54
 
     # Underline
@@ -87,10 +101,10 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
     draw.rectangle([(40, y_cursor), (260, y_cursor + 6)], fill=accent_color)
     draw.line([(260, y_cursor + 3), (1040, y_cursor + 3)], fill="#1A1A1A", width=2)
 
-    # 3. Fixed Taller Summary Box Proportions (anchored at bottom)
+    # 3. Compact Summary Box Proportions (anchored at bottom)
     footer_y = 1022
     box_bottom = footer_y - 20
-    box_height = 420  # Expanded to 420px to hold up to 5 bullets comfortably
+    box_height = 340  # Made more compact to allow larger centered image
     box_top = box_bottom - box_height
     box_left, box_right = 40, 1040
 
@@ -130,16 +144,25 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
     draw.rounded_rectangle([(box_left, box_top), (box_right, box_bottom)], radius=12, fill="#E0F2FE", outline="#BAE6FD", width=2)
     draw.rectangle([(box_left, box_top), (box_left + 14, box_bottom)], fill=accent_color)
 
-    # Draw up to 5 Bullets inside box
-    sum_y = box_top + 22
-    line_height = 42  # Spacing adjusted for 5 bullets
+    # Draw up to 5 Bullets inside box with pixel-based auto-wrap
+    sum_y = box_top + 20
+    max_text_width = box_right - box_left - 72 - 32  # margins: left=72, right=32
+    line_spacing = 30
+    
     for b in bullets[:5]:
-        draw.text((72, sum_y), strip_emojis(b), fill="#0369A1", font=font_bullet)
-        sum_y += line_height
+        wrapped = wrap_text_by_pixels(strip_emojis(b), font_bullet, max_text_width, draw)
+        for line in wrapped:
+            draw.text((72, sum_y), line, fill="#0369A1", font=font_bullet)
+            sum_y += line_spacing
+        sum_y += 4  # gap between bullets
 
-    # Draw Why It Matters inside box (Removed lightbulb emoji)
-    sum_y += 10
-    draw.text((72, sum_y), f"Insight: {strip_emojis(why_it_matters)[:100]}...", fill="#075985", font=get_font("bold", 26))
+    # Draw Why It Matters inside box
+    sum_y += 6
+    insight_text = f"Insight: {strip_emojis(why_it_matters)}"
+    wrapped_insight = wrap_text_by_pixels(insight_text, font_insight, max_text_width, draw)
+    for line in wrapped_insight[:2]:  # Limit to 2 lines
+        draw.text((72, sum_y), line, fill="#075985", font=font_insight)
+        sum_y += line_spacing
 
     # 6. Footer Watermark (📸 @news.nit_iit)
     footer_center_x = 420

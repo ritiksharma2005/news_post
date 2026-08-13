@@ -11,6 +11,8 @@ on:
 jobs:
   run-digest:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -39,3 +41,12 @@ jobs:
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
         run: python instagram_digest/main_digest.py
+
+      - name: Commit and Push History
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull origin main --rebase || true
+          git add data/ || true
+          git commit -m "Update publication history [skip ci]" || true
+          git push origin main || true
