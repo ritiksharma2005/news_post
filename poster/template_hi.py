@@ -118,7 +118,7 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     draw.rectangle([(0, 0), (width, 18)], fill=accent_color)
     
     # 2. Header Bar (News.nit_iit on left, 2026 on right)
-    draw.text((60, 30), "NIT IIT", fill="#1A1A1A", font=font_header_eng)
+    draw.text((60, 30), "News.nit_iit", fill="#1A1A1A", font=font_header_eng)
     logo_w = draw.textlength("2026", font=font_header_eng)
     draw.text((1020 - logo_w, 30), "2026", fill="#1A1A1A", font=font_header_eng)
     draw.line([(60, 78), (1020, 78)], fill="#1A1A1A", width=3)
@@ -167,13 +167,14 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
         draw.rectangle([(60, y_image_start), (1020, y_image_start + image_h)], fill="#EAE5E1")
         
     # 5. Draw Devanagari Category Badge Banner overlaying the image top-left
-    badge_text = CATEGORY_BADGES_HI.get(category, "राष्ट्रीय")
-    font_badge = get_font("bold", 22)
-    badge_w = draw.textlength(badge_text, font=font_badge)
-    
-    bx, by = 80, y_image_start + 20
-    draw.rounded_rectangle([(bx, by), (bx + badge_w + 30, by + 40)], radius=6, fill=accent_color)
-    draw.text((bx + 15, by + 8), badge_text, fill="#FFFFFF", font=font_badge)
+    if category:
+        badge_text = CATEGORY_BADGES_HI.get(category, str(category))
+        font_badge = get_font("bold", 22)
+        badge_w = draw.textlength(badge_text, font=font_badge)
+        
+        bx, by = 80, y_image_start + 20
+        draw.rounded_rectangle([(bx, by), (bx + badge_w + 30, by + 40)], radius=6, fill=accent_color)
+        draw.text((bx + 15, by + 8), badge_text, fill="#FFFFFF", font=font_badge)
     
     # 6. Left-Aligned Summary Section (with light tint background)
     y_summary_start = y_image_start + image_h + 16

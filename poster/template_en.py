@@ -124,10 +124,9 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", catego
     # 1. Top Accent Stripe
     draw.rectangle([(0, 0), (width, 18)], fill=accent_color)
     
-    # 2. Header Bar
     draw.text((40, 30), "2026", fill="#1A1A1A", font=font_header)
-    logo_w = draw.textlength("News.NIT_IIT", font=font_header)
-    draw.text((1040 - logo_w, 30), "News.nit_iit", fill="#1A1A1A", font=font_header)
+    logo_w = draw.textlength("news.nit_iit", font=font_header)
+    draw.text((1040 - logo_w, 30), "news.nit_iit", fill="#1A1A1A", font=font_header)
     draw.line([(40, 78), (1040, 78)], fill="#1A1A1A", width=3)
     
     # 3. Dynamic Headline Section (Centered horizontally, exactly 2 lines max)
@@ -148,7 +147,7 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", catego
     for line in headline_lines[:2]:
         line_w = draw.textlength(line, font=font_headline)
         line_x = max(40, int((width - line_w) // 2))
-        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline)
+        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline, stroke_width=1, stroke_fill="#1A1A1A")
         y_cursor += (headline_size + 14)
         
     y_cursor += 12
@@ -171,14 +170,15 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", catego
         draw.rectangle([(40, y_image_start), (1040, y_image_start + image_h)], fill="#EAE5E1")
         
     # 5. Draw Category Badge Banner overlaying the image top-left
-    badge_text = CATEGORY_BADGES.get(category, "🇮🇳 National")
-    font_badge = get_font("bold", 22)
-    badge_w = draw.textlength(badge_text, font=font_badge)
-    
-    # Draw nice rounded tag banner
-    bx, by = 60, y_image_start + 20
-    draw.rounded_rectangle([(bx, by), (bx + badge_w + 30, by + 40)], radius=6, fill=accent_color)
-    draw.text((bx + 15, by + 8), badge_text, fill="#FFFFFF", font=font_badge)
+    if category:
+        badge_text = CATEGORY_BADGES.get(category, str(category).upper())
+        font_badge = get_font("bold", 22)
+        badge_w = draw.textlength(badge_text, font=font_badge)
+        
+        # Draw nice rounded tag banner
+        bx, by = 60, y_image_start + 20
+        draw.rounded_rectangle([(bx, by), (bx + badge_w + 30, by + 40)], radius=6, fill=accent_color)
+        draw.text((bx + 15, by + 8), badge_text, fill="#FFFFFF", font=font_badge)
     
     # 6. Summary Section (with light tint background)
     y_summary_start = y_image_start + image_h + 16

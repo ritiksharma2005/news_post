@@ -31,7 +31,7 @@ def clean_and_truncate(text, max_len):
         return trimmed.rsplit(" ", 1)[0] + "..."
     return trimmed + "..."
 
-def process_instagram_post(post, username, lang="hi", dry_run=False):
+def process_instagram_post(post, username, lang="hi", dry_run=False, sequence_num=0):
     """Converts a raw Instagram post object into a formatted card and caption."""
     caption = post.get("caption", "").strip()
     image_url = post.get("image_url", "")
@@ -101,13 +101,13 @@ def process_instagram_post(post, username, lang="hi", dry_run=False):
         "new_summary": summary,
         "featured_image": image_url,
         "bucket": "StudentEducation",
-        "category": "Student",
+        "category": None,
         "caption": final_caption
     }
     
     # 3. Download image and render card
-    image_path = f"output/images/insta_{username}.jpg"
-    card_path = f"output/cards/insta_{username}.png"
+    image_path = f"output/images/insta_{username}_{sequence_num}.jpg"
+    card_path = f"output/cards/insta_{username}_{sequence_num}.png"
     
     final_image = image_handler.prepare_image(story, image_path)
     
@@ -117,7 +117,7 @@ def process_instagram_post(post, username, lang="hi", dry_run=False):
             summary=summary,
             image_path=final_image,
             bucket="StudentEducation",
-            category="Student",
+            category=None,
             output_path=card_path
         )
     else:
@@ -126,7 +126,7 @@ def process_instagram_post(post, username, lang="hi", dry_run=False):
             summary=summary,
             image_path=final_image,
             bucket="StudentEducation",
-            category="Student",
+            category=None,
             output_path=card_path
         )
         
@@ -160,23 +160,49 @@ if __name__ == "__main__":
     parser.add_argument("--username", type=str, default="iit__nit__iiit", help="Target Instagram username")
     parser.add_argument("--lang", type=str, default="hi", choices=["en", "hi"], help="Output card language")
     parser.add_argument("--dry-run", action="store_true", help="Generate card locally without posting")
+    parser.add_argument("--date", type=str, help="Date to fetch posts for in YYYY-MM-DD format (default: yesterday)")
     
     args = parser.parse_args()
     
-    # 1. Fetch latest post
-    posts = fetch_instagram_posts(args.username, limit=1)
+    # 1. Determine target date (yesterday by default)
+    if args.date:
+        target_date_str = args.date
+    else:
+        import datetime
+        target_date = datetime.date.today() - datetime.timedelta(days=1)
+        target_date_str = target_date.isoformat()
+        
+    print(f"[Workflow] Target date for Instagram posts: {target_date_str}")
+    
+    # 2. Fetch recent posts
+    posts = fetch_instagram_posts(args.username, limit=12)
     
     if not posts:
         print(f"\n[Error] Could not fetch any posts for @{args.username}. Check your RapidAPI key or username.")
         sys.exit(1)
         
-    post = posts[0]
-    post_code = post.get("code")
-    if post_code and is_duplicate_insta(post_code):
-        print(f"\n[Instagram Scraper] Notice: Latest post '{post_code}' is already published. Stopping workflow to avoid duplicates.")
+    # 3. Filter posts matching target date
+    matching_posts = [p for p in posts if p.get("date") == target_date_str]
+    
+    if not matching_posts:
+        print(f"\n[Warning] No posts found for @{args.username} on date: {target_date_str}")
+        print("Available post dates in fetched batch:")
+        for p in posts:
+            print(f"  - Code: {p.get('code')} | Date: {p.get('date')}")
         sys.exit(0)
         
-    # 2. Process the latest post
-    success = process_instagram_post(post, args.username, lang=args.lang, dry_run=args.dry_run)
-    if not success:
-        sys.exit(1)
+    print(f"[Workflow] Found {len(matching_posts)} posts from {target_date_str}.")
+    
+    # 4. Process all matching posts
+    success_count = 0
+    for idx, post in enumerate(matching_posts):
+        post_code = post.get("code")
+        if post_code and is_duplicate_insta(post_code):
+            print(f"\n[Instagram Scraper] Notice: Post '{post_code}' is already published. Skipping duplicate.")
+            continue
+            
+        success = process_instagram_post(post, args.username, lang=args.lang, dry_run=args.dry_run, sequence_num=idx)
+        if success:
+            success_count += 1
+            
+    print(f"\n🏁 Finished processing. Successfully converted {success_count} posts from {target_date_str}!")

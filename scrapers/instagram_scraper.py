@@ -94,11 +94,23 @@ def fetch_instagram_posts(username, limit=3):
                     if edges and isinstance(edges[0], dict):
                         caption = edges[0].get("node", {}).get("text", "")
                 
+                # 3. Extract taken_at and parse date
+                taken_at = node.get("taken_at")
+                post_date = None
+                if taken_at:
+                    try:
+                        import datetime
+                        post_date = datetime.date.fromtimestamp(taken_at).isoformat()
+                    except Exception:
+                        pass
+                
                 posts.append({
                     "caption": caption.strip(),
                     "image_url": display_url,
                     "id": node.get("id"),
-                    "code": node.get("code")
+                    "code": node.get("code"),
+                    "taken_at": taken_at,
+                    "date": post_date
                 })
             
             print(f"[Instagram Scraper] Successfully compiled {len(posts)} posts.")

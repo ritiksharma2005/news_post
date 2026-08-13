@@ -50,7 +50,7 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
 
     font_brand = get_font("bold", 34)
     font_headline = get_font("bold", 48)
-    font_bullet = get_font("regular", 30)  # Font adjusted to 30 to guarantee 5 bullets fit
+    font_bullet = get_font("regular", 26)  # Font adjusted to 30 to guarantee 5 bullets fit
     font_footer = get_font("bold", 30)
 
     # 1. Top Stripe & Header (Removed emoji to prevent box glitch)
