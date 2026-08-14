@@ -91,7 +91,7 @@ def run_digest_pipeline(dry_run=False):
         f"{digest_data.get('headline')}\n\n"
         + "\n".join(digest_data.get("bullets", [])) + "\n\n"
         f"💡 Why it matters:\n{digest_data.get('why_it_matters')}\n\n"
-        f"📲 Join @news.nit_iit on Telegram for daily campus alerts!\n\n"
+        f"📲 Join our Instagram Community (Link in Bio): https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/\n\n"
         f"#IIT #NIT #CampusNews #Engineering #Placements #news_nit_iit"
     )
 

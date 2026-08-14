@@ -87,52 +87,75 @@ def extract_article_details(article_url):
         
     return img_url, summary
 
-def scrape_bhaskar_rss(limit=8):
+def scrape_hindi_rss_feeds(limit=12):
     """
-    Parses the live Dainik Bhaskar National RSS feed for fresh Hindi news.
+    Scrapes and merges news from multiple top Hindi RSS sources:
+    Dainik Bhaskar, BBC Hindi, and Aaj Tak.
     """
-    url = "https://www.bhaskar.com/rss-feed/1061/"
+    feeds = [
+        {"name": "Dainik Bhaskar", "url": "https://www.bhaskar.com/rss-feed/1061/"},
+        {"name": "BBC Hindi", "url": "https://feeds.bbci.co.uk/hindi/rss.xml"},
+        {"name": "Aaj Tak", "url": "https://www.aajtak.in/rssfeeds/?id=home"}
+    ]
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
     stories = []
-    try:
-        res = requests.get(url, headers=headers, timeout=15)
-        if res.status_code == 200:
-            soup = BeautifulSoup(res.content, "xml")
-            items = soup.find_all("item")
-            for item in items:
-                if len(stories) >= limit:
-                    break
-                title_el = item.find("title")
-                link_el = item.find("link")
-                desc_el = item.find("description")
-                
-                title = title_el.text.strip() if title_el else ""
-                link = link_el.text.strip() if link_el else ""
-                description = desc_el.text.strip() if desc_el else ""
-                
-                # Extract image URL from media:content
-                media = item.find("media:content") or item.find("content")
-                image_url = ""
-                if media and media.get("url"):
-                    image_url = media["url"].strip()
-                elif item.find("enclosure") and item.find("enclosure").get("url"):
-                    image_url = item.find("enclosure")["url"].strip()
+    
+    # We want to round-robin or gather a balanced list of stories from the feeds
+    per_feed_limit = max(3, limit // len(feeds) + 1)
+    
+    for f in feeds:
+        try:
+            print(f"  [Hindi RSS] Fetching {f['name']}...")
+            res = requests.get(f["url"], headers=headers, timeout=12)
+            if res.status_code == 200:
+                soup = BeautifulSoup(res.content, "xml")
+                items = soup.find_all("item")
+                feed_stories = 0
+                for item in items:
+                    if feed_stories >= per_feed_limit:
+                        break
+                        
+                    title_el = item.find("title")
+                    link_el = item.find("link")
+                    desc_el = item.find("description")
                     
-                if title:
-                    stories.append({
-                        "title": title,
-                        "link": link,
-                        "description": description,
-                        "summary": description,
-                        "image_url": image_url,
-                        "featured_image": image_url,
-                        "source": "Dainik Bhaskar"
-                    })
-    except Exception as e:
-        print(f"  [Bhaskar RSS] Error parsing RSS: {e}")
-    return stories
+                    title = title_el.text.strip() if title_el else ""
+                    link = link_el.text.strip() if link_el else ""
+                    description = desc_el.text.strip() if desc_el else ""
+                    
+                    # Clean CDATA/HTML tags
+                    title = re.sub(r'<[^>]+>', '', title).replace("<![CDATA[", "").replace("]]>", "").strip()
+                    description = re.sub(r'<[^>]+>', '', description).replace("<![CDATA[", "").replace("]]>", "").strip()
+                    
+                    # Extract image URL
+                    image_url = ""
+                    media = item.find("media:content") or item.find("content") or item.find("media:thumbnail") or item.find("thumbnail")
+                    if media and media.get("url"):
+                        image_url = media["url"].strip()
+                    elif item.find("enclosure") and item.find("enclosure").get("url"):
+                        image_url = item.find("enclosure")["url"].strip()
+                        
+                    if title:
+                        stories.append({
+                            "title": title,
+                            "link": link,
+                            "description": description,
+                            "summary": description,
+                            "image_url": image_url,
+                            "featured_image": image_url,
+                            "source": f["name"]
+                        })
+                        feed_stories += 1
+        except Exception as e:
+            print(f"  [Hindi RSS] Error parsing {f['name']}: {e}")
+            
+    return stories[:limit]
+
+def scrape_bhaskar_rss(limit=8):
+    """Alias for backward compatibility."""
+    return scrape_hindi_rss_feeds(limit)
 
 def scrape_google_news(query, lang="en", limit=10):
     """

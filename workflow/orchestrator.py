@@ -140,19 +140,25 @@ def run_pipeline(language="en", run_type="morning", dry_run=False):
         if language == "hi":
             caption = (
                 f"🔥 {headline}\n\n"
+                f"📝 मुख्य बातें (Highlights):\n"
                 f"{summary}\n\n"
-                f"💬 इस घटनाक्रम पर आपकी क्या राय है? कमेंट में बताएं! 👇\n\n"
-                f"📌 अपडेट रहने के लिए इसे अपने दोस्तों के साथ शेयर करें!\n\n"
-                f"📲 रोज़ाना हिंदी अपडेट्स के लिए टेलीग्राम पर @news.nit_iit से जुड़ें!\n\n"
+                f"📌 विस्तार से समझें (Overview):\n"
+                f"देश और दुनिया की इस ताज़ा खबर को लेकर युवाओं और छात्र-छात्राओं के बीच काफी चर्चा है। "
+                f"शिक्षा, समाज और सरकारी नीतियों से जुड़ा यह नया अपडेट हमारे आने वाले करियर और सामाजिक परिदृश्य पर असर डाल सकता है। "
+                f"पूरी जानकारी पढ़ें, इसे अपने साथियों के साथ शेयर करें और भविष्य की तैयारी को और भी मजबूत बनाएं!\n\n"
+                f"💬 इस घटनाक्रम पर आपकी क्या राय है? कमेंट में जरूर बताएं! 👇\n\n"
+                f"📌 ताज़ा अपडेट्स के लिए इसे अपने दोस्तों के साथ शेयर करें!\n\n"
+                f"📲 हमारे इंस्टाग्राम कम्युनिटी चैनल से जुड़ें (लिंक बायो में भी उपलब्ध है): https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/\n\n"
                 f"#HindiNews #RashtriyaKhabar #SarkariFaisle #UPSC #CurrentAffairs #news_nit_iit"
             )
         else:
             caption = (
                 f"🔥 {headline}\n\n"
+                f"📝 Highlights:\n"
                 f"{summary}\n\n"
                 f"💬 What is your opinion on this update? Let us know in the comments below! 👇\n\n"
                 f"📌 Tag a friend to keep them informed! \n\n"
-                f"📲 Join @news.nit_iit on Telegram for daily updates!\n\n"
+                f"📲 Join our Instagram Community (Link in Bio): https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/\n\n"
                 f"#IndiaNews #StudentAffairs #UPSC #CompetitiveExams #GenZNews #news_nit_iit"
             )
         story["caption"] = caption

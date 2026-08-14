@@ -56,7 +56,7 @@ def run_quote_pipeline(dry_run=False):
         f"— {author_name}\n\n"
         f"💭 Today's Reflection for Students:\n{quote_data['reflection']}\n\n"
         f"💬 How are you applying this in your prep today? Comment below! 👇\n\n"
-        f"📲 Join @news.nit_iit on Telegram for daily alerts!\n\n"
+        f"📲 Join our Instagram Community (Link in Bio): https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/\n\n"
         f"#LifeMantra #Motivation #UPSC #JEE #NEET #GATE #StudentLife #news_nit_iit"
     )
 
