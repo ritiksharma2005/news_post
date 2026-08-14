@@ -205,18 +205,31 @@ def run_pipeline(language="en", run_type="morning", dry_run=False):
             print(f"Caption:\n{s['caption']}")
         return
         
-    # 5. Publish to Telegram
-    print("\nSending stories to Telegram...")
-    telegram.send_all_stories(final_posters)
+    # 5. Publish to Telegram and Instagram with error catching
+    telegram_err = None
+    instagram_err = None
     
-    # 6. Publish to Instagram
-    print("\nPublishing stories to Instagram...")
-    instagram.publish_all_stories(final_posters)
-    
-    # 7. Save to global history
+    try:
+        print("\nSending stories to Telegram...")
+        telegram.send_all_stories(final_posters)
+    except Exception as e:
+        print(f"  ⚠️ Telegram publishing failed: {e}")
+        telegram_err = e
+        
+    try:
+        print("\nPublishing stories to Instagram...")
+        instagram.publish_all_stories(final_posters)
+    except Exception as e:
+        print(f"  ⚠️ Instagram publishing failed: {e}")
+        instagram_err = e
+        
+    # 7. Save to global history (Guarantees stories are registered even on partial publish failure)
     print("\nSaving published news to history...")
     for s in final_posters:
         add_published_news(s["title"], s.get("link"))
+        
+    if telegram_err or instagram_err:
+        raise Exception(f"Publishing finished with errors: Telegram: {telegram_err}, Instagram: {instagram_err}")
         
     print("\n" + "=" * 60)
     print(f"🏁 {language.upper()} {run_type.upper()} RUN COMPLETE!")

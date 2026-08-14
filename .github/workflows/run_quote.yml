@@ -39,6 +39,7 @@ jobs:
         run: python main_quote.py
 
       - name: Commit and Push History
+        if: always()
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
