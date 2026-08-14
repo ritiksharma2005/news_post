@@ -87,6 +87,53 @@ def extract_article_details(article_url):
         
     return img_url, summary
 
+def scrape_bhaskar_rss(limit=8):
+    """
+    Parses the live Dainik Bhaskar National RSS feed for fresh Hindi news.
+    """
+    url = "https://www.bhaskar.com/rss-feed/1061/"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+    stories = []
+    try:
+        res = requests.get(url, headers=headers, timeout=15)
+        if res.status_code == 200:
+            soup = BeautifulSoup(res.content, "xml")
+            items = soup.find_all("item")
+            for item in items:
+                if len(stories) >= limit:
+                    break
+                title_el = item.find("title")
+                link_el = item.find("link")
+                desc_el = item.find("description")
+                
+                title = title_el.text.strip() if title_el else ""
+                link = link_el.text.strip() if link_el else ""
+                description = desc_el.text.strip() if desc_el else ""
+                
+                # Extract image URL from media:content
+                media = item.find("media:content") or item.find("content")
+                image_url = ""
+                if media and media.get("url"):
+                    image_url = media["url"].strip()
+                elif item.find("enclosure") and item.find("enclosure").get("url"):
+                    image_url = item.find("enclosure")["url"].strip()
+                    
+                if title:
+                    stories.append({
+                        "title": title,
+                        "link": link,
+                        "description": description,
+                        "summary": description,
+                        "image_url": image_url,
+                        "featured_image": image_url,
+                        "source": "Dainik Bhaskar"
+                    })
+    except Exception as e:
+        print(f"  [Bhaskar RSS] Error parsing RSS: {e}")
+    return stories
+
 def scrape_google_news(query, lang="en", limit=10):
     """
     Uses Playwright to search Google News and extract headlines, target links,

@@ -34,7 +34,7 @@ def fetch_instagram_posts(username, limit=3):
     
     try:
         print(f"[Instagram Scraper] Requesting posts for '{username}'...")
-        response = requests.post(url, headers=headers, data=payload, timeout=15)
+        response = requests.post(url, headers=headers, data=payload, timeout=60)
         if response.status_code == 200:
             data = response.json()
             

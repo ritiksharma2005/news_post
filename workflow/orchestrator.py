@@ -7,7 +7,7 @@ from difflib import SequenceMatcher
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import config
-from scrapers.playwright_scraper import scrape_google_news
+from scrapers.playwright_scraper import scrape_google_news, scrape_bhaskar_rss
 from poster import image_handler, template_en, template_hi
 from publisher import telegram, instagram
 from workflow.history_manager import is_duplicate_news, add_published_news
@@ -42,8 +42,12 @@ def run_pipeline(language="en", run_type="morning", dry_run=False):
         general_query = "India news"
         student_query = "site:careers360.com OR site:shiksha.com OR site:nta.ac.in exam news"
         
-    print(f"\n[Workflow] Scraping general/trending news...")
-    general_stories = scrape_google_news(general_query, lang=language, limit=8)
+    if language == "hi":
+        print(f"\n[Workflow] Scraping Dainik Bhaskar national RSS feed...")
+        general_stories = scrape_bhaskar_rss(limit=8)
+    else:
+        print(f"\n[Workflow] Scraping general/trending news...")
+        general_stories = scrape_google_news(general_query, lang=language, limit=8)
     
     print(f"\n[Workflow] Scraping student/education news...")
     student_stories = scrape_google_news(student_query, lang=language, limit=5)

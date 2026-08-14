@@ -40,7 +40,7 @@ def fetch_via_rapidapi(target_username):
 
     try:
         print(f"  Querying RapidAPI for @{target_username} posts...")
-        response = requests.post(url, headers=headers, data=payload, timeout=20)
+        response = requests.post(url, headers=headers, data=payload, timeout=60)
         
         if response.status_code != 200:
             print(f"  RapidAPI returned status code: {response.status_code} ({response.text})")
