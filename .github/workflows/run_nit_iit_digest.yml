@@ -40,6 +40,7 @@ jobs:
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
         run: python instagram_digest/main_digest.py
 
       - name: Commit and Push History
