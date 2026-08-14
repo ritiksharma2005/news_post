@@ -190,18 +190,8 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     # Vertical accent bar
     draw.rectangle([(60, y_summary_start + 2), (76, y_summary_start + summary_h - 2)], fill=accent_color)
     
-    # Draw summary lines
-    words_sum = summary.split()
-    summary_lines = []
-    cur_line = ""
-    for w in words_sum:
-        if len(cur_line + " " + w) < 52:
-            cur_line += " " + w if cur_line else w
-        else:
-            summary_lines.append(cur_line)
-            cur_line = w
-    if cur_line:
-        summary_lines.append(cur_line)
+    # Draw summary lines using pixel-based wrapping
+    summary_lines = wrap_text_by_pixels(summary, font_summary, 880, draw)
         
     y_sum_text = y_summary_start + 24
     box_center_x = (60 + 1020) // 2

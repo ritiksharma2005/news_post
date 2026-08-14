@@ -153,6 +153,14 @@ def prepare_image(story, output_path, width=IMAGE_WIDTH, height=IMAGE_HEIGHT):
             local_photo = fetch_search_image(search_query, output_path)
             if local_photo:
                 return local_photo
+        else:
+            # Relevancy fallback: Search web using the first 7 words of the headline
+            headline_words = headline.split()
+            clean_query = " ".join(headline_words[:7])
+            print(f"  No whitelist matched. Searching web using headline: '{clean_query}'...")
+            local_photo = fetch_search_image(clean_query, output_path)
+            if local_photo:
+                return local_photo
 
     # 4. Final fallback to default template image (No AI generation)
     fallback_path = "assets/default_fallback.jpg"
