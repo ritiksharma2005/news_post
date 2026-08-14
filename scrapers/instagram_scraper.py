@@ -116,6 +116,11 @@ def fetch_instagram_posts(username, limit=3):
             print(f"[Instagram Scraper] Successfully compiled {len(posts)} posts.")
             return posts
         else:
+            if response.status_code == 429 or "exceeded the MONTHLY quota" in response.text:
+                print("\n" + "!" * 80)
+                print("⚠️  [RAPIDAPI CAP LIMIT REACHED] Monthly request quota exceeded!")
+                print("Please upgrade your subscription or wait for the monthly limit reset.")
+                print("!" * 80 + "\n")
             print(f"[Instagram Scraper] API Error: {response.status_code} - {response.text}")
     except Exception as e:
         print(f"[Instagram Scraper] Connection Error: {e}")
