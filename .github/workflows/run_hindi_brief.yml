@@ -2,10 +2,10 @@ name: 🇮🇳 Run Hindi News Brief
 
 on:
   schedule:
-    # 1:30 PM IST (08:00 AM UTC)
-    - cron: "0 8 * * *"
-    # 8:30 PM IST (03:00 PM UTC)
-    - cron: "0 15 * * *"
+    # 8:00 AM IST (02:30 AM UTC)
+    - cron: "30 2 * * *"
+    # 6:00 PM IST (12:30 PM UTC)
+    - cron: "30 12 * * *"
   workflow_dispatch: {}
 
 jobs:
@@ -45,7 +45,7 @@ jobs:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
         run: |
-          if [ "$(date -u +%H)" -eq "08" ]; then
+          if [ "$(date -u +%H)" -eq "02" ]; then
             python main_hindi.py --type=morning
           else
             python main_hindi.py --type=evening
