@@ -70,7 +70,8 @@ def fetch_via_apify(username, limit=12):
                                 "id": item.get("id"),
                                 "code": item.get("shortCode") or item.get("code"),
                                 "taken_at": item.get("timestamp"),
-                                "date": post_date
+                                "date": post_date,
+                                "is_pinned": item.get("isPinned") or item.get("pinned") or item.get("pinnedToTop") or False
                             })
                         print(f"[Apify Scraper] Successfully compiled {len(compiled_posts)} posts.")
                         return compiled_posts

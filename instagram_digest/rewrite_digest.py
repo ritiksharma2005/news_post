@@ -18,24 +18,27 @@ DIGEST_REWRITE_PROMPT = """You are an editor for @news.nit_iit. Below are raw In
 {posts_text}
 
 TASK:
-1. Identify the SINGLE MOST IMPORTANT student update (e.g. Hackathon, Internship, Exam alert, Placement record, Admission, or Event). Skip generic memes or ads.
-2. Extract key facts: College Name, Event/Exam Title, Registration Deadline/Dates, Eligibility, and Why it matters for students.
-3. Rewrite into @news.nit_iit's editorial style.
+1. Identify the TWO MOST IMPORTANT distinct student updates (e.g. Hackathon, Internship, Exam alert, Placement record, Admission, or Event). Skip generic memes or ads.
+2. For each, extract key facts: College Name, Event/Exam Title, Registration Deadline/Dates, Eligibility, and Why it matters for students.
+3. Rewrite both into @news.nit_iit's editorial style.
 
-OUTPUT FORMAT (Return valid JSON object only, no markdown formatting):
-{{
-  "selected_index": 1,  // The [1-based index] of the selected post from the list below
-  "headline": "A detailed 2-line headline with emojis (Make it long enough to span exactly two lines, around 60-80 characters. E.g. 🚀 IIT Bombay Opens National Innovation Hackathon: Registration Closes This Week)",
-  "bullets": [
-    "• Registration Deadline: 25 July 2026",
-    "• Open for all B.Tech, M.Tech & Ph.D. students",
-    "• Total prize pool of 5 Lakhs with mentorship",
-    "• Direct internship interview slots for winners",
-    "• Apply online via the official institute portal"
-  ],  // MUST provide exactly 4 to 5 bullet points
-  "why_it_matters": "A great opportunity for students interested in innovation and problem-solving.",
-  "caption": "Full Instagram caption text with CTAs and hashtags"
-}}
+OUTPUT FORMAT (Return a valid JSON array containing up to 2 distinct objects, no markdown formatting):
+[
+  {{
+    "selected_index": 1,  // The [1-based index] of the selected post from the list below
+    "headline": "A detailed 2-line headline with emojis (Make it long enough to span exactly two lines, around 60-80 characters. E.g. 🚀 IIT Bombay Opens National Innovation Hackathon: Registration Closes This Week)",
+    "bullets": [
+      "• Registration Deadline: 25 July 2026",
+      "• Open for all B.Tech, M.Tech & Ph.D. students",
+      "• Total prize pool of 5 Lakhs with mentorship",
+      "• Direct internship interview slots for winners",
+      "• Apply online via the official institute portal"
+    ],  // MUST provide exactly 4 to 5 bullet points
+    "why_it_matters": "A great opportunity for students interested in innovation and problem-solving.",
+    "caption": "Full Instagram caption text with CTAs and hashtags"
+  }},
+  ...
+]
 """
 
 
@@ -82,17 +85,25 @@ def rewrite_latest_digest():
             clean_text = clean_text.split("```")[1].split("```")[0].strip()
 
         digest_data = json.loads(clean_text)
+        
+        # Ensure digest_data is a list
+        if not isinstance(digest_data, list):
+            digest_data = [digest_data]
 
-        # Add the selected post's shortcode for history tracking
-        selected_idx = digest_data.get("selected_index", 1) - 1
-        if 0 <= selected_idx < len(filtered_posts):
-            digest_data["selected_shortcode"] = filtered_posts[selected_idx].get("shortcode")
+        # Add the selected post's shortcode to each item in the list for history tracking
+        for item in digest_data:
+            selected_idx = item.get("selected_index", 1) - 1
+            if 0 <= selected_idx < len(filtered_posts):
+                item["selected_shortcode"] = filtered_posts[selected_idx].get("shortcode")
+
+        # Limit to at most 2 updates
+        digest_data = digest_data[:2]
 
         save_path = "output/processed_ig_digest.json"
         with open(save_path, "w", encoding="utf-8") as f:
             json.dump(digest_data, f, indent=2, ensure_ascii=False)
 
-        print(f"  Successfully rewritten Digest: {digest_data.get('headline')}")
+        print(f"  Successfully compiled {len(digest_data)} rewritten updates.")
         return digest_data
     except Exception as e:
         print(f"❌ Error rewriting digest: {e}")

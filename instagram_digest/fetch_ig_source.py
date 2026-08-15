@@ -22,10 +22,15 @@ from scrapers.instagram_scraper import fetch_instagram_posts
 
 def fetch_via_rapidapi(target_username):
     """Fetches latest posts using the unified scraper parsing logic."""
-    raw_posts = fetch_instagram_posts(target_username, limit=5)
+    # Fetch 10 posts so we can filter out pinned posts and still get a full list of top 5
+    raw_posts = fetch_instagram_posts(target_username, limit=10)
     posts = []
     
-    for p in raw_posts:
+    # Exclude pinned posts
+    unpinned_posts = [p for p in raw_posts if not p.get("is_pinned", False)]
+    
+    # Store only the latest 5 unpinned posts
+    for p in unpinned_posts[:5]:
         caption = p.get("caption", "").strip()
         if caption:
             shortcode = p.get("code")
@@ -36,10 +41,11 @@ def fetch_via_rapidapi(target_username):
                 "media_url": p.get("image_url"),
                 "permalink": permalink,
                 "timestamp": p.get("date") or str(datetime.date.today()),
-                "shortcode": shortcode
+                "shortcode": shortcode,
+                "is_pinned": False
             })
             
-    print(f"  🎉 Success! Fetched {len(posts)} posts via RapidAPI.")
+    print(f"  🎉 Success! Fetched {len(posts)} unpinned posts via RapidAPI.")
     return posts
 
 

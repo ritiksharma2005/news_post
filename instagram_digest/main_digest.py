@@ -51,85 +51,85 @@ def run_digest_pipeline(dry_run=False):
     print("\n" + "=" * 50)
     print("🎓 STEP 2: AI Selection & Rewriting...")
     print("=" * 50)
-    digest_data = rewrite_digest.rewrite_latest_digest()
+    digest_items = rewrite_digest.rewrite_latest_digest()
 
-    if not digest_data:
-        print("  No new digest story generated.")
+    if not digest_items:
+        print("  No new digest stories generated.")
         return
 
-    # Retrieve source image URL from raw database
+    # Load raw posts to get source image URLs
     raw_path = "output/raw_ig_digest.json"
-    source_image_local = None
-    
+    raw_posts = []
     if os.path.exists(raw_path):
         try:
             with open(raw_path, "r", encoding="utf-8") as f:
                 raw_posts = json.load(f)
-            
-            selected_idx = digest_data.get("selected_index", 1) - 1
-            if 0 <= selected_idx < len(raw_posts):
-                selected_raw_post = raw_posts[selected_idx]
-                media_url = selected_raw_post.get("media_url")
+        except Exception as e:
+            print(f"  Error loading raw IG posts: {e}")
+
+    for idx, item in enumerate(digest_items):
+        print(f"\n🧠 Processing Digest Item {idx+1}/{len(digest_items)}...")
+        
+        # Download source image matching selected shortcode
+        source_image_local = None
+        shortcode = item.get("selected_shortcode")
+        if shortcode and raw_posts:
+            matching_posts = [p for p in raw_posts if p.get("shortcode") == shortcode]
+            if matching_posts:
+                media_url = matching_posts[0].get("media_url")
                 if media_url:
-                    print(f"\n📥 Downloading original post photo from source...")
-                    source_image_local = download_source_image(media_url, "output/images/digest_source.jpg")
-        except Exception as e:
-            print(f"  Could not load source image: {e}")
+                    print(f"📥 Downloading original post photo for '{shortcode}'...")
+                    source_image_local = download_source_image(media_url, f"output/images/digest_source_{idx}.jpg")
+        
+        # Determine output paths
+        card_path = f"output/cards/digest_today_{idx}.png"
+        
+        print(f"🎨 Rendering Campus Digest Card {idx+1}...")
+        card_path = design_digest_post.create_digest_card(
+            headline=item.get("headline", ""),
+            bullets=item.get("bullets", []),
+            why_it_matters=item.get("why_it_matters", ""),
+            image_path=source_image_local,
+            output_path=card_path
+        )
 
-    print("\n" + "=" * 50)
-    print("🎓 STEP 3: Rendering Campus Digest Poster...")
-    print("=" * 50)
-    card_path = design_digest_post.create_digest_card(
-        headline=digest_data.get("headline", ""),
-        bullets=digest_data.get("bullets", []),
-        why_it_matters=digest_data.get("why_it_matters", ""),
-        image_path=source_image_local,
-        output_path="output/cards/digest_today.png"
-    )
+        caption_text = (
+            f"{item.get('headline')}\n\n"
+            + "\n".join(item.get("bullets", [])) + "\n\n"
+            f"💡 Why it matters:\n{item.get('why_it_matters')}\n\n"
+            f"📲 Join our Instagram Community (Link in Bio): https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/\n\n"
+            f"#IIT #NIT #CampusNews #Engineering #Placements #news_nit_iit"
+        )
 
-    caption_text = (
-        f"{digest_data.get('headline')}\n\n"
-        + "\n".join(digest_data.get("bullets", [])) + "\n\n"
-        f"💡 Why it matters:\n{digest_data.get('why_it_matters')}\n\n"
-        f"📲 Join our Instagram Community (Link in Bio): https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/\n\n"
-        f"#IIT #NIT #CampusNews #Engineering #Placements #news_nit_iit"
-    )
+        story_obj = {
+            "card_path": card_path,
+            "caption": caption_text,
+            "hashtags": []
+        }
 
-    story_obj = {
-        "card_path": card_path,
-        "caption": caption_text,
-        "hashtags": []
-    }
+        if dry_run:
+            print(f"🔒 [DRY RUN ACTIVE] Card generated at: {card_path}")
+            print(f"Caption draft:\n{caption_text}")
+            continue
 
-    if dry_run:
-        print("\n" + "=" * 50)
-        print("🔒 [DRY RUN ACTIVE] Digest card generated at output/cards/digest_today.png")
-        print("=" * 50)
-        print(f"Caption draft:\n{caption_text}")
-        return
+        # Real publish
+        print(f"🎓 Sending Digest {idx+1} to Telegram...")
+        telegram_bot.send_story(story_obj)
 
-    print("\n" + "=" * 50)
-    print("🎓 STEP 4: Sending Digest to Telegram")
-    print("=" * 50)
-    telegram_bot.send_story(story_obj)
+        print(f"🎓 Publishing Digest {idx+1} to Instagram...")
+        if ENABLE_INSTAGRAM_POSTING:
+            instagram_publisher.publish_story(story_obj)
+        else:
+            print("🔒 [DRY RUN ACTIVE] Instagram publishing paused.")
 
-    print("\n" + "=" * 50)
-    print("🎓 STEP 5: Publishing Digest to Instagram")
-    print("=" * 50)
-    if ENABLE_INSTAGRAM_POSTING:
-        instagram_publisher.publish_story(story_obj)
-    else:
-        print("🔒 [DRY RUN ACTIVE] Instagram publishing paused.")
-
-    # Record the published post code to history
-    shortcode = digest_data.get("selected_shortcode")
-    if shortcode:
-        try:
-            from workflow.history_manager import add_published_insta
-            add_published_insta(shortcode)
-            print(f"  [History] Successfully recorded post code '{shortcode}' to database/local history.")
-        except Exception as e:
-            print(f"  [History] Error recording post code: {e}")
+        # Record shortcode to history
+        if shortcode:
+            try:
+                from workflow.history_manager import add_published_insta
+                add_published_insta(shortcode)
+                print(f"  [History] Recorded post code '{shortcode}' to database/local history.")
+            except Exception as e:
+                print(f"  [History] Error recording post code: {e}")
 
     print("\n" + "=" * 50)
     print("🎓 CAMPUS DIGEST PIPELINE COMPLETE")
