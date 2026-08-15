@@ -22,7 +22,7 @@ from scrapers.instagram_scraper import fetch_instagram_posts
 
 def fetch_via_rapidapi(target_username):
     """Fetches latest posts using the unified scraper parsing logic."""
-    raw_posts = fetch_instagram_posts(target_username, limit=12)
+    raw_posts = fetch_instagram_posts(target_username, limit=5)
     posts = []
     
     for p in raw_posts:
@@ -35,7 +35,8 @@ def fetch_via_rapidapi(target_username):
                 "caption": caption,
                 "media_url": p.get("image_url"),
                 "permalink": permalink,
-                "timestamp": p.get("date") or str(datetime.date.today())
+                "timestamp": p.get("date") or str(datetime.date.today()),
+                "shortcode": shortcode
             })
             
     print(f"  🎉 Success! Fetched {len(posts)} posts via RapidAPI.")

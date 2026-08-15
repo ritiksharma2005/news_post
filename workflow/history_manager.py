@@ -104,6 +104,13 @@ def add_published_quote(quote_text):
         save_history(history)
 
 def is_duplicate_insta(post_code):
+    from workflow.supabase_manager import fetch_supabase_insta_history, is_supabase_configured
+    if is_supabase_configured():
+        supabase_codes = fetch_supabase_insta_history()
+        if post_code in supabase_codes:
+            print(f"  [Supabase History Match] Instagram post code matched: {post_code}")
+            return True
+
     history = load_history()
     return post_code in history.get("insta_ids", [])
 
@@ -112,3 +119,7 @@ def add_published_insta(post_code):
     if post_code not in history["insta_ids"]:
         history["insta_ids"].append(post_code)
         save_history(history)
+
+    from workflow.supabase_manager import save_insta_to_supabase, is_supabase_configured
+    if is_supabase_configured():
+        save_insta_to_supabase(post_code)

@@ -52,9 +52,22 @@ def rewrite_latest_digest():
         print("  No posts available to digest.")
         return None
 
-    # Format posts for AI
+    # Format posts for AI, filtering out duplicate shortcodes
+    from workflow.history_manager import is_duplicate_insta
+    filtered_posts = []
+    for p in posts:
+        shortcode = p.get("shortcode")
+        if shortcode and is_duplicate_insta(shortcode):
+            print(f"  [Deduplication] Skipping already processed source post: {shortcode}")
+            continue
+        filtered_posts.append(p)
+
+    if not filtered_posts:
+        print("  No new/unprocessed posts available to digest.")
+        return None
+
     posts_text = []
-    for i, p in enumerate(posts[:10]):
+    for i, p in enumerate(filtered_posts[:5]):
         posts_text.append(f"[{i+1}] Account: {p.get('source_account')}\nCaption: {p.get('caption')[:300]}\n")
 
     prompt = DIGEST_REWRITE_PROMPT.format(posts_text="\n".join(posts_text))
@@ -69,6 +82,11 @@ def rewrite_latest_digest():
             clean_text = clean_text.split("```")[1].split("```")[0].strip()
 
         digest_data = json.loads(clean_text)
+
+        # Add the selected post's shortcode for history tracking
+        selected_idx = digest_data.get("selected_index", 1) - 1
+        if 0 <= selected_idx < len(filtered_posts):
+            digest_data["selected_shortcode"] = filtered_posts[selected_idx].get("shortcode")
 
         save_path = "output/processed_ig_digest.json"
         with open(save_path, "w", encoding="utf-8") as f:

@@ -121,6 +121,16 @@ def run_digest_pipeline(dry_run=False):
     else:
         print("🔒 [DRY RUN ACTIVE] Instagram publishing paused.")
 
+    # Record the published post code to history
+    shortcode = digest_data.get("selected_shortcode")
+    if shortcode:
+        try:
+            from workflow.history_manager import add_published_insta
+            add_published_insta(shortcode)
+            print(f"  [History] Successfully recorded post code '{shortcode}' to database/local history.")
+        except Exception as e:
+            print(f"  [History] Error recording post code: {e}")
+
     print("\n" + "=" * 50)
     print("🎓 CAMPUS DIGEST PIPELINE COMPLETE")
     print("=" * 50)
