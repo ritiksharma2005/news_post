@@ -43,6 +43,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          python workflow/sync_history.py || true
           git pull origin main --rebase || true
           git add data/ || true
           git commit -m "Update publication history [skip ci]" || true
