@@ -31,6 +31,30 @@ def save_history(history):
         print(f"  [History Manager] Error saving history file: {e}")
 
 def is_duplicate_news(title, url=None):
+    from workflow.supabase_manager import fetch_supabase_news_history, is_supabase_configured
+    
+    # Check Supabase first if configured
+    if is_supabase_configured():
+        supabase_titles, supabase_links = fetch_supabase_news_history()
+        norm_title = title.lower().strip()
+        
+        # 1. Match by URL
+        if url and url.strip() in supabase_links:
+            print(f"  [Supabase History Match] URL matched: {url}")
+            return True
+            
+        # 2. Match by exact title
+        if norm_title in [t.lower().strip() for t in supabase_titles]:
+            print(f"  [Supabase History Match] Exact Title matched: '{title}'")
+            return True
+            
+        # 3. Match by similarity ratio (> 0.6)
+        for past_title in supabase_titles:
+            if get_similarity(title, past_title) > 0.6:
+                print(f"  [Supabase History Match] Similar Title matched: '{title}' ~ '{past_title}'")
+                return True
+
+    # Fallback to local history
     history = load_history()
     norm_title = title.lower().strip()
     
@@ -59,6 +83,10 @@ def add_published_news(title, url=None):
     if url and url not in history["news_links"]:
         history["news_links"].append(url)
     save_history(history)
+
+    from workflow.supabase_manager import save_news_to_supabase, is_supabase_configured
+    if is_supabase_configured():
+        save_news_to_supabase(title, url)
 
 def is_duplicate_quote(quote_text):
     history = load_history()

@@ -44,6 +44,8 @@ jobs:
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
           if [ "$(date -u +%H)" -eq "02" ]; then
             python main.py --type=morning
