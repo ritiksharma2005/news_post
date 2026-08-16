@@ -1,0 +1,35 @@
+name: 🧪 Test Supabase Connection
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  test-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests python-dotenv
+
+      - name: Run connection test
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python workflow/test_supabase_connection.py > supabase_test_log.txt
+          cat supabase_test_log.txt
+
+      - name: Commit and Push log
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add supabase_test_log.txt
+          git commit -m "Upload Supabase test logs [skip ci]" || true
+          git push origin main || true
