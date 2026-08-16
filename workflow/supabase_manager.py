@@ -3,10 +3,22 @@ import requests
 import json
 import config
 
-SUPABASE_URL = os.getenv("SUPABASE_URL") or getattr(config, "SUPABASE_URL", "")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY") or getattr(config, "SUPABASE_KEY", "")
+def _clean_val(value):
+    if not value:
+        return ""
+    val = value.strip()
+    if val.startswith('"') and val.endswith('"'):
+        val = val[1:-1].strip()
+    elif val.startswith("'") and val.endswith("'"):
+        val = val[1:-1].strip()
+    return val
+
+SUPABASE_URL = _clean_val(os.getenv("SUPABASE_URL") or getattr(config, "SUPABASE_URL", ""))
+SUPABASE_KEY = _clean_val(os.getenv("SUPABASE_KEY") or getattr(config, "SUPABASE_KEY", ""))
 
 def is_supabase_configured():
+    # Debug print to trace credentials loading
+    print(f"  [DEBUG] SUPABASE_URL: {SUPABASE_URL}, Key Length: {len(SUPABASE_KEY) if SUPABASE_KEY else 0}")
     return bool(SUPABASE_URL and SUPABASE_KEY)
 
 def get_supabase_headers():

@@ -30,12 +30,19 @@ def save_history(history):
     except Exception as e:
         print(f"  [History Manager] Error saving history file: {e}")
 
+# Cache Supabase lookups to avoid sequential HTTP requests in a loop
+_supabase_news_cache = None
+_supabase_insta_cache = None
+
 def is_duplicate_news(title, url=None):
+    global _supabase_news_cache
     from workflow.supabase_manager import fetch_supabase_news_history, is_supabase_configured
     
     # Check Supabase first if configured
     if is_supabase_configured():
-        supabase_titles, supabase_links = fetch_supabase_news_history()
+        if _supabase_news_cache is None:
+            _supabase_news_cache = fetch_supabase_news_history()
+        supabase_titles, supabase_links = _supabase_news_cache
         norm_title = title.lower().strip()
         
         # 1. Match by URL
@@ -104,10 +111,12 @@ def add_published_quote(quote_text):
         save_history(history)
 
 def is_duplicate_insta(post_code):
+    global _supabase_insta_cache
     from workflow.supabase_manager import fetch_supabase_insta_history, is_supabase_configured
     if is_supabase_configured():
-        supabase_codes = fetch_supabase_insta_history()
-        if post_code in supabase_codes:
+        if _supabase_insta_cache is None:
+            _supabase_insta_cache = fetch_supabase_insta_history()
+        if post_code in _supabase_insta_cache:
             print(f"  [Supabase History Match] Instagram post code matched: {post_code}")
             return True
 
