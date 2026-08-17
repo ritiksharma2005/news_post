@@ -1,0 +1,10 @@
+=== Supabase Actions Runner Diagnostics ===
+Resolved SUPABASE_URL: 'https://nulgskquspzkawnfkowm.supabase.co/rest/v1/'
+Resolved SUPABASE_KEY length: 208
+Is configured: True
+
+GET news_history Status: 404
+GET news_history Response: {"code":"PGRST125","details":null,"hint":null,"message":"Invalid path specified in request URL"}
+
+POST news_history Status: 404
+POST news_history Response: {"code":"PGRST125","details":null,"hint":null,"message":"Invalid path specified in request URL"}
