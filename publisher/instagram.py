@@ -72,7 +72,10 @@ def publish_all_stories(stories):
     try:
         print(f"\nPublishing {len(stories)} stories to Instagram...", flush=True)
         published = 0
-        for story in stories:
+        for i, story in enumerate(stories):
+            if i > 0:
+                print("  Waiting 30 seconds before publishing the next story to avoid Instagram rate limits...", flush=True)
+                time.sleep(30)
             if publish_story(story):
                 published += 1
         print(f"Done. Published {published}/{len(stories)} stories to Instagram.", flush=True)

@@ -76,8 +76,11 @@ def send_all_stories(stories):
         return 0
         
     print(f"Sending {len(stories)} stories to Telegram...", flush=True)
+    import time
     sent = 0
-    for story in stories:
+    for i, story in enumerate(stories):
+        if i > 0:
+            time.sleep(3)
         if send_story(story):
             sent += 1
     print(f"Done. Sent {sent}/{len(stories)} stories to Telegram.", flush=True)
