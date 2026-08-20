@@ -138,18 +138,44 @@ def run_pipeline(language="en", run_type="morning", dry_run=False):
         
         # Build engagement caption
         if language == "hi":
-            if story.get("bucket") == "StudentEducation" or story.get("category") == "छात्र समाचार":
+            bucket = story.get("bucket", "")
+            if bucket == "StudentEducation":
                 overview_text = (
-                    f"यह महत्वपूर्ण अपडेट देश के लाखों छात्रों, प्रतियोगी परीक्षाओं की तैयारी कर रहे उम्मीदवारों और शैक्षणिक संस्थानों से सीधे तौर पर जुड़ा हुआ है। "
-                    f"वर्तमान में शिक्षा क्षेत्र में हो रहे बड़े बदलावों, बोर्ड परीक्षाओं, प्रवेश परीक्षाओं और सरकारी नौकरी की भर्ती प्रक्रियाओं से जुड़ी हर जानकारी युवाओं के करियर को सीधे प्रभावित करती है। "
-                    f"ऐसे में इस ताज़ा घटनाक्रम, नियमों में बदलाव, और परीक्षा परिणामों से जुड़ी हर बारीक जानकारी को समझना सभी के लिए बेहद जरूरी है। "
-                    f"इस पूरे समाचार को ध्यान से पढ़ें, अपने सहपाठियों और मित्रों के साथ साझा करें ताकि कोई भी महत्वपूर्ण अपडेट छूटने न पाए, और अपनी परीक्षा व भविष्य की तैयारी को एक सही दिशा दें!"
+                    "यह महत्वपूर्ण अपडेट देश के लाखों छात्रों, प्रतियोगी परीक्षाओं की तैयारी कर रहे उम्मीदवारों और शैक्षणिक संस्थानों से सीधे तौर पर जुड़ा हुआ है। "
+                    "वर्तमान में शिक्षा क्षेत्र में हो रहे बड़े बदलावों, बोर्ड परीक्षाओं, प्रवेश परीक्षाओं और सरकारी नौकरी की भर्ती प्रक्रियाओं से जुड़ी हर जानकारी युवाओं के करियर को सीधे प्रभावित करती है। "
+                    "ऐसे में इस ताज़ा घटनाक्रम, नियमों में बदलाव, और परीक्षा परिणामों से जुड़ी हर बारीक जानकारी को समझना सभी के लिए बेहद जरूरी है। "
+                    "इस पूरे समाचार को ध्यान से पढ़ें, अपने सहपाठियों और मित्रों के साथ साझा करें ताकि कोई भी महत्वपूर्ण अपडेट छूटने न पाए, और अपनी परीक्षा व भविष्य की तैयारी को एक सही दिशा दें!"
+                )
+            elif bucket == "IndianPolitics":
+                overview_text = (
+                    "देश के राजनीतिक और राष्ट्रीय घटनाक्रम सीधे तौर पर हमारे शासन, नीतियों और रोजमर्रा के जीवन को प्रभावित करते हैं। "
+                    "सरकार द्वारा लिए जा रहे निर्णय, नीतिगत बदलाव और विभिन्न राजनैतिक दलों की गतिविधियां देश की दिशा तय करने में महत्वपूर्ण भूमिका निभाती हैं। "
+                    "इस समाचार में दिए गए तथ्य और बदलाव हर जागरूक नागरिक, विशेषकर प्रतियोगी परीक्षाओं (जैसे UPSC व अन्य) की तैयारी कर रहे युवाओं के लिए आवश्यक हैं। "
+                    "इस पूरे घटनाक्रम पर बारीक नज़र रखना और इसके सामाजिक प्रभावों को समझना अत्यंत महत्वपूर्ण है। "
+                    "ताज़ा अपडेट के लिए खबर को पूरा पढ़ें और अपने दोस्तों के साथ साझा करना न भूलें।"
+                )
+            elif bucket == "Economy":
+                overview_text = (
+                    "आर्थिक नीतियों, बाज़ार के उतार-चढ़ाव, महंगाई दर और बैंकिंग क्षेत्र के नए फैसले सीधे तौर पर हमारे देश की आर्थिक स्थिति को दर्शाते हैं। "
+                    "वित्त वर्ष के नीतिगत बदलाव, जीडीपी दर, टैक्स से जुड़े नियम और आम आदमी के बजट पर पड़ने वाला प्रभाव देश के विकास की गति निर्धारित करता है। "
+                    "यह समाचार हमारे व्यापारिक परिदृश्य, रोजगार के अवसरों और वित्तीय साक्षरता के लिए अत्यंत प्रासंगिक है। "
+                    "इस पूरे आर्थिक बदलाव और इसके दूरगामी परिणामों को समझना हर पेशेवर, छात्र और सामान्य नागरिक के लिए महत्वपूर्ण है। "
+                    "इस अपडेट को पूरा समझें और वित्तीय जानकारी बढ़ाने के लिए इसे साझा करें।"
+                )
+            elif bucket == "Sports":
+                overview_text = (
+                    "खेल जगत से जुड़ी उपलब्धियां, नए रिकॉर्ड और प्रमुख टूर्नामेंट देशवासियों को गौरवान्वित और प्रेरित करते हैं। "
+                    "चाहे वह क्रिकेट हो, ओलंपिक खेल हों, या कोई अन्य खेल, भारतीय खिलाड़ियों का वैश्विक स्तर पर प्रदर्शन युवाओं के लिए प्रेरणा का एक बड़ा स्रोत है। "
+                    "राष्ट्रीय और अंतर्राष्ट्रीय स्तर पर खेल नीतियां, प्रशिक्षण और चैंपियनशिप युवाओं में टीम भावना और अनुशासन को बढ़ावा देती हैं। "
+                    "इस ताज़ा खेल समाचार और इसके प्रमुख आंकड़ों को विस्तार से जानने के लिए इस पूरे अपडेट को ध्यान से पढ़ें। "
+                    "इस जानकारी को अन्य खेल प्रेमियों के साथ शेयर करें और हमारे एथलीटों का उत्साहवर्धन करें।"
                 )
             else:
                 overview_text = (
-                    f"देश और दुनिया की इस ताज़ा खबर को लेकर युवाओं और छात्र-छात्राओं के बीच काफी चर्चा है। "
-                    f"शिक्षा, समाज और सरकारी नीतियों से जुड़ा यह नया अपडेट हमारे आने वाले करियर और सामाजिक परिदृश्य पर असर डाल सकता है। "
-                    f"पूरी जानकारी पढ़ें, इसे अपने साथियों के साथ शेयर करें और भविष्य की तैयारी को और भी मजबूत बनाएं!"
+                    "देश और दुनिया की इस ताज़ा खबर को लेकर युवाओं और छात्र-छात्राओं के बीच काफी चर्चा है। "
+                    "शिक्षा, समाज और सरकारी नीतियों से जुड़ा यह नया अपडेट हमारे आने वाले करियर और सामाजिक परिदृश्य पर महत्वपूर्ण असर डाल सकता है। "
+                    "इस पूरे घटनाक्रम को समझना और इसके सामाजिक व प्रशासनिक निहितार्थों पर चर्चा करना हर जागरूक व्यक्ति के लिए आवश्यक है। "
+                    "इस पूरी जानकारी को ध्यानपूर्वक पढ़ें, इसका विश्लेषण करें, इसे अपने साथियों के साथ शेयर करें और भविष्य के अवसरों व चुनौतियों के लिए तैयार रहें।"
                 )
 
             caption = (
@@ -164,14 +190,49 @@ def run_pipeline(language="en", run_type="morning", dry_run=False):
                 f"#HindiNews #StudentNews #EducationUpdates #UPSC #SarkariNaukri #news_nit_iit"
             )
         else:
+            bucket = story.get("bucket", "")
+            if bucket == "StudentEducation":
+                overview_text = (
+                    "This key update is generating significant interest among students, competitive exam aspirants, and academic communities across India. "
+                    "Keeping track of national policy updates, educational reforms, and current affairs is essential for shaping future career strategies. "
+                    "In today's fast-changing academic environment, keeping up with board decisions, entrance exams, and government job updates is highly beneficial. "
+                    "Make sure to read through the complete details, share this crucial update with your fellow peers, and stay ahead in your preparation journey!"
+                )
+            elif bucket == "IndianPolitics":
+                overview_text = (
+                    "National and political developments play a crucial role in shaping administrative decisions, public policies, and the overall social landscape. "
+                    "Understanding major political movements, government actions, and legislative changes is essential for staying informed as a responsible citizen. "
+                    "For students and competitive exam aspirants (especially UPSC), analyzing these political shifts provides critical context for general awareness. "
+                    "Take a close look at the details presented in this update, consider its potential long-term social impacts, and share it with others to spread awareness."
+                )
+            elif bucket == "Economy":
+                overview_text = (
+                    "Economic policies, market trends, financial reforms, and inflation rates have a direct impact on the country's development and citizen livelihood. "
+                    "Tracking GDP numbers, trade changes, RBI decisions, and employment opportunities offers valuable insight into the nation's financial health. "
+                    "This update highlights important shifts in the economic landscape that are relevant for professionals, students, and businesses alike. "
+                    "Stay informed about the fiscal updates by reading the details below, and share this update to keep your network financially aware."
+                )
+            elif bucket == "Sports":
+                overview_text = (
+                    "Sports updates, athletic records, and global tournaments serve as a massive source of inspiration and national pride for the youth. "
+                    "Whether it is cricket, the Olympics, or regional championships, the dedication and performance of our athletes drive motivation and sportsmanship. "
+                    "Analyzing sports policies, training setups, and match details helps us stay connected with national and international sporting spirits. "
+                    "Read the full details of this exciting sporting update, keep track of the key records, and share the pride with your fellow sports enthusiasts."
+                )
+            else:
+                overview_text = (
+                    "This latest development is currently drawing major attention across various social media and public platforms nationwide. "
+                    "Understanding the details of this event, its background context, and its practical implications is highly valuable for remaining informed. "
+                    "Such current affairs events provide vital talking points and perspective, especially for competitive exam aspirants and active citizens. "
+                    "Please read the full highlights of the news below, share it with your friends and colleagues, and let us know your thoughts in the comments."
+                )
+
             caption = (
                 f"🔥 {headline}\n\n"
                 f"📝 Highlights:\n"
                 f"{summary}\n\n"
                 f"📌 Overview & Context:\n"
-                f"This key update is generating significant interest among students, competitive exam aspirants, and academic communities across India. "
-                f"Keeping track of national policy updates, educational reforms, and current affairs is essential for shaping future career strategies. "
-                f"Make sure to read through the complete details, share this crucial update with your fellow peers, and stay ahead in your preparation journey!\n\n"
+                f"{overview_text}\n\n"
                 f"💬 What is your opinion on this update? Let us know in the comments below! 👇\n\n"
                 f"📌 Tag a friend to keep them informed! \n\n"
                 f"📲 Join our Instagram Community (Link in Bio): https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/\n\n"
