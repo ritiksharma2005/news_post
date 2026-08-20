@@ -12,11 +12,18 @@ load_dotenv()
 
 def clean_env(name):
     """
-    Get an environment variable and strip any accidental whitespace or
-    newline characters.
+    Get an environment variable and strip any accidental whitespace,
+    newlines, or surrounding double/single quotes.
     """
     value = os.getenv(name)
-    return value.strip() if value else value
+    if not value:
+        return ""
+    val = value.strip()
+    if val.startswith('"') and val.endswith('"'):
+        val = val[1:-1].strip()
+    elif val.startswith("'") and val.endswith("'"):
+        val = val[1:-1].strip()
+    return val
 
 
 # ---- API Keys (loaded from .env / GitHub Secrets) ----
