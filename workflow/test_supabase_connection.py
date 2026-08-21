@@ -100,7 +100,7 @@ if groq_key:
                 "Content-Type": "application/json",
             }
             payload = {
-                "model": "llama-3.3-70b-versatile",
+                "model": "llama-3.1-8b-instant",
                 "messages": [{"role": "user", "content": "Reply with the word SUCCESS."}],
             }
             resp = requests.post(url, headers=headers, json=payload, timeout=15)
