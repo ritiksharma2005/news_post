@@ -21,6 +21,16 @@ def is_supabase_configured():
     print(f"  [DEBUG] SUPABASE_URL: {SUPABASE_URL}, Key Length: {len(SUPABASE_KEY) if SUPABASE_KEY else 0}")
     return bool(SUPABASE_URL and SUPABASE_KEY)
 
+def _get_endpoint_url(table, params=""):
+    base = SUPABASE_URL.rstrip('/')
+    if "/rest/v1" in base:
+        url = f"{base}/{table}"
+    else:
+        url = f"{base}/rest/v1/{table}"
+    if params:
+        url = f"{url}?{params}"
+    return url
+
 def get_supabase_headers():
     return {
         "apikey": SUPABASE_KEY,
@@ -36,7 +46,7 @@ def fetch_supabase_news_history():
     if not is_supabase_configured():
         return [], []
 
-    url = f"{SUPABASE_URL.rstrip('/')}/rest/v1/news_history?select=title,url"
+    url = _get_endpoint_url("news_history", "select=title,url")
     headers = {
         "apikey": SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}"
@@ -63,7 +73,7 @@ def save_news_to_supabase(title, link=None):
     if not is_supabase_configured():
         return False
 
-    url = f"{SUPABASE_URL.rstrip('/')}/rest/v1/news_history"
+    url = _get_endpoint_url("news_history")
     headers = get_supabase_headers()
     payload = {
         "title": title,
@@ -88,7 +98,7 @@ def fetch_supabase_insta_history():
     if not is_supabase_configured():
         return []
 
-    url = f"{SUPABASE_URL.rstrip('/')}/rest/v1/insta_history?select=post_code"
+    url = _get_endpoint_url("insta_history", "select=post_code")
     headers = {
         "apikey": SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}"
@@ -114,7 +124,7 @@ def save_insta_to_supabase(post_code):
     if not is_supabase_configured():
         return False
 
-    url = f"{SUPABASE_URL.rstrip('/')}/rest/v1/insta_history"
+    url = _get_endpoint_url("insta_history")
     headers = get_supabase_headers()
     payload = {
         "post_code": post_code

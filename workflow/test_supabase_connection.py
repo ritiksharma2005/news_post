@@ -27,8 +27,18 @@ print(f"Resolved SUPABASE_URL: '{SUPABASE_URL}'")
 print(f"Resolved SUPABASE_KEY length: {len(SUPABASE_KEY) if SUPABASE_KEY else 0}")
 print(f"Is configured: {is_supabase_configured()}")
 
+def _get_endpoint_url(table, params=""):
+    base = SUPABASE_URL.rstrip('/')
+    if "/rest/v1" in base:
+        url = f"{base}/{table}"
+    else:
+        url = f"{base}/rest/v1/{table}"
+    if params:
+        url = f"{url}?{params}"
+    return url
+
 if is_supabase_configured():
-    url = f"{SUPABASE_URL.rstrip('/')}/rest/v1/news_history?select=id,title"
+    url = _get_endpoint_url("news_history", "select=id,title")
     headers = {
         "apikey": SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}"
@@ -39,7 +49,7 @@ if is_supabase_configured():
         print(f"GET news_history Response: {res.text[:300]}")
         
         # Test insert
-        post_url = f"{SUPABASE_URL.rstrip('/')}/rest/v1/news_history"
+        post_url = _get_endpoint_url("news_history")
         headers_post = {
             "apikey": SUPABASE_KEY,
             "Authorization": f"Bearer {SUPABASE_KEY}",
