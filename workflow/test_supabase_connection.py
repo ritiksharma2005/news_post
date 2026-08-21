@@ -60,7 +60,8 @@ gemini_key = os.getenv("GEMINI_API_KEY")
 print(f"GEMINI_API_KEY configured: {bool(gemini_key)} (Length: {len(gemini_key) if gemini_key else 0})")
 if gemini_key:
     clean_gemini = _clean_val(gemini_key)
-    print(f"Sanitized GEMINI_API_KEY length: {len(clean_gemini)}")
+    preview = f"{clean_gemini[:6]}...{clean_gemini[-4:]}" if len(clean_gemini) > 10 else clean_gemini
+    print(f"Sanitized GEMINI_API_KEY length: {len(clean_gemini)} (Preview: '{preview}')")
     print(f"Testing Gemini client directly...")
     try:
         config.GEMINI_API_KEY = clean_gemini
@@ -73,7 +74,8 @@ groq_key = os.getenv("GROQ_API_KEY")
 print(f"GROQ_API_KEY configured: {bool(groq_key)} (Length: {len(groq_key) if groq_key else 0})")
 if groq_key:
     clean_groq = _clean_val(groq_key)
-    print(f"Sanitized GROQ_API_KEY length: {len(clean_groq)}")
+    preview = f"{clean_groq[:6]}...{clean_groq[-4:]}" if len(clean_groq) > 10 else clean_groq
+    print(f"Sanitized GROQ_API_KEY length: {len(clean_groq)} (Preview: '{preview}')")
     print(f"Testing Groq client directly...")
     try:
         config.GROQ_API_KEY = clean_groq
