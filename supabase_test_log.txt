@@ -3,11 +3,14 @@ Resolved SUPABASE_URL: 'https://nulgskquspzkawnfkowm.supabase.co/rest/v1/'
 Resolved SUPABASE_KEY length: 208
 Is configured: True
 
-GET news_history Status: 404
-GET news_history Response: {"code":"PGRST125","details":null,"hint":null,"message":"Invalid path specified in request URL"}
+GET news_history Status: 200
+GET news_history Response: [{"id":1,"title":"एक परिवार के कई बच्चे सिलेक्ट, कृषि पर्यवेक्षक भर्ती परिणाम में गड़बड़ी का आरोप"}, 
+ {"id":5,"title":"एक परिवार के कई बच्चे सिलेक्ट, कृषि पर्यवेक्षक भर्ती परिणाम में गड़बड़ी का आरोप"}, 
+ {"id":6,"title":"मोदी बोले- दिमागी नक्सलियों को पहचानें, उन्हें अलग करें:ये स..."}, 
+ {"id":7,"
 
-POST news_history Status: 404
-POST news_history Response: {"code":"PGRST125","details":null,"hint":null,"message":"Invalid path specified in request URL"}
+POST news_history Status: 201
+POST news_history Response: [{"id":8,"title":"Test run headline from GitHub Actions Diagnostics","url":null,"created_at":"2026-08-21T07:41:31.283274+00:00"}]
 
 === Generative AI Diagnostics ===
 GEMINI_API_KEY configured: True (Length: 53)
@@ -18,12 +21,12 @@ Testing Gemini client directly...
     [Gemini] Request failed: No module named 'google'. Attempt 3/3. Pausing 40s...
 Gemini Call failed: No module named 'google'
 GROQ_API_KEY configured: True (Length: 56)
-Sanitized GROQ_API_KEY length: 56 (Preview: 'gsk_zj...74B9')
+Sanitized GROQ_API_KEY length: 56 (Preview: 'gsk_3p...t1ox')
 Testing Groq client directly...
-    [Groq] Request failed: 401 Client Error: Unauthorized for url: https://api.groq.com/openai/v1/chat/completions. Attempt 1/3. Pausing 10s...
-    [Groq] Request failed: 401 Client Error: Unauthorized for url: https://api.groq.com/openai/v1/chat/completions. Attempt 2/3. Pausing 20s...
-    [Groq] Request failed: 401 Client Error: Unauthorized for url: https://api.groq.com/openai/v1/chat/completions. Attempt 3/3. Pausing 40s...
-Groq Call failed: 401 Client Error: Unauthorized for url: https://api.groq.com/openai/v1/chat/completions
-Direct Groq POST status: 401
-Direct Groq POST body: {"error":{"message":"Invalid API Key","type":"invalid_request_error","code":"invalid_api_key"}}
+    [Groq] Request failed: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions. Attempt 1/3. Pausing 10s...
+    [Groq] Request failed: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions. Attempt 2/3. Pausing 20s...
+    [Groq] Request failed: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions. Attempt 3/3. Pausing 40s...
+Groq Call failed: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+Direct Groq POST status: 404
+Direct Groq POST body: {"error":{"message":"The model `llama-3.3-70b-versatile` does not exist or you do not have access to it.","type":"invalid_request_error","code":"model_not_found"}}
 
