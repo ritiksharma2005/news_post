@@ -87,16 +87,14 @@ def run_digest_pipeline(dry_run=False):
         print(f"🎨 Rendering Campus Digest Card {idx+1}...")
         card_path = design_digest_post.create_digest_card(
             headline=item.get("headline", ""),
-            bullets=item.get("bullets", []),
-            why_it_matters=item.get("why_it_matters", ""),
+            summary=item.get("summary", ""),
             image_path=source_image_local,
             output_path=card_path
         )
 
         caption_text = (
             f"{item.get('headline')}\n\n"
-            + "\n".join(item.get("bullets", [])) + "\n\n"
-            f"💡 Why it matters:\n{item.get('why_it_matters')}\n\n"
+            f"{item.get('summary')}\n\n"
             f"📲 Join our Instagram Community (Link in Bio): https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/\n\n"
             f"#IIT #NIT #CampusNews #Engineering #Placements #news_nit_iit"
         )

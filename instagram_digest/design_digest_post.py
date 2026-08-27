@@ -54,10 +54,10 @@ def wrap_text_by_pixels(text, font, max_width, draw):
     return lines
 
 
-def create_digest_card(headline, bullets, why_it_matters, image_path=None, output_path="output/digest_card.png"):
+def create_digest_card(headline, summary, image_path=None, output_path="output/digest_card.png"):
     """
     Renders a 1080x1080 Square Campus Digest Poster with centered image (increased height)
-    and space for a 2-line headline and 4-5 bullet points.
+    and space for a 2-line headline and a paragraph summary.
     """
     width, height = 1080, 1080
     bg_color = "#F5EFEB"
@@ -67,8 +67,7 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
 
     font_brand = get_font("bold", 34)
     font_headline = get_font("bold", 48)
-    font_bullet = get_font("regular", 22)  # Highly readable size for bullets
-    font_insight = get_font("bold", 22)
+    font_bullet = get_font("regular", 22)  # Highly readable size for text
     font_footer = get_font("bold", 30)
 
     # 1. Top Stripe & Header
@@ -144,24 +143,16 @@ def create_digest_card(headline, bullets, why_it_matters, image_path=None, outpu
     draw.rounded_rectangle([(box_left, box_top), (box_right, box_bottom)], radius=12, fill="#E0F2FE", outline="#BAE6FD", width=2)
     draw.rectangle([(box_left, box_top), (box_left + 14, box_bottom)], fill=accent_color)
 
-    # Draw up to 5 Bullets inside box with pixel-based auto-wrap
-    sum_y = box_top + 20
+    # Draw Paragraph Summary inside box with pixel-based auto-wrap
+    sum_y = box_top + 22
     max_text_width = box_right - box_left - 72 - 32  # margins: left=72, right=32
     line_spacing = 30
     
-    for b in bullets[:5]:
-        wrapped = wrap_text_by_pixels(strip_emojis(b), font_bullet, max_text_width, draw)
-        for line in wrapped:
-            draw.text((72, sum_y), line, fill="#0369A1", font=font_bullet)
-            sum_y += line_spacing
-        sum_y += 4  # gap between bullets
-
-    # Draw Why It Matters inside box
-    sum_y += 6
-    insight_text = f"Insight: {strip_emojis(why_it_matters)}"
-    wrapped_insight = wrap_text_by_pixels(insight_text, font_insight, max_text_width, draw)
-    for line in wrapped_insight[:2]:  # Limit to 2 lines
-        draw.text((72, sum_y), line, fill="#075985", font=font_insight)
+    summary_text = strip_emojis(summary)
+    wrapped = wrap_text_by_pixels(summary_text, font_bullet, max_text_width, draw)
+    # Fit up to 9 lines inside the box
+    for line in wrapped[:9]:
+        draw.text((72, sum_y), line, fill="#0369A1", font=font_bullet)
         sum_y += line_spacing
 
     # 6. Footer Watermark (📸 @news.nit_iit)
