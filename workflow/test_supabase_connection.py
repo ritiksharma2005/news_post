@@ -75,6 +75,20 @@ if gemini_key:
     print(f"Testing Gemini client directly...")
     try:
         config.GEMINI_API_KEY = clean_gemini
+        
+        # Test model listing to verify key permissions
+        from google import genai
+        from google.genai import types
+        diag_client = genai.Client(api_key=clean_gemini, http_options=types.HttpOptions(api_version='v1'))
+        print("  Querying list of accessible models from Google's servers...")
+        try:
+            models = diag_client.models.list()
+            print("  Accessible models found:")
+            for m in list(models)[:15]:  # Print first 15 models
+                print(f"    - {m.name}")
+        except Exception as list_ex:
+            print(f"  Model listing query failed: {list_ex}")
+
         res = ai_client.call_gemini("Reply with the word SUCCESS.")
         print(f"Gemini Call: SUCCESS (Response: '{res.strip()}')")
     except Exception as e:
