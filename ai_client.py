@@ -22,19 +22,22 @@ def call_gemini(prompt, max_retries=3):
     use_classic = False
     try:
         from google import genai
-        client = genai.Client(api_key=key)
+        from google.genai import types
+        # Force stable v1 API version to bypass regional v1beta model limits
+        client = genai.Client(api_key=key, http_options=types.HttpOptions(api_version='v1'))
     except ImportError:
         use_classic = True
 
     delay = 10
     last_error = None
-    model_name = getattr(config, "GEMINI_MODEL", "gemini-2.5-flash")
+    model_name = getattr(config, "GEMINI_MODEL", "gemini-1.5-flash")
 
     for attempt in range(1, max_retries + 1):
         try:
             if use_classic:
                 import google.generativeai as genai_classic
-                genai_classic.configure(api_key=key)
+                # Force stable v1 API version in classic SDK
+                genai_classic.configure(api_key=key, client_options={'api_version': 'v1'})
                 classic_model_name = getattr(config, "GEMINI_MODEL", "gemini-1.5-flash")
                 model = genai_classic.GenerativeModel(classic_model_name)
                 res = model.generate_content(prompt)
@@ -59,64 +62,11 @@ def call_gemini(prompt, max_retries=3):
     raise last_error
 
 
-def call_groq(prompt, max_retries=3):
-    """Call Groq's OpenAI-compatible chat completions endpoint with auto-retries on 429."""
-    key = getattr(config, "GROQ_API_KEY", "")
-    if not key:
-        raise ValueError("GROQ_API_KEY is missing or empty.")
-
-    url = "https://api.groq.com/openai/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {key}",
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "model": getattr(config, "GROQ_MODEL", "llama-3.1-8b-instant"),
-        "messages": [{"role": "user", "content": prompt}],
-    }
-
-    delay = 10
-    last_error = None
-    for attempt in range(1, max_retries + 1):
-        try:
-            resp = requests.post(url, headers=headers, json=payload, timeout=30)
-            resp.raise_for_status()
-            data = resp.json()
-            return data["choices"][0]["message"]["content"]
-        except Exception as e:
-            last_error = e
-            
-            # Check if it is a 429 Rate Limit error
-            is_429 = False
-            if isinstance(e, requests.exceptions.HTTPError) and e.response is not None:
-                if e.response.status_code == 429:
-                    is_429 = True
-            
-            if is_429:
-                print(f"    [Groq] Rate limited (429). Attempt {attempt}/{max_retries}. Pausing {delay}s...")
-            else:
-                print(f"    [Groq] Request failed: {e}. Attempt {attempt}/{max_retries}. Pausing {delay}s...")
-                
-            if attempt < max_retries:
-                time.sleep(delay)
-                delay *= 2
-    raise last_error
-
-
 def call_ai(prompt):
     """
-    Call the AI with automatic fallback: try Gemini first, fall back to
-    Groq if Gemini fails for any reason. Returns the raw text response.
+    Call the AI using Gemini. Returns the raw text response.
     """
-    try:
-        return call_gemini(prompt)
-    except Exception as e:
-        print(f"    Gemini failed ({e}), falling back to Groq...")
-        try:
-            return call_groq(prompt)
-        except Exception as ex:
-            print(f"    Groq fallback failed: {ex}")
-            raise ex
+    return call_gemini(prompt)
 
 
 # Alias function so ask_ai(prompt) works everywhere
@@ -133,10 +83,3 @@ if __name__ == "__main__":
         print(f"Gemini output: {result.strip()}")
     except Exception as e:
         print(f"Gemini failed: {e}")
-
-    print("\nTesting Groq...")
-    try:
-        result = call_groq(test_prompt)
-        print(f"Groq output: {result.strip()}")
-    except Exception as e:
-        print(f"Groq failed: {e}")

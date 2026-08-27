@@ -80,32 +80,5 @@ if gemini_key:
     except Exception as e:
         print(f"Gemini Call failed: {e}")
 
-groq_key = os.getenv("GROQ_API_KEY")
-print(f"GROQ_API_KEY configured: {bool(groq_key)} (Length: {len(groq_key) if groq_key else 0})")
-if groq_key:
-    clean_groq = _clean_val(groq_key)
-    preview = f"{clean_groq[:6]}...{clean_groq[-4:]}" if len(clean_groq) > 10 else clean_groq
-    print(f"Sanitized GROQ_API_KEY length: {len(clean_groq)} (Preview: '{preview}')")
-    print(f"Testing Groq client directly...")
-    try:
-        config.GROQ_API_KEY = clean_groq
-        res = ai_client.call_groq("Reply with the word SUCCESS.")
-        print(f"Groq Call: SUCCESS (Response: '{res.strip()}')")
-    except Exception as e:
-        print(f"Groq Call failed: {e}")
-        try:
-            url = "https://api.groq.com/openai/v1/chat/completions"
-            headers = {
-                "Authorization": f"Bearer {clean_groq}",
-                "Content-Type": "application/json",
-            }
-            payload = {
-                "model": "llama-3.1-8b-instant",
-                "messages": [{"role": "user", "content": "Reply with the word SUCCESS."}],
-            }
-            resp = requests.post(url, headers=headers, json=payload, timeout=15)
-            print(f"Direct Groq POST status: {resp.status_code}")
-            print(f"Direct Groq POST body: {resp.text}")
-        except Exception as ex:
-            print(f"Direct Groq POST failed: {ex}")
+
 
