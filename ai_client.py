@@ -30,7 +30,7 @@ def call_gemini(prompt, max_retries=3):
 
     delay = 10
     last_error = None
-    model_name = getattr(config, "GEMINI_MODEL", "gemini-2.5-flash")
+    model_name = getattr(config, "GEMINI_MODEL", "gemini-3.6-flash")
 
     for attempt in range(1, max_retries + 1):
         try:
@@ -38,7 +38,7 @@ def call_gemini(prompt, max_retries=3):
                 import google.generativeai as genai_classic
                 # Force stable v1 API version in classic SDK
                 genai_classic.configure(api_key=key, client_options={'api_version': 'v1'})
-                classic_model_name = getattr(config, "GEMINI_MODEL", "gemini-2.5-flash")
+                classic_model_name = getattr(config, "GEMINI_MODEL", "gemini-3.6-flash")
                 model = genai_classic.GenerativeModel(classic_model_name)
                 res = model.generate_content(prompt)
                 return res.text
