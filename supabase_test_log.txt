@@ -10,7 +10,7 @@ GET news_history Response: [{"id":1,"title":"एक परिवार के �
  {"id":7,"
 
 POST news_history Status: 201
-POST news_history Response: [{"id":69,"title":"Test run headline from GitHub Actions Diagnostics","url":null,"created_at":"2026-08-27T20:30:43.704196+00:00"}]
+POST news_history Response: [{"id":70,"title":"Test run headline from GitHub Actions Diagnostics","url":null,"created_at":"2026-08-27T20:40:29.96768+00:00"}]
 
 === Generative AI Diagnostics ===
 GEMINI_API_KEY configured: True (Length: 53)
@@ -33,7 +33,4 @@ Testing Gemini client directly...
     - models/gemini-3.7-flash
     - models/antigravity-preview-05-2026
     - models/deep-research-max-preview-04-2026
-    [Gemini] Request failed: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}. Attempt 1/3. Pausing 10s...
-    [Gemini] Request failed: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}. Attempt 2/3. Pausing 20s...
-    [Gemini] Request failed: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}. Attempt 3/3. Pausing 40s...
-Gemini Call failed: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}
+Gemini Call: SUCCESS (Response: 'SUCCESS')
