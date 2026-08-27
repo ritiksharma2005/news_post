@@ -196,13 +196,15 @@ def run_pipeline(language="en", run_type="morning", dry_run=False):
                     "This key update is generating significant interest among students, competitive exam aspirants, and academic communities across India. "
                     "Keeping track of national policy updates, educational reforms, and current affairs is essential for shaping future career strategies. "
                     "In today's fast-changing academic environment, keeping up with board decisions, entrance exams, and government job updates is highly beneficial. "
-                    "Make sure to read through the complete details, share this crucial update with your fellow peers, and stay ahead in your preparation journey!"
+                    "Every minor change in syllabus, recruitment procedures, or results can have a major impact on preparation timelines and student outcomes. "
+                    "Make sure to read through the complete details, share this crucial update with your fellow peers to keep them in the loop, and stay ahead in your preparation journey!"
                 )
             elif bucket == "IndianPolitics":
                 overview_text = (
                     "National and political developments play a crucial role in shaping administrative decisions, public policies, and the overall social landscape. "
                     "Understanding major political movements, government actions, and legislative changes is essential for staying informed as a responsible citizen. "
                     "For students and competitive exam aspirants (especially UPSC), analyzing these political shifts provides critical context for general awareness. "
+                    "These events often lead to long-term changes in governance, judicial systems, and state administrative machinery that directly impact our daily lives. "
                     "Take a close look at the details presented in this update, consider its potential long-term social impacts, and share it with others to spread awareness."
                 )
             elif bucket == "Economy":
@@ -210,6 +212,7 @@ def run_pipeline(language="en", run_type="morning", dry_run=False):
                     "Economic policies, market trends, financial reforms, and inflation rates have a direct impact on the country's development and citizen livelihood. "
                     "Tracking GDP numbers, trade changes, RBI decisions, and employment opportunities offers valuable insight into the nation's financial health. "
                     "This update highlights important shifts in the economic landscape that are relevant for professionals, students, and businesses alike. "
+                    "Understanding financial metrics and policy changes helps individuals make informed decisions about investments, careers, and budgeting. "
                     "Stay informed about the fiscal updates by reading the details below, and share this update to keep your network financially aware."
                 )
             elif bucket == "Sports":
@@ -217,6 +220,7 @@ def run_pipeline(language="en", run_type="morning", dry_run=False):
                     "Sports updates, athletic records, and global tournaments serve as a massive source of inspiration and national pride for the youth. "
                     "Whether it is cricket, the Olympics, or regional championships, the dedication and performance of our athletes drive motivation and sportsmanship. "
                     "Analyzing sports policies, training setups, and match details helps us stay connected with national and international sporting spirits. "
+                    "These achievements often foster a culture of physical fitness, national unity, and appreciation for the hard work of our representatives on the global stage. "
                     "Read the full details of this exciting sporting update, keep track of the key records, and share the pride with your fellow sports enthusiasts."
                 )
             else:
@@ -224,6 +228,7 @@ def run_pipeline(language="en", run_type="morning", dry_run=False):
                     "This latest development is currently drawing major attention across various social media and public platforms nationwide. "
                     "Understanding the details of this event, its background context, and its practical implications is highly valuable for remaining informed. "
                     "Such current affairs events provide vital talking points and perspective, especially for competitive exam aspirants and active citizens. "
+                    "Staying updated with the latest happenings helps in developing critical thinking and building a well-rounded viewpoint on global issues. "
                     "Please read the full highlights of the news below, share it with your friends and colleagues, and let us know your thoughts in the comments."
                 )
 
