@@ -1,9 +1,9 @@
 name: 🌅 Run Morning Quote
 
 on:
-  schedule:
-    # 7:00 AM IST (01:30 AM UTC)
-    - cron: " * * *"
+#  schedule:
+#    # 7:00 AM IST (01:30 AM UTC)
+#    - cron: " * * *"
   workflow_dispatch: {}
 
 jobs:
