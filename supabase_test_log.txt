@@ -10,12 +10,29 @@ GET news_history Response: [{"id":1,"title":"एक परिवार के �
  {"id":7,"
 
 POST news_history Status: 201
-POST news_history Response: [{"id":67,"title":"Test run headline from GitHub Actions Diagnostics","url":null,"created_at":"2026-08-27T20:18:51.101373+00:00"}]
+POST news_history Response: [{"id":68,"title":"Test run headline from GitHub Actions Diagnostics","url":null,"created_at":"2026-08-27T20:25:23.403796+00:00"}]
 
 === Generative AI Diagnostics ===
 GEMINI_API_KEY configured: True (Length: 53)
 Sanitized GEMINI_API_KEY length: 53 (Preview: 'AQ.Ab8...izJA')
 Testing Gemini client directly...
+  Querying list of accessible models from Google's servers...
+  Accessible models found:
+    - models/gemini-2.5-flash
+    - models/gemini-2.5-pro
+    - models/gemma-4-26b-a4b-it
+    - models/gemma-4-31b-it
+    - models/gemini-2.5-flash-lite
+    - models/gemini-2.5-flash-image
+    - models/gemini-3.1-flash-lite
+    - models/gemini-3.1-flash-image
+    - models/gemini-3.1-flash-lite-image
+    - models/gemini-3.5-flash
+    - models/gemini-3.5-flash-lite
+    - models/gemini-3.6-flash
+    - models/gemini-3.7-flash
+    - models/antigravity-preview-05-2026
+    - models/deep-research-max-preview-04-2026
     [Gemini] Request failed: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}. Attempt 1/3. Pausing 10s...
     [Gemini] Request failed: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}. Attempt 2/3. Pausing 20s...
     [Gemini] Request failed: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}. Attempt 3/3. Pausing 40s...
