@@ -20,14 +20,14 @@ DIGEST_REWRITE_PROMPT = """You are an editor for @news.nit_iit. Below are raw In
 TASK:
 1. Identify the TWO MOST IMPORTANT distinct student updates (e.g. Hackathon, Internship, Exam alert, Placement record, Admission, or Event). Skip generic memes or ads.
 2. For each, extract key facts: College Name, Event/Exam Title, Registration Deadline/Dates, Eligibility, and why it matters.
-3. Rewrite them into a cohesive paragraph of exactly 5 to 7 lines of sentence-based text. Do not use bullet points or lists.
+3. Rewrite them into a cohesive paragraph of exactly 4 to 5 sentences (about 5 to 6 lines of text). Do not use bullet points or lists. Do not use any emojis in the headline.
 
 OUTPUT FORMAT (Return a valid JSON array containing up to 2 distinct objects, no markdown formatting):
 [
-  {{
+  {
     "selected_index": 1,  // The [1-based index] of the selected post from the list below
-    "headline": "A detailed 2-line headline with emojis (Make it long enough to span exactly two lines, E.g. 🚀 IIT Bombay Opens National Innovation Hackathon: Registration Closes This Week)",
-    "summary": "A cohesive, detailed paragraph of 5 to 7 sentences detailing the college, event/exam, dates, eligibility, and key details. No bullets, list symbols, or dashes.",
+    "headline": "A detailed 2-line headline. Do not include any emojis. E.g. IIT Bombay Opens National Innovation Hackathon: Registration Closes This Week",
+    "summary": "A cohesive, detailed paragraph of exactly 4 to 5 sentences (about 5 to 6 lines) detailing the college, event/exam, dates, eligibility, and key details. No bullets, list symbols, dashes, or emojis.",
     "caption": "Full Instagram caption text with CTAs and hashtags"
   }},
   ...

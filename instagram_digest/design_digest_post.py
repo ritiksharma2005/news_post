@@ -103,7 +103,7 @@ def create_digest_card(headline, summary, image_path=None, output_path="output/d
     # 3. Compact Summary Box Proportions (anchored at bottom)
     footer_y = 1022
     box_bottom = footer_y - 20
-    box_height = 340  # Made more compact to allow larger centered image
+    box_height = 230  # Reduced to allow even larger centered image
     box_top = box_bottom - box_height
     box_left, box_right = 40, 1040
 
@@ -150,8 +150,8 @@ def create_digest_card(headline, summary, image_path=None, output_path="output/d
     
     summary_text = strip_emojis(summary)
     wrapped = wrap_text_by_pixels(summary_text, font_bullet, max_text_width, draw)
-    # Fit up to 9 lines inside the box
-    for line in wrapped[:9]:
+    # Fit up to 6 lines inside the box
+    for line in wrapped[:6]:
         draw.text((72, sum_y), line, fill="#0369A1", font=font_bullet)
         sum_y += line_spacing
 
