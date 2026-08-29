@@ -4,8 +4,6 @@ on:
   schedule:
     # 8:00 AM IST (02:30 AM UTC)
     - cron: "30 2 * * *"
-    # 6:00 PM IST (12:30 PM UTC)
-    - cron: "30 12 * * *"
   workflow_dispatch: {}
 
 jobs:
@@ -46,12 +44,7 @@ jobs:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: |
-          if [ "$(date -u +%H)" -eq "02" ]; then
-            python main.py --type=morning
-          else
-            python main.py --type=evening
-          fi
+        run: python main.py --type=morning
 
       - name: Commit and Push History
         if: always()
