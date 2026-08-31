@@ -10,7 +10,7 @@ GET news_history Response: [{"id":1,"title":"एक परिवार के �
  {"id":7,"
 
 POST news_history Status: 201
-POST news_history Response: [{"id":70,"title":"Test run headline from GitHub Actions Diagnostics","url":null,"created_at":"2026-08-27T20:40:29.96768+00:00"}]
+POST news_history Response: [{"id":101,"title":"Test run headline from GitHub Actions Diagnostics","url":null,"created_at":"2026-08-31T14:59:47.481238+00:00"}]
 
 === Generative AI Diagnostics ===
 GEMINI_API_KEY configured: True (Length: 53)
