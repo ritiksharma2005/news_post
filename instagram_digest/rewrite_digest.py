@@ -24,7 +24,7 @@ TASK:
 
 OUTPUT FORMAT (Return a valid JSON array containing up to 2 distinct objects, no markdown formatting):
 [
-  {
+  {{
     "selected_index": 1,  // The [1-based index] of the selected post from the list below
     "headline": "A detailed 2-line headline. Do not include any emojis. E.g. IIT Bombay Opens National Innovation Hackathon: Registration Closes This Week",
     "summary": "A cohesive, detailed paragraph of exactly 4 to 5 sentences (about 5 to 6 lines) detailing the college, event/exam, dates, eligibility, and key details. No bullets, list symbols, dashes, or emojis.",
