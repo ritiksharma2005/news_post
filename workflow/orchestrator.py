@@ -130,7 +130,7 @@ def run_pipeline(language="en", run_type="morning", dry_run=False):
     for i, story in enumerate(selected_stories):
         # Truncate title and summary to fit card layout perfectly
         headline = clean_and_truncate(story["title"], 80)
-        summary_limit = 290 if language == "hi" else 155
+        summary_limit = 450 if language == "hi" else 400
         summary = clean_and_truncate(story["summary"], summary_limit)
         
         story["new_headline"] = headline

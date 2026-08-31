@@ -147,7 +147,7 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", catego
     for line in headline_lines[:2]:
         line_w = draw.textlength(line, font=font_headline)
         line_x = max(40, int((width - line_w) // 2))
-        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline, stroke_width=1, stroke_fill="#1A1A1A")
+        draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline, stroke_width=2, stroke_fill="#1A1A1A")
         y_cursor += (headline_size + 14)
         
     y_cursor += 12
