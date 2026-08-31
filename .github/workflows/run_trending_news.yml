@@ -56,6 +56,6 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git pull origin main --rebase || true
-          git add data/trending_news.db output/trending/ || true
+          git add -f data/trending_news.db output/trending/ || true
           git commit -m "Update Trending News database & output artifact [skip ci]" || true
           git push origin main || true

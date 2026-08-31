@@ -11,7 +11,9 @@ __pycache__/
 .DS_Store
 
 # Local application data
-output/
+output/*
+!output/trending/
 data/*
 !data/published_history.json
 !data/used_quotes.json
+!data/trending_news.db

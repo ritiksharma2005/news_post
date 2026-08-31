@@ -223,5 +223,27 @@ def collect_leads_for_run(run_type: str = "morning") -> List[Dict[str, Any]]:
             collected_leads.append(parsed)
             print(f"  ✅ Qualified candidate lead: '{post_id}' from @{username}")
             
+    # Fallback Window Expansion if 0 leads collected
+    if not collected_leads:
+        print("\n  ⚠️ [Collector Notice] Strict time window yielded 0 leads. Expanding window lookback to 48 hours for fallback...")
+        fallback_start_utc = end_utc - timedelta(hours=48)
+        
+        for username in INSTAGRAM_SOURCES:
+            raw_posts = scrape_with_apify(username, limit=10) or scrape_with_playwright(username, limit=10)
+            for p in raw_posts:
+                parsed = parse_raw_post(p, username)
+                post_id = parsed["source_post_id"]
+                if is_post_processed(post_id):
+                    continue
+                if is_within_time_window(parsed["posted_at"], fallback_start_utc, end_utc):
+                    if parsed["image_url"]:
+                        parsed["image_path"] = download_lead_image(parsed["image_url"], post_id)
+                    else:
+                        parsed["image_path"] = None
+                    collected_leads.append(parsed)
+                    print(f"  ✅ Qualified candidate lead (Fallback Window): '{post_id}' from @{username}")
+                    if len(collected_leads) >= 4:
+                        break
+                        
     print(f"\n📡 [Collector Complete] Collected {len(collected_leads)} valid lead stories for processing.")
     return collected_leads
