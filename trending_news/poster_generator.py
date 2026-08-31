@@ -67,32 +67,39 @@ def fit_headline_font(headline: str, max_width: int, max_lines: int, start_size:
 
 
 def draw_header_brand(draw: ImageDraw.ImageDraw, accent_color: str = "#0284C7", bg_is_dark: bool = False):
-    """Renders top header brand stripe and @news.nit_iit watermark."""
-    font_brand = load_font("bold", 30)
+    """Renders a top solid white strip border (banner) with NEWS.NIT_IIT and DAILY EDITORIAL."""
+    font_brand = load_font("bold", 32)
     font_tag = load_font("bold", 24)
     
-    text_color = "#FFFFFF" if bg_is_dark else "#0F172A"
+    # 1. Top White Strip Border Banner (Height: 90px)
+    draw.rectangle([(0, 0), (CANVAS_WIDTH, 90)], fill="#FFFFFF")
+    # Top accent stripe
+    draw.rectangle([(0, 0), (CANVAS_WIDTH, 10)], fill=accent_color)
     
-    # Accent stripe
-    draw.rectangle([(0, 0), (CANVAS_WIDTH, 14)], fill=accent_color)
+    # Left: NEWS.NIT_IIT
+    draw.text((50, 32), BRAND_NAME, fill="#0F172A", font=font_brand)
     
-    # Top header text
-    draw.text((50, 40), BRAND_NAME, fill=accent_color, font=font_brand)
+    # Right: DAILY EDITORIAL
     tag_w = draw.textlength("DAILY EDITORIAL", font=font_tag)
-    draw.text((CANVAS_WIDTH - 50 - tag_w, 44), "DAILY EDITORIAL", fill=text_color, font=font_tag)
+    draw.text((CANVAS_WIDTH - 50 - tag_w, 36), "DAILY EDITORIAL", fill=accent_color, font=font_tag)
     
-    line_color = "#334155" if bg_is_dark else "#CBD5E1"
-    draw.line([(50, 88), (CANVAS_WIDTH - 50, 88)], fill=line_color, width=2)
+    # Bottom separator line of the white border
+    draw.line([(0, 90), (CANVAS_WIDTH, 90)], fill=accent_color, width=3)
 
 
 def draw_footer_brand(draw: ImageDraw.ImageDraw, y_pos: int = 1270, bg_is_dark: bool = False):
-    """Renders footer @news.nit_iit branding."""
+    """Renders a bottom solid white strip border (banner) with @news.nit_iit."""
     font_footer = load_font("bold", 32)
-    color = "#38BDF8" if bg_is_dark else "#0284C7"
+    accent_color = "#0284C7"
     
+    # 1. Bottom White Strip Border Banner (Height: 80px)
+    draw.rectangle([(0, 1270), (CANVAS_WIDTH, CANVAS_HEIGHT)], fill="#FFFFFF")
+    draw.line([(0, 1270), (CANVAS_WIDTH, 1270)], fill=accent_color, width=3)
+    
+    # Centered: @news.nit_iit
     w = draw.textlength(BRAND_HANDLE, font=font_footer)
     x = int((CANVAS_WIDTH - w) // 2)
-    draw.text((x, y_pos), BRAND_HANDLE, fill=color, font=font_footer)
+    draw.text((x, 1292), BRAND_HANDLE, fill=accent_color, font=font_footer)
 
 
 # ==================================================

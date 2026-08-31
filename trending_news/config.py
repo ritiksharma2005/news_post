@@ -63,11 +63,15 @@ MIN_QUALIFYING_SCORE = 55.0
 # Dedicated Gemini & Groq API keys for Trending News project
 TRENDING_GEMINI_API_KEY = os.getenv("TRENDING_GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY", "")
 TRENDING_GROQ_API_KEY = os.getenv("TRENDING_GROQ_API_KEY") or os.getenv("GROQ_API_KEY", "")
-APIFY_TOKEN = os.getenv("APIFY_API_TOKEN") or os.getenv("APIFY_TOKEN", "")
+TRENDING_APIFY_TOKEN = os.getenv("TRENDING_APIFY_TOKEN") or os.getenv("APIFY_API_TOKEN") or os.getenv("APIFY_TOKEN", "")
+APIFY_TOKEN = TRENDING_APIFY_TOKEN
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
 INSTAGRAM_ACCESS_TOKEN = os.getenv("INSTAGRAM_ACCESS_TOKEN", "")
 INSTAGRAM_USER_ID = os.getenv("INSTAGRAM_USER_ID", "")
+
+# Image source preference (Prioritize original Instagram source photo)
+USE_ORIGINAL_SOURCE_IMAGE = True
 
 # Gemini model preference
 GEMINI_MODEL = "gemini-3.6-flash"

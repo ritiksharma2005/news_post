@@ -46,12 +46,16 @@ def generate_procedural_editorial_art(category: str, output_path: str) -> str:
     return output_path
 
 
-def generate_editorial_visual(visual_concept: str, category: str, post_id: str) -> str:
+def generate_editorial_visual(visual_concept: str, category: str, post_id: str, source_image_path: Optional[str] = None) -> str:
     """
-    Generates an original editorial visual based on the AI visual_concept prompt.
-    Uses Pollinations AI free image endpoint with fallback to procedural art.
-    Ensures ZERO source logos or watermarks.
+    Selects the visual asset for the poster:
+    1. Prioritizes the actual original Instagram source photo downloaded from the post.
+    2. Falls back to Pollinations AI / procedural artwork if source image is missing.
     """
+    if source_image_path and os.path.exists(source_image_path):
+        print(f"  📸 [VisualGenerator] Using actual original Instagram source photo: {source_image_path}")
+        return source_image_path
+
     out_dir = OUTPUT_DIR / "temp"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = str(out_dir / f"visual_{post_id}.jpg")

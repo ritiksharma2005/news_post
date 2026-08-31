@@ -79,11 +79,12 @@ def run_trending_news_pipeline(run_type: str = "morning", dry_run: bool = True):
         # 5. AI Editorial Rewrite
         editorial = rewrite_story_editorial(story)
         
-        # 6. Generate Original Editorial Visual (No source logos)
+        # 6. Select Visual (Prioritize original Instagram source photo)
         visual_path = generate_editorial_visual(
             visual_concept=editorial.get("visual_concept", ""),
             category=editorial.get("category", "News"),
-            post_id=post_id
+            post_id=post_id,
+            source_image_path=story.get("image_path")
         )
         
         # 7. Render 4:5 Portrait Poster (1080 x 1350 px)
