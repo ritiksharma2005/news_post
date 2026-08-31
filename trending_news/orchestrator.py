@@ -148,6 +148,17 @@ def run_trending_news_pipeline(run_type: str = "morning", dry_run: bool = True):
         print(f"  📤 Sending story {story_idx} preview to Telegram...")
         telegram_bot.send_story(story_obj)
         
+        # 12. Instagram Graph API Publishing (if not in dry run mode)
+        if not dry_run:
+            try:
+                import instagram_publisher
+                print(f"  🎓 Publishing story {story_idx} to Instagram (@news.nit_iit)...")
+                instagram_publisher.publish_story(story_obj)
+            except Exception as ie:
+                print(f"  [Instagram Publisher Notice] {ie}")
+        else:
+            print("  🔒 [DRY RUN ACTIVE] Instagram publishing paused for preview.")
+            
         published_count += 1
         
     record_run_history(run_type, processed_count=len(raw_leads), selected_count=published_count)

@@ -31,7 +31,8 @@ def format_instagram_caption(editorial: Dict[str, Any], lead: Dict[str, Any]) ->
     # 4. Community CTA
     cta = (
         "💬 What is your take on this update? Let us know in the comments below! 👇\n\n"
-        f"📌 Tag a friend to keep them informed!\n\n"
+        "📌 Tag a friend to keep them informed!\n\n"
+        "📲 Join our Instagram Community (Link in Bio): https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/\n\n"
         f"📲 Follow {BRAND_HANDLE} for daily verified news updates."
     )
     
