@@ -84,7 +84,15 @@ CANVAS_WIDTH = 1080
 CANVAS_HEIGHT = 1350
 
 BRAND_HANDLE = "@news.nit_iit"
+BRAND_HANDLE_WITH_ICON = "📸 @news.nit_iit"
 BRAND_NAME = "NEWS.NIT_IIT"
+DEFAULT_HEADER_LABEL = "THE LATEST"
+
+# Brand Color Palette
+BRAND_COLOR_ACCENT = "#F97316"    # Vibrant Orange Accent
+BRAND_HEADER_BG = "#FDFBF7"       # Very Light Warm Cream / Off-White
+BRAND_HEADER_TEXT = "#0F172A"     # Dark Navy / Black
+BRAND_BORDER_LINE = "#E2E8F0"     # Subtle 1-2px Separator Line
 
 # Fonts Directory
 BASE_DIR = Path(__file__).resolve().parent.parent

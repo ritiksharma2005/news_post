@@ -36,26 +36,28 @@ Formulate a clear visual design concept and select the best poster layout type:
 - LAYOUT_D: Sports / Culture / Entertainment (Full-Bleed Visual)
 
 CRITICAL RULES:
-1. Headline MUST be 5 to 14 words.
+1. Headline MUST be concise (5 to 12 words max).
 2. Headline MUST NOT contain any emojis.
-3. Summary MUST be 1 to 2 concise sentences.
-4. Language must be modern, fast, and easy for Indian students to understand.
+3. Identify 1 to 3 strongest visual keywords from the headline to set as "highlight_text".
+4. Determine the appropriate category header label (e.g., THE LATEST, INDIA, POLITICS, CAREER, TECH, SPORTS).
+5. Summary MUST be 1 to 2 short sentences max.
 
 OUTPUT FORMAT (Return a valid JSON object ONLY with no markdown formatting):
 {{
-  "headline": "Cabinet Clears Landmark Education Framework to Boost AI and Skill Training",
+  "headline": "Cabinet Clears Landmark Education Framework for Colleges",
+  "highlight_text": "Education Framework",
+  "header_label": "THE LATEST",
   "subheadline": "New National Initiative Opens Industry Internships for College Students Across India",
-  "summary": "The Union Cabinet has approved a major national education update aimed at integrating artificial intelligence and practical skill modules into undergraduate curricula. This decision is expected to benefit millions of students across central and state universities.",
+  "summary": "The Union Cabinet has approved a major national education update integrating artificial intelligence and practical skill modules into undergraduate curricula.",
   "key_facts": [
-    "Approved by the Union Cabinet for national implementation",
-    "Focuses on AI, data science, and hands-on skill training",
-    "Creates direct industry internship credits for B.Tech and degree students"
+    "Approved by Union Cabinet",
+    "Focuses on AI and skill training"
   ],
-  "why_it_matters": "This reform significantly increases industry exposure and career readiness for Indian graduates.",
-  "category": "Education",
+  "why_it_matters": "Increases industry readiness for graduates.",
+  "category": "EDUCATION",
   "layout_type": "LAYOUT_A",
   "metric_callout": "₹15,000 Cr",
-  "visual_concept": "Editorial 3D style illustration of Indian university students holding digital laptops and AI certificates with modern geometry background."
+  "visual_concept": "Modern 3D digital education illustration"
 }}
 """
 
@@ -134,13 +136,17 @@ def rewrite_story_editorial(story: Dict[str, Any]) -> Dict[str, Any]:
             
     # Reliable fallback dictionary
     headline = story.get("analysis", {}).get("headline_extracted") or caption[:80].split("\n")[0]
+    words = headline.split()
+    highlight = " ".join(words[:2]) if len(words) >= 2 else headline
     return {
         "headline": headline.replace("🚀", "").replace("🔥", "").strip(),
+        "highlight_text": highlight,
+        "header_label": "THE LATEST",
         "subheadline": "Major Update for Indian Students & Young Professionals",
-        "summary": caption[:220].strip() + "...",
+        "summary": caption[:160].strip() + "...",
         "key_facts": [caption[:100]],
         "why_it_matters": "Important national news development.",
-        "category": story.get("analysis", {}).get("category", "Education"),
+        "category": story.get("analysis", {}).get("category", "EDUCATION").upper(),
         "layout_type": "LAYOUT_A",
         "metric_callout": "",
         "visual_concept": "Modern 3D digital education illustration"

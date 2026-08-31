@@ -2,8 +2,8 @@ name: 🔥 Run Trending News Project
 
 on:
   schedule:
-    # 9:00 AM IST (03:30 AM UTC) — Morning Run
-    - cron: "30 3 * * *"
+    # 8:00 AM IST (02:30 AM UTC) — Morning Run
+    - cron: "30 2 * * *"
     # 8:00 PM IST (02:30 PM UTC / 14:30 UTC) — Evening Run
     - cron: "30 14 * * *"
   workflow_dispatch: {}
@@ -44,7 +44,7 @@ jobs:
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
         run: |
-          if [ "$(date -u +%H)" -eq "03" ]; then
+          if [ "$(date -u +%H)" -eq "02" ]; then
             python -m trending_news.orchestrator --type=morning --dry-run
           else
             python -m trending_news.orchestrator --type=evening --dry-run
