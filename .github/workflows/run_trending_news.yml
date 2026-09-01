@@ -45,9 +45,9 @@ jobs:
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
         run: |
           if [ "$(date -u +%H)" -eq "02" ]; then
-            python -m trending_news.orchestrator --type=morning --dry-run
+            python -m trending_news.orchestrator --type=morning
           else
-            python -m trending_news.orchestrator --type=evening --dry-run
+            python -m trending_news.orchestrator --type=evening
           fi
 
       - name: Commit and Push Database & Outputs

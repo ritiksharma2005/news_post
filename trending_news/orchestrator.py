@@ -172,7 +172,7 @@ def run_trending_news_pipeline(run_type: str = "morning", dry_run: bool = True):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Trend India Project Pipeline")
     parser.add_argument("--type", choices=["morning", "evening"], default="morning", help="Run schedule type")
-    parser.add_argument("--dry-run", action="store_true", default=True, help="Execute dry run mode without Instagram publishing")
+    parser.add_argument("--dry-run", action="store_true", default=False, help="Execute dry run mode without Instagram publishing")
     args = parser.parse_args()
     
     run_trending_news_pipeline(run_type=args.type, dry_run=args.dry_run)
