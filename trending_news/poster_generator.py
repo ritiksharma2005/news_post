@@ -158,31 +158,48 @@ def apply_bottom_gradient(card: Image.Image, start_y: int = 450, end_y: int = 12
     return Image.alpha_composite(card.convert("RGBA"), overlay).convert("RGB")
 
 
+def prepare_clean_source_photo(image_path: str, target_w: int = 1080, target_h: int = 680) -> Optional[Image.Image]:
+    """
+    Extracts the clean photographic subject from a source news card by cropping out
+    the lower 42% portion where original source headlines, text overlays, and logos are baked in.
+    """
+    if not image_path or not os.path.exists(image_path):
+        return None
+    try:
+        img = Image.open(image_path).convert("RGB")
+        iw, ih = img.size
+        
+        # 1. Crop top 58% of original image (where actual faces/photo subject are located)
+        clean_top = img.crop((0, 0, iw, int(ih * 0.58)))
+        
+        # 2. Resize to fit target width & height cleanly
+        ct_w, ct_h = clean_top.size
+        ratio = target_w / ct_w
+        nh = int(ct_h * ratio)
+        resized = clean_top.resize((target_w, nh), Image.Resampling.LANCZOS)
+        
+        if nh >= target_h:
+            final_crop = resized.crop((0, 0, target_w, target_h))
+        else:
+            final_crop = Image.new("RGB", (target_w, target_h), "#0F172A")
+            final_crop.paste(resized, (0, 0))
+            
+        return final_crop
+    except Exception as e:
+        print(f"  [Photo Clean Error] {e}")
+        return None
+
+
 # ==================================================
 # LAYOUT A — BREAKING / TRENDING (Refined Layout)
 # ==================================================
 def render_layout_a(editorial: Dict[str, Any], image_path: Optional[str], output_path: str) -> str:
     card = Image.new("RGB", (CANVAS_WIDTH, CANVAS_HEIGHT), "#0F172A")
     
-    # 1. Main Photo Background
-    if image_path and os.path.exists(image_path):
-        try:
-            img = Image.open(image_path).convert("RGB")
-            iw, ih = img.size
-            ratio = CANVAS_WIDTH / iw
-            nh = int(ih * ratio)
-            resized = img.resize((CANVAS_WIDTH, nh), Image.Resampling.LANCZOS)
-            
-            photo_box_h = 1180  # From y=90 to y=1270
-            if nh > photo_box_h:
-                cropped = resized.crop((0, (nh - photo_box_h) // 2, CANVAS_WIDTH, (nh - photo_box_h) // 2 + photo_box_h))
-            else:
-                cropped = Image.new("RGB", (CANVAS_WIDTH, photo_box_h), "#0F172A")
-                cropped.paste(resized, (0, (photo_box_h - nh) // 2))
-                
-            card.paste(cropped, (0, 90))
-        except Exception:
-            pass
+    # 1. Main Clean Photographic Subject (Top 58% Crop, removing baked-in source text & logos)
+    clean_photo = prepare_clean_source_photo(image_path, target_w=CANVAS_WIDTH, target_h=680)
+    if clean_photo:
+        card.paste(clean_photo, (0, 90))
             
     # 2. Dark Gradient Transition
     card = apply_bottom_gradient(card, start_y=450, end_y=1270)
@@ -236,16 +253,9 @@ def render_layout_b(editorial: Dict[str, Any], image_path: Optional[str], output
 def render_layout_c(editorial: Dict[str, Any], image_path: Optional[str], output_path: str) -> str:
     card = Image.new("RGB", (CANVAS_WIDTH, CANVAS_HEIGHT), "#0F172A")
     
-    if image_path and os.path.exists(image_path):
-        try:
-            img = Image.open(image_path).convert("RGB")
-            iw, ih = img.size
-            ratio = CANVAS_WIDTH / iw
-            nh = int(ih * ratio)
-            resized = img.resize((CANVAS_WIDTH, nh), Image.Resampling.LANCZOS)
-            card.paste(resized, (0, 90))
-        except Exception:
-            pass
+    clean_photo = prepare_clean_source_photo(image_path, target_w=CANVAS_WIDTH, target_h=680)
+    if clean_photo:
+        card.paste(clean_photo, (0, 90))
             
     card = apply_bottom_gradient(card, start_y=450, end_y=1270)
     draw = ImageDraw.Draw(card)
