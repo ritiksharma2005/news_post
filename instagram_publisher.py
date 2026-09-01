@@ -61,10 +61,32 @@ def publish_photo(image_url, caption=""):
         return False
 
 
+def upload_to_catbox(file_path: str) -> Optional[str]:
+    """Uploads a local image poster to Catbox.moe to obtain a public HTTP image URL for Meta Graph API."""
+    try:
+        url = "https://catbox.moe/user/api.php"
+        with open(file_path, "rb") as f:
+            resp = requests.post(url, data={"reqtype": "fileupload"}, files={"fileToUpload": f}, timeout=25)
+            if resp.status_code == 200 and resp.text.startswith("http"):
+                pub_url = resp.text.strip()
+                print(f"  ✅ Uploaded poster to public host: {pub_url}", flush=True)
+                return pub_url
+    except Exception as e:
+        print(f"  [Catbox Upload Error] {e}", flush=True)
+    return None
+
+
 def publish_story(story):
     image_url = story.get("public_image_url")
+    card_path = story.get("card_path")
+    
+    if not image_url and card_path and os.path.exists(card_path):
+        image_url = upload_to_catbox(card_path)
+        if image_url:
+            story["public_image_url"] = image_url
+
     if not image_url:
-        print("  ⚠️ No public_image_url found for story. Skipping Instagram publish.", flush=True)
+        print("  ⚠️ No public_image_url or valid local card_path found for story. Skipping Instagram publish.", flush=True)
         return False
 
     caption_text = story.get("caption", "")
@@ -72,7 +94,7 @@ def publish_story(story):
     if hashtags:
         caption_text += "\n\n" + " ".join(hashtags)
 
-    headline = story.get("new_headline", story.get("title", ""))[:60]
+    headline = story.get("new_headline", story.get("headline", story.get("title", "")))[:60]
     print(f"  Publishing to IG: {headline}...", flush=True)
     return publish_photo(image_url, caption_text)
 
