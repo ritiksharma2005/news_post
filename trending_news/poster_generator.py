@@ -10,7 +10,7 @@ import re
 from PIL import Image, ImageDraw, ImageFont
 from typing import Dict, Any, List, Optional
 from .config import (
-    CANVAS_WIDTH, CANVAS_HEIGHT, BRAND_HANDLE_WITH_ICON, BRAND_NAME,
+    CANVAS_WIDTH, CANVAS_HEIGHT, BRAND_HANDLE, BRAND_HANDLE_WITH_ICON, BRAND_NAME,
     BRAND_HEADER_BG, BRAND_HEADER_TEXT, BRAND_COLOR_ACCENT, BRAND_BORDER_LINE,
     DEFAULT_HEADER_LABEL, FONTS_DIR
 )
@@ -97,10 +97,31 @@ def draw_header_brand(draw: ImageDraw.ImageDraw, header_label: str = DEFAULT_HEA
     draw.line([(0, 90), (CANVAS_WIDTH, 90)], fill=BRAND_BORDER_LINE, width=2)
 
 
+def draw_vector_camera_icon(draw: ImageDraw.ImageDraw, x: int, y: int, size: int = 28, fill_color: str = "#0F172A", accent_color: str = "#F97316"):
+    """
+    Renders a crisp vector camera icon directly using PIL geometric shapes (RGB filled).
+    """
+    # 1. Main camera body (rounded rectangle)
+    body_box = [(x, y + 5), (x + size, y + size + 1)]
+    draw.rounded_rectangle(body_box, radius=5, fill=fill_color)
+    
+    # 2. Camera top flash bump
+    bump_box = [(x + int(size * 0.3), y), (x + int(size * 0.7), y + 5)]
+    draw.rectangle(bump_box, fill=fill_color)
+    
+    # 3. Lens outer ring
+    lens_box = [(x + int(size * 0.22), y + 5 + int(size * 0.14)), (x + int(size * 0.78), y + 5 + int(size * 0.70))]
+    draw.ellipse(lens_box, fill="#FFFFFF")
+    
+    # 4. Lens inner aperture
+    aperture_box = [(x + int(size * 0.36), y + 5 + int(size * 0.28)), (x + int(size * 0.64), y + 5 + int(size * 0.56))]
+    draw.ellipse(aperture_box, fill=accent_color)
+
+
 def draw_footer_brand(draw: ImageDraw.ImageDraw):
     """
     Renders bottom header banner with warm cream background (#FDFBF7)
-    and 📸 @news.nit_iit branding centered.
+    and RGB vector camera icon + @news.nit_iit branding centered.
     """
     font_footer = load_font("bold", 30)
     
@@ -108,10 +129,22 @@ def draw_footer_brand(draw: ImageDraw.ImageDraw):
     draw.rectangle([(0, 1270), (CANVAS_WIDTH, CANVAS_HEIGHT)], fill=BRAND_HEADER_BG)
     draw.line([(0, 1270), (CANVAS_WIDTH, 1270)], fill=BRAND_BORDER_LINE, width=2)
     
-    # Centered: 📸 @news.nit_iit
-    w = draw.textlength(BRAND_HANDLE_WITH_ICON, font=font_footer)
-    x = int((CANVAS_WIDTH - w) // 2)
-    draw.text((x, 1292), BRAND_HANDLE_WITH_ICON, fill=BRAND_HEADER_TEXT, font=font_footer)
+    # Centered: Vector Camera Icon + @news.nit_iit
+    handle_text = BRAND_HANDLE
+    handle_w = draw.textlength(handle_text, font=font_footer)
+    
+    icon_size = 28
+    gap = 12
+    total_w = icon_size + gap + handle_w
+    
+    start_x = int((CANVAS_WIDTH - total_w) // 2)
+    y_pos = 1294
+    
+    # Draw vector camera icon (RGB)
+    draw_vector_camera_icon(draw, x=start_x, y=y_pos - 2, size=icon_size, fill_color="#0F172A", accent_color=BRAND_COLOR_ACCENT)
+    
+    # Draw handle text
+    draw.text((start_x + icon_size + gap, y_pos - 5), handle_text, fill=BRAND_HEADER_TEXT, font=font_footer)
 
 
 def draw_highlighted_headline(
