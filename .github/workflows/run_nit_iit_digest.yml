@@ -2,8 +2,10 @@ name: 🎓 Run NIT IIT Digest
 
 on:
   schedule:
-    # 9:00 AM 2:00 PM 8:00 PM IST (03:30 AM UTC)
-    - cron: "30 3 * * *"
+    # 8:00 AM IST (02:30 AM UTC)
+    - cron: "30 2 * * *"
+    # 8:00 PM IST (14:30 PM UTC)
+    - cron: "30 14 * * *"
   workflow_dispatch: {}
 
 jobs:
