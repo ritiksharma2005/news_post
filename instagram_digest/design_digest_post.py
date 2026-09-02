@@ -66,7 +66,7 @@ def create_digest_card(headline, summary, image_path=None, output_path="output/d
     draw = ImageDraw.Draw(card)
 
     font_brand = get_font("bold", 34)
-    font_headline = get_font("bold", 48)
+    font_headline = get_font("bold", 42)
     font_bullet = get_font("regular", 22)  # Highly readable size for text
     font_footer = get_font("bold", 30)
 
@@ -79,37 +79,34 @@ def create_digest_card(headline, summary, image_path=None, output_path="output/d
     draw.text((1040 - logo_w, 30), "news.nit_iit", fill="#1A1A1A", font=font_brand)
     draw.line([(40, 78), (1040, 78)], fill="#1A1A1A", width=3)
 
-    # 2. Headline (Wraps into exactly 2 lines using pixel width limits)
-    y_cursor = 94
+    # 2. Headline (Wraps into up to 3 lines using pixel width limits)
+    y_cursor = 88
     clean_headline = strip_emojis(headline)
     lines = wrap_text_by_pixels(clean_headline, font_headline, 1000, draw)
 
-    # Draw exactly 2 lines (pad with empty line if only 1 line was generated)
-    while len(lines) < 2:
-        lines.append("")
-        
-    for line in lines[:2]:
+    # Draw up to 3 lines
+    for line in lines[:3]:
         # Centered headline with a stroke for maximum crispness
         line_w = draw.textlength(line, font=font_headline)
         line_x = max(40, int((width - line_w) // 2))
         draw.text((line_x, y_cursor), line, fill="#1A1A1A", font=font_headline, stroke_width=1, stroke_fill="#1A1A1A")
-        y_cursor += 54
+        y_cursor += 46
 
     # Underline
-    y_cursor += 12
+    y_cursor += 8
     draw.rectangle([(40, y_cursor), (260, y_cursor + 6)], fill=accent_color)
     draw.line([(260, y_cursor + 3), (1040, y_cursor + 3)], fill="#1A1A1A", width=2)
 
     # 3. Compact Summary Box Proportions (anchored at bottom)
     footer_y = 1022
     box_bottom = footer_y - 20
-    box_height = 230  # Reduced to allow even larger centered image
+    box_height = 195  # Reduced to accommodate 3-line headline
     box_top = box_bottom - box_height
     box_left, box_right = 40, 1040
 
     # 4. Center Image Section (Fills remaining middle space)
-    image_top = y_cursor + 16
-    image_bottom = box_top - 16
+    image_top = y_cursor + 14
+    image_bottom = box_top - 14
     image_height = image_bottom - image_top
 
     if image_path and os.path.exists(image_path):
@@ -144,14 +141,14 @@ def create_digest_card(headline, summary, image_path=None, output_path="output/d
     draw.rectangle([(box_left, box_top), (box_left + 14, box_bottom)], fill=accent_color)
 
     # Draw Paragraph Summary inside box with pixel-based auto-wrap
-    sum_y = box_top + 22
+    sum_y = box_top + 18
     max_text_width = box_right - box_left - 72 - 32  # margins: left=72, right=32
-    line_spacing = 30
+    line_spacing = 28
     
     summary_text = strip_emojis(summary)
     wrapped = wrap_text_by_pixels(summary_text, font_bullet, max_text_width, draw)
-    # Fit up to 6 lines inside the box
-    for line in wrapped[:6]:
+    # Fit up to 5 lines inside the box (reduced by 1 line)
+    for line in wrapped[:5]:
         draw.text((72, sum_y), line, fill="#0369A1", font=font_bullet)
         sum_y += line_spacing
 
