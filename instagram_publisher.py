@@ -6,6 +6,7 @@ Publishes poster cards + captions to Instagram via Meta Graph API.
 import os
 import time
 import requests
+from typing import Optional
 import config
 
 
