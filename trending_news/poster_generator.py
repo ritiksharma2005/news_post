@@ -193,8 +193,10 @@ def apply_bottom_gradient(card: Image.Image, start_y: int = 450, end_y: int = 12
 
 def prepare_clean_source_photo(image_path: str, target_w: int = 1080, target_h: int = 680) -> Optional[Image.Image]:
     """
-    Extracts the clean photographic subject from a source news card by cropping out
-    the lower 42% portion where original source headlines, text overlays, and logos are baked in.
+    Extracts the clean photographic subject from a source news card by:
+    1. Cropping out the lower 42% portion (removing bottom source headlines & logos).
+    2. Trimming 7% from the right margin (removing vertical right-side handle watermarks like 'indicore.in').
+    3. Applying a smooth dark right-edge gradient patch to ensure 100% watermark masking.
     """
     if not image_path or not os.path.exists(image_path):
         return None
@@ -202,8 +204,10 @@ def prepare_clean_source_photo(image_path: str, target_w: int = 1080, target_h: 
         img = Image.open(image_path).convert("RGB")
         iw, ih = img.size
         
-        # 1. Crop top 58% of original image (where actual faces/photo subject are located)
-        clean_top = img.crop((0, 0, iw, int(ih * 0.58)))
+        # 1. Crop top 58% height AND trim right 7% margin (cuts off right-edge vertical handle watermarks)
+        crop_right = int(iw * 0.93)
+        crop_bottom = int(ih * 0.58)
+        clean_top = img.crop((0, 0, crop_right, crop_bottom))
         
         # 2. Resize to fit target width & height cleanly
         ct_w, ct_h = clean_top.size
@@ -217,7 +221,15 @@ def prepare_clean_source_photo(image_path: str, target_w: int = 1080, target_h: 
             final_crop = Image.new("RGB", (target_w, target_h), "#0F172A")
             final_crop.paste(resized, (0, 0))
             
-        return final_crop
+        # 3. Apply smooth dark right-edge gradient patch (x=900 to 1080) to completely mask any residual corner text
+        overlay = Image.new("RGBA", (target_w, target_h), (0, 0, 0, 0))
+        odraw = ImageDraw.Draw(overlay)
+        for rx in range(880, target_w):
+            alpha = int(245 * ((rx - 880) / (target_w - 880)))
+            odraw.line([(rx, 0), (rx, target_h)], fill=(15, 23, 42, alpha))
+            
+        final_clean = Image.alpha_composite(final_crop.convert("RGBA"), overlay).convert("RGB")
+        return final_clean
     except Exception as e:
         print(f"  [Photo Clean Error] {e}")
         return None
