@@ -15,10 +15,7 @@ load_dotenv()
 # ==================================================
 # Adding a new Instagram news lead source only requires appending username here
 INSTAGRAM_SOURCES = [
-    "thetatvaindia",
-    "theinformly",
-    "forbesindia",
-    "thebetterindia"
+    "indicore.in"
 ]
 
 # ==================================================
