@@ -114,7 +114,8 @@ def evaluate_score_with_ai(lead: Dict[str, Any], analysis: Dict[str, Any]) -> fl
 
 def rank_and_select_top_stories(candidates: List[Dict[str, Any]], max_select: int = MAX_POSTERS_PER_RUN) -> List[Dict[str, Any]]:
     """
-    Ranks candidate leads by news importance score (0-100) and selects up to max_select (Top 2) stories.
+    Ranks candidate leads by news importance score (0-100) & freshness,
+    filtering out non-news memes/jokes, and selects up to max_select (Top 2) unique stories.
     """
     print(f"\n📊 [Ranker] Evaluating news importance scores for {len(candidates)} candidates...")
     
@@ -122,7 +123,12 @@ def rank_and_select_top_stories(candidates: List[Dict[str, Any]], max_select: in
     for c in candidates:
         analysis = c.get("analysis", {})
         
-        # Exclude unverified sensitive claims
+        # 1. Exclude non-news memes, jokes, satire, or ads
+        if not analysis.get("is_real_news", True):
+            print(f"  [Ranker Skip] Skipping non-news / meme / joke lead: '{c.get('source_post_id')}' (@{c.get('source_account')})")
+            continue
+            
+        # 2. Exclude unverified sensitive claims
         verification = c.get("verification", {})
         if verification.get("verification_status") == "unverified":
             print(f"  [Ranker Skip] Skipping unverified lead: '{c.get('source_post_id')}' ({verification.get('verification_notes')})")
@@ -134,13 +140,13 @@ def rank_and_select_top_stories(candidates: List[Dict[str, Any]], max_select: in
         scored_candidates.append(c)
         print(f"  ⭐ Candidate '{c.get('source_post_id')}' (@{c.get('source_account')}) | Score: {score}/100")
         
-    # Sort descending by score
-    scored_candidates.sort(key=lambda x: x.get("trend_score", 0.0), reverse=True)
+    # Sort candidates primarily by posted_at (latest first) and secondarily by trend_score
+    scored_candidates.sort(key=lambda x: (x.get("posted_at", ""), x.get("trend_score", 0.0)), reverse=True)
     
     selected_stories = scored_candidates[:max_select]
-    print(f"\n🏆 [Ranker Selection Complete] Selected TOP {len(selected_stories)} stories for poster generation.")
+    print(f"\n🏆 [Ranker Selection Complete] Selected TOP {len(selected_stories)} latest unique news stories for poster generation.")
     for i, story in enumerate(selected_stories):
         headline = story.get("analysis", {}).get("headline_extracted") or story.get("caption", "")[:60]
-        print(f"  [{i+1}] Score {story.get('trend_score')}: {headline}")
+        print(f"  [{i+1}] Score {story.get('trend_score')} | Date: {story.get('posted_at')}: {headline}")
         
     return selected_stories

@@ -89,6 +89,23 @@ def rewrite_with_groq(prompt: str) -> Optional[str]:
     return None
 
 
+import re
+
+def sanitize_headline(text: str) -> str:
+    """Strips markdown headers (###), asterisks, bullet numbers, and prompt placeholders from headlines."""
+    if not text:
+        return ""
+    clean = re.sub(r'^#+\s*', '', text)
+    clean = re.sub(r'^\d+[\.\)]\s*', '', clean)
+    clean = clean.replace("**", "").replace("*", "").replace("`", "").strip()
+    
+    # Reject generic prompt template placeholders
+    low = clean.lower()
+    if "main headline" in low or "core event title" in low or "news update" in low or "news lead" in low:
+        return ""
+    return clean
+
+
 def rewrite_story_editorial(story: Dict[str, Any]) -> Dict[str, Any]:
     """
     Invokes Gemini (or Groq fallback) to rewrite a lead story into structured editorial JSON.
@@ -129,21 +146,31 @@ def rewrite_story_editorial(story: Dict[str, Any]) -> Dict[str, Any]:
                 clean_json = clean_json.split("```")[1].split("```")[0].strip()
                 
             editorial_data = json.loads(clean_json)
-            print(f"  ✨ AI Editorial Package compiled: '{editorial_data.get('headline', '')[:50]}...'")
+            
+            # Sanitize headline to ensure zero markdown symbols ('###', '**') or placeholders
+            raw_hl = editorial_data.get("headline", "")
+            clean_hl = sanitize_headline(raw_hl)
+            if not clean_hl:
+                clean_hl = sanitize_headline(story.get("analysis", {}).get("headline_extracted", ""))
+            if not clean_hl:
+                clean_hl = sanitize_headline(caption.split("\n")[0]) or "National News Update"
+                
+            editorial_data["headline"] = clean_hl
+            print(f"  ✨ AI Editorial Package compiled: '{clean_hl[:50]}...'")
             return editorial_data
         except Exception as pe:
             print(f"  [JSON Parse Error] {pe}. Raw: {response_text[:100]}")
             
     # Reliable fallback dictionary
-    headline = story.get("analysis", {}).get("headline_extracted") or caption[:80].split("\n")[0]
+    headline = sanitize_headline(story.get("analysis", {}).get("headline_extracted", "")) or sanitize_headline(caption.split("\n")[0]) or "National News Update"
     words = headline.split()
     highlight = " ".join(words[:2]) if len(words) >= 2 else headline
     return {
-        "headline": headline.replace("🚀", "").replace("🔥", "").strip(),
+        "headline": headline,
         "highlight_text": highlight,
         "header_label": "THE LATEST",
         "subheadline": "Major Update for Indian Students & Young Professionals",
-        "summary": caption[:160].strip() + "...",
+        "summary": re.sub(r'[\U00010000-\U0010ffff]', '', caption[:160]).strip() + "...",
         "key_facts": [caption[:100]],
         "why_it_matters": "Important national news development.",
         "category": story.get("analysis", {}).get("category", "EDUCATION").upper(),

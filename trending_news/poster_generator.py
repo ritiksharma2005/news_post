@@ -17,10 +17,13 @@ from .config import (
 
 
 def strip_emojis(text: str) -> str:
-    """Strips emoji characters from headline to ensure clean typography rendering."""
+    """Strips emoji characters, markdown headers ('###'), bullet numbers, and asterisks from headline text."""
     if not text:
         return ""
-    return re.sub(r'[\U00010000-\U0010ffff\u2600-\u27bf\u2b50\u2b06\u2192]', '', text).strip()
+    clean = re.sub(r'^#+\s*', '', text)
+    clean = re.sub(r'^\d+[\.\)]\s*', '', clean)
+    clean = clean.replace("**", "").replace("*", "").replace("`", "").strip()
+    return re.sub(r'[\U00010000-\U0010ffff\u2600-\u27bf\u2b50\u2b06\u2192]', '', clean).strip()
 
 
 def load_font(font_name: str = "bold", size: int = 42) -> ImageFont.FreeTypeFont:
