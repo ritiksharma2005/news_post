@@ -160,7 +160,7 @@ def draw_highlighted_headline(
     line_gap: int = 12
 ) -> int:
     """
-    Renders headline lines word-by-word. Words matching highlight_text are drawn
+    Renders headline lines word-by-word in Extra Bold typography. Words matching highlight_text are drawn
     in Brand Accent Orange (#F97316), while other words are drawn in White (#FFFFFF).
     """
     h_tokens = set(w.lower().strip(".,!?:;\"'") for w in (highlight_text or "").split())
@@ -174,7 +174,7 @@ def draw_highlighted_headline(
             is_highlighted = clean_w in h_tokens and len(clean_w) > 1
             color = BRAND_COLOR_ACCENT if is_highlighted else "#FFFFFF"
             
-            draw.text((cur_x, y), word, fill=color, font=font, stroke_width=1, stroke_fill="#000000")
+            draw.text((cur_x, y), word, fill=color, font=font, stroke_width=2, stroke_fill="#000000")
             cur_x += int(draw.textlength(word + " ", font=font))
         y += font.size + line_gap
         

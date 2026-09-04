@@ -28,36 +28,27 @@ Multimodal Analysis:
 {analysis_summary}
 
 TASK:
-Rewrite this lead into an ORIGINAL, high-impact news editorial for @news.nit_iit. Do NOT copy the original caption text verbatim.
-Formulate a clear visual design concept and select the best poster layout type:
-- LAYOUT_A: Breaking / National / Politics / Social Issue (High Contrast, Bold Header)
-- LAYOUT_B: Achievement / Education / Student / Human Story (Clean, Modern)
-- LAYOUT_C: Data / Economy / Salary / Statistics (Large Number / Metric Callout)
-- LAYOUT_D: Sports / Culture / Entertainment (Full-Bleed Visual)
+Rewrite this lead into an ORIGINAL, high-impact news editorial for @news.nit_iit.
 
 CRITICAL RULES:
-1. Headline MUST be concise (5 to 12 words max).
-2. Headline MUST NOT contain any emojis.
-3. Identify 1 to 3 strongest visual keywords from the headline to set as "highlight_text".
-4. Determine the appropriate category header label (e.g., THE LATEST, INDIA, POLITICS, CAREER, TECH, SPORTS).
-5. Summary MUST be 1 to 2 short sentences max.
+1. Headline MUST be a SHORT, PUNCHY BOLD TITLE (strictly 5 to 10 words max!).
+   Example: "Grand Mufti Remarks Spark Major National Controversy"
+   Do NOT output long multi-clause sentences as headlines!
+2. Identify 2 to 4 key visual words from the headline to set as "highlight_text" (e.g. "National Controversy" or "Grand Mufti").
+3. Headline MUST NOT contain emojis, markdown symbols ('###', '**'), or numbered prefixes.
+4. Summary MUST be 1 to 2 short sentences providing distinct background context. Do NOT repeat the headline text verbatim!
 
 OUTPUT FORMAT (Return a valid JSON object ONLY with no markdown formatting):
 {{
-  "headline": "Cabinet Clears Landmark Education Framework for Colleges",
-  "highlight_text": "Education Framework",
+  "headline": "Grand Mufti Remarks Spark Major National Controversy",
+  "highlight_text": "National Controversy",
   "header_label": "THE LATEST",
-  "subheadline": "New National Initiative Opens Industry Internships for College Students Across India",
-  "summary": "The Union Cabinet has approved a major national education update integrating artificial intelligence and practical skill modules into undergraduate curricula.",
-  "key_facts": [
-    "Approved by Union Cabinet",
-    "Focuses on AI and skill training"
-  ],
-  "why_it_matters": "Increases industry readiness for graduates.",
-  "category": "EDUCATION",
+  "subheadline": "Controversial Statement Triggers Widespread Public Debate",
+  "summary": "Prominent religious figure Sheikh Abubakr Ahmad faced intense backlash following public remarks regarding social roles.",
+  "category": "NATIONAL",
   "layout_type": "LAYOUT_A",
-  "metric_callout": "₹15,000 Cr",
-  "visual_concept": "Modern 3D digital education illustration"
+  "metric_callout": "",
+  "visual_concept": "Modern news illustration"
 }}
 """
 

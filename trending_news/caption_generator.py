@@ -13,7 +13,6 @@ def format_instagram_caption(editorial: Dict[str, Any], lead: Dict[str, Any]) ->
     """
     headline = editorial.get("headline", "")
     summary = editorial.get("summary", "")
-    why_it_matters = editorial.get("why_it_matters", "")
     category = editorial.get("category", "News")
     source_account = lead.get("source_account", "")
     
@@ -22,13 +21,8 @@ def format_instagram_caption(editorial: Dict[str, Any], lead: Dict[str, Any]) ->
     
     # 2. Key Summary Explanation
     explanation = f"📝 What Happened:\n{summary}\n"
-    
-    # 3. Why It Matters
-    context = ""
-    if why_it_matters:
-        context = f"💡 Why It Matters:\n{why_it_matters}\n"
         
-    # 4. Community CTA
+    # 3. Community CTA
     cta = (
         "💬 What is your take on this update? Let us know in the comments below! 👇\n\n"
         "📌 Tag a friend to keep them informed!\n\n"
@@ -36,12 +30,12 @@ def format_instagram_caption(editorial: Dict[str, Any], lead: Dict[str, Any]) ->
         f"📲 Follow {BRAND_HANDLE} for daily verified news updates."
     )
     
-    # 5. Source Attribution
+    # 4. Source Attribution
     attribution = ""
     if source_account:
         attribution = f"\n\n(Source Lead: @{source_account})"
         
-    # 6. Hashtags
+    # 5. Hashtags
     default_tags = ["#IndiaNews", "#StudentUpdates", "#UPSC", "#Education", "#Engineering", "#GenZNews", "#news_nit_iit"]
     category_tag = f"#{category.replace(' ', '')}" if category else ""
     if category_tag and category_tag not in default_tags:
@@ -52,7 +46,6 @@ def format_instagram_caption(editorial: Dict[str, Any], lead: Dict[str, Any]) ->
     caption_full = (
         f"{opening}\n"
         f"{explanation}\n"
-        f"{context}\n"
         f"{cta}"
         f"{attribution}\n\n"
         f"{hashtags_str}"
