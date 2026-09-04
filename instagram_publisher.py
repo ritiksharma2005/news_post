@@ -10,18 +10,52 @@ from typing import Optional
 import config
 
 
+def resolve_instagram_user_id(token: str, user_id: str) -> str:
+    """
+    If user_id is a Facebook Page ID instead of an Instagram Business Account ID (178414...),
+    queries Meta Graph API to auto-resolve the connected instagram_business_account.id.
+    """
+    if not user_id or not token:
+        return user_id
+        
+    if user_id.startswith("178414"):
+        return user_id
+        
+    try:
+        url = f"https://graph.facebook.com/v19.0/{user_id}?fields=instagram_business_account&access_token={token}"
+        resp = requests.get(url, timeout=10).json()
+        if "instagram_business_account" in resp and "id" in resp["instagram_business_account"]:
+            ig_id = resp["instagram_business_account"]["id"]
+            print(f"  💡 Auto-resolved Instagram Business Account ID: {ig_id} from Page object {user_id}", flush=True)
+            return ig_id
+            
+        accounts_url = f"https://graph.facebook.com/v19.0/me/accounts?fields=instagram_business_account&access_token={token}"
+        acc_resp = requests.get(accounts_url, timeout=10).json()
+        if "data" in acc_resp:
+            for item in acc_resp["data"]:
+                if "instagram_business_account" in item and "id" in item["instagram_business_account"]:
+                    ig_id = item["instagram_business_account"]["id"]
+                    print(f"  💡 Auto-resolved Instagram Business Account ID from me/accounts: {ig_id}", flush=True)
+                    return ig_id
+    except Exception as e:
+        print(f"  [IG ID Resolve Notice] {e}", flush=True)
+        
+    return user_id
+
+
 def publish_photo(image_url, caption=""):
     token = os.getenv("INSTAGRAM_ACCESS_TOKEN") or getattr(config, "INSTAGRAM_ACCESS_TOKEN", "")
-    user_id = os.getenv("INSTAGRAM_USER_ID") or getattr(config, "INSTAGRAM_USER_ID", "")
+    raw_user_id = os.getenv("INSTAGRAM_USER_ID") or getattr(config, "INSTAGRAM_USER_ID", "")
 
-    if not token or not user_id:
+    if not token or not raw_user_id:
         print("  ⚠️ Skipping Instagram: INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID missing in config/secrets.", flush=True)
         return False
 
+    user_id = resolve_instagram_user_id(token, raw_user_id)
     base_url = f"https://graph.facebook.com/v19.0/{user_id}"
 
     try:
-        print("  Creating Instagram media container...", flush=True)
+        print(f"  Creating Instagram media container for ID {user_id}...", flush=True)
         container_url = f"{base_url}/media"
         payload = {
             "image_url": image_url,
