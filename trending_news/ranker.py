@@ -114,21 +114,17 @@ def evaluate_score_with_ai(lead: Dict[str, Any], analysis: Dict[str, Any]) -> fl
 
 def rank_and_select_top_stories(candidates: List[Dict[str, Any]], max_select: int = MAX_POSTERS_PER_RUN) -> List[Dict[str, Any]]:
     """
-    Ranks candidate leads by news importance score (0-100) & freshness,
-    filtering out non-news memes/jokes, and selects up to max_select (Top 2) unique stories.
+    Evaluates candidate posts and selects exactly 1 post from @indicore.in and 1 post from @besanskari_
+    to guarantee 2 posters per run with balanced source representation. Accepts all engaging news, memes, & viral trends.
     """
-    print(f"\n📊 [Ranker] Evaluating news importance scores for {len(candidates)} candidates...")
+    print(f"\n📊 [Ranker] Evaluating scores and balancing sources for {len(candidates)} candidates...")
     
+    # 1. Score candidates
     scored_candidates = []
     for c in candidates:
         analysis = c.get("analysis", {})
         
-        # 1. Exclude non-news memes, jokes, satire, or ads
-        if not analysis.get("is_real_news", True):
-            print(f"  [Ranker Skip] Skipping non-news / meme / joke lead: '{c.get('source_post_id')}' (@{c.get('source_account')})")
-            continue
-            
-        # 2. Exclude unverified sensitive claims
+        # Exclude unverified sensitive claims
         verification = c.get("verification", {})
         if verification.get("verification_status") == "unverified":
             print(f"  [Ranker Skip] Skipping unverified lead: '{c.get('source_post_id')}' ({verification.get('verification_notes')})")
@@ -140,13 +136,38 @@ def rank_and_select_top_stories(candidates: List[Dict[str, Any]], max_select: in
         scored_candidates.append(c)
         print(f"  ⭐ Candidate '{c.get('source_post_id')}' (@{c.get('source_account')}) | Score: {score}/100")
         
-    # Sort candidates primarily by posted_at (latest first) and secondarily by trend_score
-    scored_candidates.sort(key=lambda x: (x.get("posted_at", ""), x.get("trend_score", 0.0)), reverse=True)
+    # Group candidates by source_account
+    by_source = {}
+    for c in scored_candidates:
+        src = c.get("source_account", "unknown")
+        if src not in by_source:
+            by_source[src] = []
+        by_source[src].append(c)
+        
+    selected_stories = []
     
-    selected_stories = scored_candidates[:max_select]
-    print(f"\n🏆 [Ranker Selection Complete] Selected TOP {len(selected_stories)} latest unique news stories for poster generation.")
+    # Select 1 top post from each source (@indicore.in and @besanskari_)
+    for src in ["indicore.in", "besanskari_"]:
+        if src in by_source and by_source[src]:
+            # Sort by posted_at timestamp (newest first) and trend_score
+            by_source[src].sort(key=lambda x: (x.get("posted_at", ""), x.get("trend_score", 0.0)), reverse=True)
+            top_item = by_source[src].pop(0)
+            selected_stories.append(top_item)
+            print(f"  ✅ Selected 1 story from @{src}: '{top_item.get('source_post_id')}' (Date: {top_item.get('posted_at')})")
+            
+    # If less than max_select (2), fill from remaining pool sorted by timestamp
+    if len(selected_stories) < max_select:
+        remaining = [c for c in scored_candidates if c not in selected_stories]
+        remaining.sort(key=lambda x: (x.get("posted_at", ""), x.get("trend_score", 0.0)), reverse=True)
+        for r in remaining:
+            selected_stories.append(r)
+            print(f"  ✅ Selected fallback story: '{r.get('source_post_id')}' (@{r.get('source_account')})")
+            if len(selected_stories) >= max_select:
+                break
+                
+    print(f"\n🏆 [Ranker Selection Complete] Selected TOP {len(selected_stories)} balanced stories for poster generation.")
     for i, story in enumerate(selected_stories):
         headline = story.get("analysis", {}).get("headline_extracted") or story.get("caption", "")[:60]
-        print(f"  [{i+1}] Score {story.get('trend_score')} | Date: {story.get('posted_at')}: {headline}")
+        print(f"  [{i+1}] (@{story.get('source_account')}) Score {story.get('trend_score')} | Date: {story.get('posted_at')}: {headline}")
         
-    return selected_stories
+    return selected_stories[:max_select]
