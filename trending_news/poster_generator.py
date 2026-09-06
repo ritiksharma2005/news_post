@@ -29,10 +29,12 @@ def strip_emojis(text: str) -> str:
 def load_font(font_name: str = "bold", size: int = 42) -> ImageFont.FreeTypeFont:
     """Loads display fonts with system fallbacks."""
     paths_to_try = [
+        str(FONTS_DIR / ("NotoSans-Bold.ttf" if font_name == "bold" else "NotoSans-Regular.ttf")),
         str(FONTS_DIR / "Montserrat-Bold.ttf"),
         str(FONTS_DIR / "Inter-Bold.ttf"),
         str(FONTS_DIR / "DejaVuSans-Bold.ttf"),
         "/System/Library/Fonts/Supplemental/Arial Bold.ttf" if font_name == "bold" else "/System/Library/Fonts/Supplemental/Arial.ttf",
+        "/System/Library/Fonts/Helvetica.ttc",
         "Arial.ttf"
     ]
     for p in paths_to_try:
@@ -165,6 +167,7 @@ def draw_highlighted_headline(
     """
     h_tokens = set(w.lower().strip(".,!?:;\"'") for w in (highlight_text or "").split())
     y = start_y
+    font_h = getattr(font, "size", 40)
     
     for line in lines:
         words = line.split()
@@ -176,7 +179,7 @@ def draw_highlighted_headline(
             
             draw.text((cur_x, y), word, fill=color, font=font, stroke_width=2, stroke_fill="#000000")
             cur_x += int(draw.textlength(word + " ", font=font))
-        y += font.size + line_gap
+        y += font_h + line_gap
         
     return y
 
@@ -192,6 +195,37 @@ def apply_bottom_gradient(card: Image.Image, start_y: int = 450, end_y: int = 12
         odraw.line([(0, gy), (CANVAS_WIDTH, gy)], fill=(15, 23, 42, alpha))
         
     return Image.alpha_composite(card.convert("RGBA"), overlay).convert("RGB")
+
+
+def draw_side_vertical_watermark(card: Image.Image, text: str = BRAND_HANDLE) -> Image.Image:
+    """
+    Renders a subtle vertical watermark (@news.nit_iit) along the right edge of the card
+    with 60%-70% opacity (alpha=165 / ~65% opacity).
+    """
+    card_rgba = card.convert("RGBA")
+    font_wm = load_font("bold", 22)
+    
+    dummy_img = Image.new("RGBA", (1, 1))
+    dummy_draw = ImageDraw.Draw(dummy_img)
+    bbox = dummy_draw.textbbox((0, 0), text, font=font_wm)
+    tw = bbox[2] - bbox[0] + 12
+    th = bbox[3] - bbox[1] + 12
+    
+    txt_img = Image.new("RGBA", (tw, th), (0, 0, 0, 0))
+    txt_draw = ImageDraw.Draw(txt_img)
+    # White text with 65% opacity (alpha = 165) and subtle dark stroke for extra legibility
+    txt_draw.text((6, 6), text, fill=(255, 255, 255, 165), font=font_wm, stroke_width=1, stroke_fill=(0, 0, 0, 100))
+    
+    # Rotate 270 degrees clockwise (reads top-to-bottom along right margin)
+    rotated = txt_img.rotate(270, expand=True)
+    rw, rh = rotated.size
+    
+    # Position along right edge (x = CANVAS_WIDTH - rw - 15, y = 320)
+    pos_x = CANVAS_WIDTH - rw - 15
+    pos_y = 320
+    
+    card_rgba.paste(rotated, (pos_x, pos_y), rotated)
+    return card_rgba.convert("RGB")
 
 
 def prepare_clean_source_photo(image_path: str, target_w: int = 1080, target_h: int = 680) -> Optional[Image.Image]:
@@ -224,7 +258,7 @@ def prepare_clean_source_photo(image_path: str, target_w: int = 1080, target_h: 
             final_crop = Image.new("RGB", (target_w, target_h), "#0F172A")
             final_crop.paste(resized, (0, 0))
             
-        # 3. Apply smooth dark right-edge gradient patch (x=900 to 1080) to completely mask any residual corner text
+        # 3. Apply smooth dark right-edge gradient patch (x=880 to 1080) to completely mask any residual corner text
         overlay = Image.new("RGBA", (target_w, target_h), (0, 0, 0, 0))
         odraw = ImageDraw.Draw(overlay)
         for rx in range(880, target_w):
@@ -284,6 +318,9 @@ def render_layout_a(editorial: Dict[str, Any], image_path: Optional[str], output
     # 7. Warm Cream Bottom Footer Banner
     draw_footer_brand(draw)
     
+    # 8. Side Vertical Watermark (60-70% Opacity)
+    card = draw_side_vertical_watermark(card)
+    
     card.save(output_path)
     return output_path
 
@@ -334,6 +371,10 @@ def render_layout_c(editorial: Dict[str, Any], image_path: Optional[str], output
         sy += 34
         
     draw_footer_brand(draw)
+    
+    # Side Vertical Watermark (60-70% Opacity)
+    card = draw_side_vertical_watermark(card)
+    
     card.save(output_path)
     return output_path
 
