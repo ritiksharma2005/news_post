@@ -17,8 +17,8 @@ except ImportError:
     GENAI_NEW_SDK = False
 
 
-REWRITE_PROMPT_TEMPLATE = """You are the Senior Editor for @news.nit_iit, a modern digital news brand for Indian students and young adults.
-Below is a raw news lead scraped from Instagram:
+REWRITE_PROMPT_TEMPLATE = """You are the Senior Editor for @news.nit_iit, a modern digital news & trend brand for Indian students and young adults.
+Below is a raw post scraped from Instagram:
 
 Source Account: @{source_account}
 Raw Caption:
@@ -28,27 +28,27 @@ Multimodal Analysis:
 {analysis_summary}
 
 TASK:
-Rewrite this lead into an ORIGINAL, high-impact news editorial for @news.nit_iit.
+Rewrite this post into an ORIGINAL, direct, highly engaging headline and summary for @news.nit_iit.
 
 CRITICAL RULES:
-1. Headline MUST be a SHORT, PUNCHY BOLD TITLE (strictly 5 to 10 words max!).
-   Example: "Grand Mufti Remarks Spark Major National Controversy"
-   Do NOT output long multi-clause sentences as headlines!
-2. Identify 2 to 4 key visual words from the headline to set as "highlight_text" (e.g. "National Controversy" or "Grand Mufti").
+1. Headline MUST be a DIRECT, CATCHY TITLE in SIMPLE, EASY ENGLISH (strictly 5 to 10 words max!).
+   Example: "Couple Bonds Over Shared Celebrity Crush" or "FIFA Drafts Blue Lock and Supa Strikas Teams"
+   Do NOT use robotic meta-words like "Viral Satire", "Viral Satire Highlights", "Satirical Snippet", or "Humor Post"! State the event or topic directly!
+2. Identify 2 to 4 key visual words from the headline to set as "highlight_text" (e.g. "Celebrity Crush" or "Blue Lock").
 3. Headline MUST NOT contain emojis, markdown symbols ('###', '**'), or numbered prefixes.
-4. Summary MUST be 1 to 2 short sentences providing distinct background context. Do NOT repeat the headline text verbatim!
+4. Summary MUST be 1 to 2 short sentences in easy, clear English explaining the story context.
 
 OUTPUT FORMAT (Return a valid JSON object ONLY with no markdown formatting):
 {{
-  "headline": "Grand Mufti Remarks Spark Major National Controversy",
-  "highlight_text": "National Controversy",
-  "header_label": "THE LATEST",
-  "subheadline": "Controversial Statement Triggers Widespread Public Debate",
-  "summary": "Prominent religious figure Sheikh Abubakr Ahmad faced intense backlash following public remarks regarding social roles.",
-  "category": "NATIONAL",
+  "headline": "Couple Bonds Over Shared Celebrity Crush",
+  "highlight_text": "Celebrity Crush",
+  "header_label": "POP CULTURE",
+  "subheadline": "Fun Social Post Sparks Widespread Engagement Online",
+  "summary": "A viral post sparked major online chatter showing a couple sharing an obsession for their favorite actress.",
+  "category": "POP CULTURE",
   "layout_type": "LAYOUT_A",
   "metric_callout": "",
-  "visual_concept": "Modern news illustration"
+  "visual_concept": "Modern engaging visual"
 }}
 """
 
@@ -83,12 +83,15 @@ def rewrite_with_groq(prompt: str) -> Optional[str]:
 import re
 
 def sanitize_headline(text: str) -> str:
-    """Strips markdown headers (###), asterisks, bullet numbers, and prompt placeholders from headlines."""
+    """Strips markdown headers (###), robotic meta-prefixes ('Viral Satire Highlights'), and prompt placeholders."""
     if not text:
         return ""
     clean = re.sub(r'^#+\s*', '', text)
     clean = re.sub(r'^\d+[\.\)]\s*', '', clean)
     clean = clean.replace("**", "").replace("*", "").replace("`", "").strip()
+    
+    # Strip robotic meta-prefixes prepended by AI for satire/memes
+    clean = re.sub(r'^(viral\s+)?(fifa\s+)?(satire|satirical|humor|meme)\s+(highlights|claims|drafts|shows|post|snippet)?\s*', '', clean, flags=re.IGNORECASE).strip()
     
     # Reject generic prompt template placeholders
     low = clean.lower()
