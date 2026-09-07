@@ -89,9 +89,9 @@ def fit_headline_font(headline: str, max_width: int, max_lines: int, start_size:
 def draw_header_brand(draw: ImageDraw.ImageDraw, header_label: str = DEFAULT_HEADER_LABEL):
     """
     Renders top header banner with warm cream background (#FDFBF7),
-    top orange accent line, NEWS.NIT_IIT on left, and dynamic label on right.
+    top orange accent line, NEWS.NIT_IIT on left, and dynamic label on right (all Bold).
     """
-    font_brand = load_font("bold", 30)
+    font_brand = load_font("bold", 32)
     font_tag = load_font("bold", 22)
     
     label_text = (header_label or DEFAULT_HEADER_LABEL).upper()
@@ -101,12 +101,12 @@ def draw_header_brand(draw: ImageDraw.ImageDraw, header_label: str = DEFAULT_HEA
     # Top Orange Accent Stripe (Height: 10px)
     draw.rectangle([(0, 0), (CANVAS_WIDTH, 10)], fill=BRAND_COLOR_ACCENT)
     
-    # Left: NEWS.NIT_IIT
-    draw.text((50, 32), BRAND_NAME, fill=BRAND_HEADER_TEXT, font=font_brand)
+    # Left: NEWS.NIT_IIT (Bold)
+    draw.text((50, 30), BRAND_NAME, fill=BRAND_HEADER_TEXT, font=font_brand, stroke_width=1, stroke_fill=BRAND_HEADER_TEXT)
     
-    # Right: Dynamic Header Label (e.g., THE LATEST, INDIA, SPORTS)
+    # Right: Dynamic Header Label (Bold)
     tag_w = draw.textlength(label_text, font=font_tag)
-    draw.text((CANVAS_WIDTH - 50 - tag_w, 36), label_text, fill=BRAND_COLOR_ACCENT, font=font_tag)
+    draw.text((CANVAS_WIDTH - 50 - tag_w, 35), label_text, fill=BRAND_COLOR_ACCENT, font=font_tag, stroke_width=1, stroke_fill=BRAND_COLOR_ACCENT)
     
     # Thin 1.5px Separator Line
     draw.line([(0, 90), (CANVAS_WIDTH, 90)], fill=BRAND_BORDER_LINE, width=2)
@@ -136,7 +136,7 @@ def draw_vector_camera_icon(draw: ImageDraw.ImageDraw, x: int, y: int, size: int
 def draw_footer_brand(draw: ImageDraw.ImageDraw):
     """
     Renders bottom header banner with warm cream background (#FDFBF7)
-    and RGB vector camera icon + @news.nit_iit branding centered.
+    and RGB vector camera icon + @news.nit_iit bold branding centered.
     """
     font_footer = load_font("bold", 30)
     
@@ -158,8 +158,8 @@ def draw_footer_brand(draw: ImageDraw.ImageDraw):
     # Draw vector camera icon (RGB)
     draw_vector_camera_icon(draw, x=start_x, y=y_pos - 2, size=icon_size, fill_color="#0F172A", accent_color=BRAND_COLOR_ACCENT)
     
-    # Draw handle text
-    draw.text((start_x + icon_size + gap, y_pos - 5), handle_text, fill=BRAND_HEADER_TEXT, font=font_footer)
+    # Draw handle text (Bold)
+    draw.text((start_x + icon_size + gap, y_pos - 5), handle_text, fill=BRAND_HEADER_TEXT, font=font_footer, stroke_width=1, stroke_fill=BRAND_HEADER_TEXT)
 
 
 def draw_highlighted_headline(
@@ -172,13 +172,13 @@ def draw_highlighted_headline(
     line_gap: int = 12
 ) -> int:
     """
-    Renders headline lines word-by-word in Extra Bold typography. Words matching highlight_text are drawn
+    Renders headline lines word-by-word in Extra Heavy Bold typography. Words matching highlight_text are drawn
     in Brand Accent Orange (#F97316), while other words are drawn in White (#FFFFFF).
-    Uses matching stroke_fill to produce solid, heavy extra-bold text glyphs.
+    Uses matching stroke_fill (stroke_width=3) to produce maximum bold impact.
     """
     h_tokens = set(w.lower().strip(".,!?:;\"'") for w in (highlight_text or "").split())
     y = start_y
-    font_h = getattr(font, "size", 40)
+    font_h = getattr(font, "size", 42)
     
     for line in lines:
         words = line.split()
@@ -188,8 +188,8 @@ def draw_highlighted_headline(
             is_highlighted = clean_w in h_tokens and len(clean_w) > 1
             color = BRAND_COLOR_ACCENT if is_highlighted else "#FFFFFF"
             
-            # Matching stroke_fill thickens glyph fill for solid bold impact
-            draw.text((cur_x, y), word, fill=color, font=font, stroke_width=2, stroke_fill=color)
+            # Heavy bold stroke matching text fill color
+            draw.text((cur_x, y), word, fill=color, font=font, stroke_width=3, stroke_fill=color)
             cur_x += int(draw.textlength(word + " ", font=font))
         y += font_h + line_gap
         
@@ -225,8 +225,8 @@ def draw_side_vertical_watermark(card: Image.Image, text: str = BRAND_HANDLE) ->
     
     txt_img = Image.new("RGBA", (tw, th), (0, 0, 0, 0))
     txt_draw = ImageDraw.Draw(txt_img)
-    # White text with 65% opacity (alpha = 165) and subtle dark stroke for extra legibility
-    txt_draw.text((6, 6), text, fill=(255, 255, 255, 165), font=font_wm, stroke_width=1, stroke_fill=(0, 0, 0, 100))
+    # White bold text with 65% opacity (alpha = 165)
+    txt_draw.text((6, 6), text, fill=(255, 255, 255, 165), font=font_wm, stroke_width=1, stroke_fill=(255, 255, 255, 165))
     
     # Rotate 270 degrees clockwise (reads top-to-bottom along right margin)
     rotated = txt_img.rotate(270, expand=True)
@@ -303,29 +303,29 @@ def render_layout_a(editorial: Dict[str, Any], image_path: Optional[str], output
     header_label = editorial.get("header_label") or DEFAULT_HEADER_LABEL
     draw_header_brand(draw, header_label=header_label)
     
-    # 4. Category Tag Pill
+    # 4. Category Tag Pill (Bold)
     category = editorial.get("category", "TRENDING").upper()
-    font_badge = load_font("bold", 20)
+    font_badge = load_font("bold", 22)
     badge_w = draw.textlength(category, font=font_badge)
-    draw.rounded_rectangle([(50, 780), (70 + badge_w, 816)], radius=6, fill=BRAND_COLOR_ACCENT)
-    draw.text((60, 787), category, fill="#FFFFFF", font=font_badge, stroke_width=1, stroke_fill="#FFFFFF")
+    draw.rounded_rectangle([(50, 780), (74 + badge_w, 818)], radius=6, fill=BRAND_COLOR_ACCENT)
+    draw.text((62, 786), category, fill="#FFFFFF", font=font_badge, stroke_width=1, stroke_fill="#FFFFFF")
     
-    # 5. Headline (5-12 words) with Extra Bold Keyword Highlighting
+    # 5. Headline (5-12 words) with Extra Heavy Bold Keyword Highlighting
     headline = strip_emojis(editorial.get("headline", ""))
     highlight = editorial.get("highlight_text", "")
     font_hl, hl_lines = fit_headline_font(headline, max_width=980, max_lines=3, start_size=50, draw=draw)
     
     y = draw_highlighted_headline(draw, font_hl, hl_lines, highlight, x=50, start_y=835)
     
-    # 6. Concise Summary (1-2 sentences) - Bold font
-    font_sum = load_font("bold", 26)
+    # 6. Concise Summary (1-2 sentences) - Extra Bold font
+    font_sum = load_font("bold", 28)
     summary = strip_emojis(editorial.get("summary", ""))
     sum_lines = wrap_text_pixels(summary, font_sum, 980, draw)
     
     sy = y + 10
     for line in sum_lines[:2]:
-        draw.text((50, sy), line, fill="#F8FAFC", font=font_sum, stroke_width=1, stroke_fill="#F8FAFC")
-        sy += 36
+        draw.text((50, sy), line, fill="#FFFFFF", font=font_sum, stroke_width=2, stroke_fill="#FFFFFF")
+        sy += 38
         
     # 7. Warm Cream Bottom Footer Banner
     draw_footer_brand(draw)
@@ -360,10 +360,10 @@ def render_layout_c(editorial: Dict[str, Any], image_path: Optional[str], output
     header_label = editorial.get("header_label") or "DATA & ECONOMY"
     draw_header_brand(draw, header_label=header_label)
     
-    # Metric Callout Text - Extra Bold
+    # Metric Callout Text - Ultra Heavy Bold
     metric = editorial.get("metric_callout") or "BIG NUMBERS"
     font_metric = load_font("bold", 68)
-    draw.text((50, 720), metric, fill=BRAND_COLOR_ACCENT, font=font_metric, stroke_width=3, stroke_fill=BRAND_COLOR_ACCENT)
+    draw.text((50, 720), metric, fill=BRAND_COLOR_ACCENT, font=font_metric, stroke_width=4, stroke_fill=BRAND_COLOR_ACCENT)
     
     # Headline
     headline = strip_emojis(editorial.get("headline", ""))
@@ -372,15 +372,15 @@ def render_layout_c(editorial: Dict[str, Any], image_path: Optional[str], output
     
     y = draw_highlighted_headline(draw, font_hl, hl_lines, highlight, x=50, start_y=810)
     
-    # Summary - Bold font
-    font_sum = load_font("bold", 26)
+    # Summary - Extra Bold font
+    font_sum = load_font("bold", 28)
     summary = strip_emojis(editorial.get("summary", ""))
     sum_lines = wrap_text_pixels(summary, font_sum, 980, draw)
     
     sy = y + 10
     for line in sum_lines[:2]:
-        draw.text((50, sy), line, fill="#F8FAFC", font=font_sum, stroke_width=1, stroke_fill="#F8FAFC")
-        sy += 36
+        draw.text((50, sy), line, fill="#FFFFFF", font=font_sum, stroke_width=2, stroke_fill="#FFFFFF")
+        sy += 38
         
     draw_footer_brand(draw)
     
