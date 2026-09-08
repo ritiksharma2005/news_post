@@ -27,7 +27,7 @@ def strip_emojis(text: str) -> str:
 
 
 def load_font(font_name: str = "bold", size: int = 42) -> ImageFont.FreeTypeFont:
-    """Loads display fonts with system fallbacks matching original template typography."""
+    """Loads display fonts with system fallbacks prioritizing crisp, sharp TTF fonts."""
     if font_name == "bold":
         paths_to_try = [
             "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
@@ -89,7 +89,7 @@ def fit_headline_font(headline: str, max_width: int, max_lines: int, start_size:
 def draw_header_brand(draw: ImageDraw.ImageDraw, header_label: str = DEFAULT_HEADER_LABEL):
     """
     Renders top header banner with warm cream background (#FDFBF7),
-    top orange accent line, NEWS.NIT_IIT on left, and dynamic label on right (Bold).
+    top orange accent line, NEWS.NIT_IIT on left, and dynamic label on right (Razor-Sharp).
     """
     font_brand = load_font("bold", 30)
     font_tag = load_font("bold", 22)
@@ -101,11 +101,11 @@ def draw_header_brand(draw: ImageDraw.ImageDraw, header_label: str = DEFAULT_HEA
     # Top Orange Accent Stripe (Height: 10px)
     draw.rectangle([(0, 0), (CANVAS_WIDTH, 10)], fill=BRAND_COLOR_ACCENT)
     
-    # Left: NEWS.NIT_IIT (Bold)
+    # Left: NEWS.NIT_IIT
     draw.text((50, 32), BRAND_NAME, fill=BRAND_HEADER_TEXT, font=font_brand)
     
-    # Right: Dynamic Header Label (Bold)
-    tag_w = draw.textlength(label_text, font=font_tag)
+    # Right: Dynamic Header Label (e.g., THE LATEST, INDIA, SPORTS)
+    tag_w = int(draw.textlength(label_text, font=font_tag))
     draw.text((CANVAS_WIDTH - 50 - tag_w, 36), label_text, fill=BRAND_COLOR_ACCENT, font=font_tag)
     
     # Thin 1.5px Separator Line
@@ -136,7 +136,7 @@ def draw_vector_camera_icon(draw: ImageDraw.ImageDraw, x: int, y: int, size: int
 def draw_footer_brand(draw: ImageDraw.ImageDraw):
     """
     Renders bottom header banner with warm cream background (#FDFBF7)
-    and RGB vector camera icon + @news.nit_iit bold branding centered.
+    and RGB vector camera icon + @news.nit_iit razor-sharp branding centered.
     """
     font_footer = load_font("bold", 30)
     
@@ -146,7 +146,7 @@ def draw_footer_brand(draw: ImageDraw.ImageDraw):
     
     # Centered: Vector Camera Icon + @news.nit_iit
     handle_text = BRAND_HANDLE
-    handle_w = draw.textlength(handle_text, font=font_footer)
+    handle_w = int(draw.textlength(handle_text, font=font_footer))
     
     icon_size = 28
     gap = 12
@@ -158,7 +158,7 @@ def draw_footer_brand(draw: ImageDraw.ImageDraw):
     # Draw vector camera icon (RGB)
     draw_vector_camera_icon(draw, x=start_x, y=y_pos - 2, size=icon_size, fill_color="#0F172A", accent_color=BRAND_COLOR_ACCENT)
     
-    # Draw handle text (Bold)
+    # Draw handle text
     draw.text((start_x + icon_size + gap, y_pos - 5), handle_text, fill=BRAND_HEADER_TEXT, font=font_footer)
 
 
@@ -172,23 +172,24 @@ def draw_highlighted_headline(
     line_gap: int = 12
 ) -> int:
     """
-    Renders headline lines word-by-word in Bold typography matching the original template.
+    Renders headline lines word-by-word in crystal-clear, razor-sharp native Bold typography.
     Words matching highlight_text are drawn in Brand Accent Orange (#F97316), while other words are drawn in White (#FFFFFF).
+    No artificial stroke halos are added to guarantee 100% crisp vector sharpness.
     """
     h_tokens = set(w.lower().strip(".,!?:;\"'") for w in (highlight_text or "").split())
-    y = start_y
-    font_h = getattr(font, "size", 42)
+    y = int(start_y)
+    font_h = int(getattr(font, "size", 42))
     
     for line in lines:
         words = line.split()
-        cur_x = x
+        cur_x = int(x)
         for word in words:
             clean_w = word.lower().strip(".,!?:;\"'")
             is_highlighted = clean_w in h_tokens and len(clean_w) > 1
             color = BRAND_COLOR_ACCENT if is_highlighted else "#FFFFFF"
             
-            # Clean bold text with matching stroke_fill=color
-            draw.text((cur_x, y), word, fill=color, font=font, stroke_width=2, stroke_fill=color)
+            # Sharp single-pass text rendering (no stroke halo blur)
+            draw.text((cur_x, y), word, fill=color, font=font)
             cur_x += int(draw.textlength(word + " ", font=font))
         y += font_h + line_gap
         
@@ -305,25 +306,25 @@ def render_layout_a(editorial: Dict[str, Any], image_path: Optional[str], output
     # 4. Category Tag Pill
     category = editorial.get("category", "TRENDING").upper()
     font_badge = load_font("bold", 20)
-    badge_w = draw.textlength(category, font=font_badge)
+    badge_w = int(draw.textlength(category, font=font_badge))
     draw.rounded_rectangle([(50, 780), (70 + badge_w, 816)], radius=6, fill=BRAND_COLOR_ACCENT)
     draw.text((60, 787), category, fill="#FFFFFF", font=font_badge)
     
-    # 5. Headline (5-12 words) with Bold Keyword Highlighting
+    # 5. Headline (5-12 words) with Bold Keyword Highlighting (Razor-Sharp)
     headline = strip_emojis(editorial.get("headline", ""))
     highlight = editorial.get("highlight_text", "")
     font_hl, hl_lines = fit_headline_font(headline, max_width=980, max_lines=3, start_size=50, draw=draw)
     
     y = draw_highlighted_headline(draw, font_hl, hl_lines, highlight, x=50, start_y=835)
     
-    # 6. Concise Summary (1-2 sentences) - Crisp regular text matching original template
+    # 6. Concise Summary (1-2 sentences) - Razor-sharp high contrast regular text
     font_sum = load_font("regular", 25)
     summary = strip_emojis(editorial.get("summary", ""))
     sum_lines = wrap_text_pixels(summary, font_sum, 980, draw)
     
     sy = y + 10
     for line in sum_lines[:2]:
-        draw.text((50, sy), line, fill="#E2E8F0", font=font_sum)
+        draw.text((50, sy), line, fill="#F1F5F9", font=font_sum)
         sy += 34
         
     # 7. Warm Cream Bottom Footer Banner
@@ -359,10 +360,10 @@ def render_layout_c(editorial: Dict[str, Any], image_path: Optional[str], output
     header_label = editorial.get("header_label") or "DATA & ECONOMY"
     draw_header_brand(draw, header_label=header_label)
     
-    # Metric Callout Text
+    # Metric Callout Text - Razor-Sharp Bold
     metric = editorial.get("metric_callout") or "BIG NUMBERS"
     font_metric = load_font("bold", 68)
-    draw.text((50, 720), metric, fill=BRAND_COLOR_ACCENT, font=font_metric, stroke_width=2, stroke_fill=BRAND_COLOR_ACCENT)
+    draw.text((50, 720), metric, fill=BRAND_COLOR_ACCENT, font=font_metric)
     
     # Headline
     headline = strip_emojis(editorial.get("headline", ""))
@@ -371,14 +372,14 @@ def render_layout_c(editorial: Dict[str, Any], image_path: Optional[str], output
     
     y = draw_highlighted_headline(draw, font_hl, hl_lines, highlight, x=50, start_y=810)
     
-    # Summary - Crisp regular text matching original template
+    # Summary - Razor-sharp high contrast regular text
     font_sum = load_font("regular", 25)
     summary = strip_emojis(editorial.get("summary", ""))
     sum_lines = wrap_text_pixels(summary, font_sum, 980, draw)
     
     sy = y + 10
     for line in sum_lines[:2]:
-        draw.text((50, sy), line, fill="#E2E8F0", font=font_sum)
+        draw.text((50, sy), line, fill="#F1F5F9", font=font_sum)
         sy += 34
         
     draw_footer_brand(draw)
