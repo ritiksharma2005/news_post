@@ -27,27 +27,24 @@ def strip_emojis(text: str) -> str:
 
 
 def load_font(font_name: str = "bold", size: int = 42) -> ImageFont.FreeTypeFont:
-    """Loads display fonts with system fallbacks prioritizing Arial Black & Heavy TTFs."""
+    """Loads display fonts with system fallbacks matching original template typography."""
     if font_name == "bold":
         paths_to_try = [
-            "/System/Library/Fonts/Supplemental/Arial Black.ttf",
             "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
-            "/Library/Fonts/Arial Black.ttf",
             "/Library/Fonts/Arial Bold.ttf",
+            str(FONTS_DIR / "NotoSans-Bold.ttf"),
             str(FONTS_DIR / "Montserrat-Bold.ttf"),
             str(FONTS_DIR / "Inter-Bold.ttf"),
-            str(FONTS_DIR / "NotoSans-Bold.ttf"),
             str(FONTS_DIR / "DejaVuSans-Bold.ttf"),
-            "Arial Black.ttf",
             "Arial Bold.ttf"
         ]
     else:
         paths_to_try = [
-            "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
             "/System/Library/Fonts/Supplemental/Arial.ttf",
             "/Library/Fonts/Arial.ttf",
             str(FONTS_DIR / "NotoSans-Regular.ttf"),
             str(FONTS_DIR / "DejaVuSans.ttf"),
+            "/System/Library/Fonts/Helvetica.ttc",
             "Arial.ttf"
         ]
     for p in paths_to_try:
@@ -79,13 +76,13 @@ def wrap_text_pixels(text: str, font: ImageFont.FreeTypeFont, max_width: int, dr
 def fit_headline_font(headline: str, max_width: int, max_lines: int, start_size: int, draw: ImageDraw.ImageDraw) -> tuple[ImageFont.FreeTypeFont, List[str]]:
     """Dynamically scales down headline font size until it fits within max_lines."""
     font_size = start_size
-    while font_size >= 30:
+    while font_size >= 28:
         font = load_font("bold", font_size)
         wrapped = wrap_text_pixels(headline, font, max_width, draw)
         if len(wrapped) <= max_lines:
             return font, wrapped
         font_size -= 4
-    font = load_font("bold", 30)
+    font = load_font("bold", 28)
     return font, wrap_text_pixels(headline, font, max_width, draw)[:max_lines]
 
 
@@ -105,11 +102,11 @@ def draw_header_brand(draw: ImageDraw.ImageDraw, header_label: str = DEFAULT_HEA
     draw.rectangle([(0, 0), (CANVAS_WIDTH, 10)], fill=BRAND_COLOR_ACCENT)
     
     # Left: NEWS.NIT_IIT (Bold)
-    draw.text((50, 32), BRAND_NAME, fill=BRAND_HEADER_TEXT, font=font_brand, stroke_width=1, stroke_fill=BRAND_HEADER_TEXT)
+    draw.text((50, 32), BRAND_NAME, fill=BRAND_HEADER_TEXT, font=font_brand)
     
     # Right: Dynamic Header Label (Bold)
     tag_w = draw.textlength(label_text, font=font_tag)
-    draw.text((CANVAS_WIDTH - 50 - tag_w, 36), label_text, fill=BRAND_COLOR_ACCENT, font=font_tag, stroke_width=1, stroke_fill=BRAND_COLOR_ACCENT)
+    draw.text((CANVAS_WIDTH - 50 - tag_w, 36), label_text, fill=BRAND_COLOR_ACCENT, font=font_tag)
     
     # Thin 1.5px Separator Line
     draw.line([(0, 90), (CANVAS_WIDTH, 90)], fill=BRAND_BORDER_LINE, width=2)
@@ -162,7 +159,7 @@ def draw_footer_brand(draw: ImageDraw.ImageDraw):
     draw_vector_camera_icon(draw, x=start_x, y=y_pos - 2, size=icon_size, fill_color="#0F172A", accent_color=BRAND_COLOR_ACCENT)
     
     # Draw handle text (Bold)
-    draw.text((start_x + icon_size + gap, y_pos - 5), handle_text, fill=BRAND_HEADER_TEXT, font=font_footer, stroke_width=1, stroke_fill=BRAND_HEADER_TEXT)
+    draw.text((start_x + icon_size + gap, y_pos - 5), handle_text, fill=BRAND_HEADER_TEXT, font=font_footer)
 
 
 def draw_highlighted_headline(
@@ -172,12 +169,11 @@ def draw_highlighted_headline(
     highlight_text: str,
     x: int,
     start_y: int,
-    line_gap: int = 14
+    line_gap: int = 12
 ) -> int:
     """
-    Renders headline lines word-by-word in Maximum Heavy Arial Black typography.
+    Renders headline lines word-by-word in Bold typography matching the original template.
     Words matching highlight_text are drawn in Brand Accent Orange (#F97316), while other words are drawn in White (#FFFFFF).
-    Uses clean stroke_width=2 with matching stroke_fill.
     """
     h_tokens = set(w.lower().strip(".,!?:;\"'") for w in (highlight_text or "").split())
     y = start_y
@@ -191,7 +187,7 @@ def draw_highlighted_headline(
             is_highlighted = clean_w in h_tokens and len(clean_w) > 1
             color = BRAND_COLOR_ACCENT if is_highlighted else "#FFFFFF"
             
-            # Crisp heavy bold stroke_width=2 matching text fill color
+            # Clean bold text with matching stroke_fill=color
             draw.text((cur_x, y), word, fill=color, font=font, stroke_width=2, stroke_fill=color)
             cur_x += int(draw.textlength(word + " ", font=font))
         y += font_h + line_gap
@@ -228,8 +224,8 @@ def draw_side_vertical_watermark(card: Image.Image, text: str = BRAND_HANDLE) ->
     
     txt_img = Image.new("RGBA", (tw, th), (0, 0, 0, 0))
     txt_draw = ImageDraw.Draw(txt_img)
-    # White bold text with 65% opacity (alpha = 165)
-    txt_draw.text((6, 6), text, fill=(255, 255, 255, 165), font=font_wm, stroke_width=1, stroke_fill=(255, 255, 255, 165))
+    # White text with 65% opacity (alpha = 165)
+    txt_draw.text((6, 6), text, fill=(255, 255, 255, 165), font=font_wm)
     
     # Rotate 270 degrees clockwise (reads top-to-bottom along right margin)
     rotated = txt_img.rotate(270, expand=True)
@@ -306,29 +302,29 @@ def render_layout_a(editorial: Dict[str, Any], image_path: Optional[str], output
     header_label = editorial.get("header_label") or DEFAULT_HEADER_LABEL
     draw_header_brand(draw, header_label=header_label)
     
-    # 4. Category Tag Pill (Bold)
+    # 4. Category Tag Pill
     category = editorial.get("category", "TRENDING").upper()
     font_badge = load_font("bold", 20)
     badge_w = draw.textlength(category, font=font_badge)
-    draw.rounded_rectangle([(50, 780), (74 + badge_w, 816)], radius=6, fill=BRAND_COLOR_ACCENT)
-    draw.text((62, 786), category, fill="#FFFFFF", font=font_badge, stroke_width=1, stroke_fill="#FFFFFF")
+    draw.rounded_rectangle([(50, 780), (70 + badge_w, 816)], radius=6, fill=BRAND_COLOR_ACCENT)
+    draw.text((60, 787), category, fill="#FFFFFF", font=font_badge)
     
-    # 5. Headline (5-12 words) with Ultra Heavy Arial Black Keyword Highlighting
+    # 5. Headline (5-12 words) with Bold Keyword Highlighting
     headline = strip_emojis(editorial.get("headline", ""))
     highlight = editorial.get("highlight_text", "")
     font_hl, hl_lines = fit_headline_font(headline, max_width=980, max_lines=3, start_size=50, draw=draw)
     
     y = draw_highlighted_headline(draw, font_hl, hl_lines, highlight, x=50, start_y=835)
     
-    # 6. Concise Summary (1-2 sentences) - Crisp Heavy Bold font
-    font_sum = load_font("bold", 26)
+    # 6. Concise Summary (1-2 sentences) - Crisp regular text matching original template
+    font_sum = load_font("regular", 25)
     summary = strip_emojis(editorial.get("summary", ""))
     sum_lines = wrap_text_pixels(summary, font_sum, 980, draw)
     
     sy = y + 10
     for line in sum_lines[:2]:
-        draw.text((50, sy), line, fill="#FFFFFF", font=font_sum, stroke_width=1, stroke_fill="#FFFFFF")
-        sy += 36
+        draw.text((50, sy), line, fill="#E2E8F0", font=font_sum)
+        sy += 34
         
     # 7. Warm Cream Bottom Footer Banner
     draw_footer_brand(draw)
@@ -363,10 +359,10 @@ def render_layout_c(editorial: Dict[str, Any], image_path: Optional[str], output
     header_label = editorial.get("header_label") or "DATA & ECONOMY"
     draw_header_brand(draw, header_label=header_label)
     
-    # Metric Callout Text - Ultra Heavy Arial Black
+    # Metric Callout Text
     metric = editorial.get("metric_callout") or "BIG NUMBERS"
     font_metric = load_font("bold", 68)
-    draw.text((50, 720), metric, fill=BRAND_COLOR_ACCENT, font=font_metric, stroke_width=3, stroke_fill=BRAND_COLOR_ACCENT)
+    draw.text((50, 720), metric, fill=BRAND_COLOR_ACCENT, font=font_metric, stroke_width=2, stroke_fill=BRAND_COLOR_ACCENT)
     
     # Headline
     headline = strip_emojis(editorial.get("headline", ""))
@@ -375,15 +371,15 @@ def render_layout_c(editorial: Dict[str, Any], image_path: Optional[str], output
     
     y = draw_highlighted_headline(draw, font_hl, hl_lines, highlight, x=50, start_y=810)
     
-    # Summary - Crisp Heavy Bold font
-    font_sum = load_font("bold", 26)
+    # Summary - Crisp regular text matching original template
+    font_sum = load_font("regular", 25)
     summary = strip_emojis(editorial.get("summary", ""))
     sum_lines = wrap_text_pixels(summary, font_sum, 980, draw)
     
     sy = y + 10
     for line in sum_lines[:2]:
-        draw.text((50, sy), line, fill="#FFFFFF", font=font_sum, stroke_width=1, stroke_fill="#FFFFFF")
-        sy += 36
+        draw.text((50, sy), line, fill="#E2E8F0", font=font_sum)
+        sy += 34
         
     draw_footer_brand(draw)
     
