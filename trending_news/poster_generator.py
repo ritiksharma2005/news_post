@@ -27,8 +27,18 @@ def strip_emojis(text: str) -> str:
 
 
 def load_font(font_name: str = "bold", size: int = 42) -> ImageFont.FreeTypeFont:
-    """Loads display fonts with system fallbacks prioritizing native Arial Bold & NotoSans-Bold TTFs."""
-    if font_name == "bold":
+    """Loads display fonts with system fallbacks prioritizing Arial Black for heavy headlines and Arial Bold for body text."""
+    if font_name == "headline_bold":
+        paths_to_try = [
+            "/System/Library/Fonts/Supplemental/Arial Black.ttf",
+            "/Library/Fonts/Arial Black.ttf",
+            str(FONTS_DIR / "Montserrat-Bold.ttf"),
+            str(FONTS_DIR / "Inter-Bold.ttf"),
+            str(FONTS_DIR / "NotoSans-Bold.ttf"),
+            "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+            "Arial Black.ttf"
+        ]
+    elif font_name == "bold":
         paths_to_try = [
             "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
             "/Library/Fonts/Arial Bold.ttf",
@@ -74,15 +84,15 @@ def wrap_text_pixels(text: str, font: ImageFont.FreeTypeFont, max_width: int, dr
 
 
 def fit_headline_font(headline: str, max_width: int, max_lines: int, start_size: int, draw: ImageDraw.ImageDraw) -> tuple[ImageFont.FreeTypeFont, List[str]]:
-    """Dynamically scales down headline font size until it fits within max_lines."""
+    """Dynamically scales down headline font size using native Heavy Black font weight until it fits within max_lines."""
     font_size = start_size
     while font_size >= 28:
-        font = load_font("bold", font_size)
+        font = load_font("headline_bold", font_size)
         wrapped = wrap_text_pixels(headline, font, max_width, draw)
         if len(wrapped) <= max_lines:
             return font, wrapped
         font_size -= 4
-    font = load_font("bold", 28)
+    font = load_font("headline_bold", 28)
     return font, wrap_text_pixels(headline, font, max_width, draw)[:max_lines]
 
 
@@ -172,9 +182,9 @@ def draw_highlighted_headline(
     line_gap: int = 12
 ) -> int:
     """
-    Renders headline lines word-by-word in crystal-clear native Bold typography (matching original template).
+    Renders headline lines word-by-word in Heavy Arial Black typography (100% Crisp & Bold).
     Words matching highlight_text are drawn in Brand Accent Orange (#F97316), while other words are drawn in White (#FFFFFF).
-    No stroke_width is applied to guarantee zero blur and 100% sharp vector bold rendering.
+    No stroke_width is used to guarantee 100% razor sharpness with ZERO BLUR.
     """
     h_tokens = set(w.lower().strip(".,!?:;\"'") for w in (highlight_text or "").split())
     y = int(start_y)
@@ -188,7 +198,7 @@ def draw_highlighted_headline(
             is_highlighted = clean_w in h_tokens and len(clean_w) > 1
             color = BRAND_COLOR_ACCENT if is_highlighted else "#FFFFFF"
             
-            # Sharp single-pass bold text rendering (no stroke blur)
+            # Sharp single-pass bold headline rendering (no stroke blur)
             draw.text((cur_x, y), word, fill=color, font=font)
             cur_x += int(draw.textlength(word + " ", font=font))
         y += font_h + line_gap
@@ -310,22 +320,22 @@ def render_layout_a(editorial: Dict[str, Any], image_path: Optional[str], output
     draw.rounded_rectangle([(50, 780), (70 + badge_w, 816)], radius=6, fill=BRAND_COLOR_ACCENT)
     draw.text((60, 787), category, fill="#FFFFFF", font=font_badge)
     
-    # 5. Headline (5-12 words) with Native Bold Keyword Highlighting (Razor-Sharp)
+    # 5. Headline (5-12 words) with Heavy Arial Black Keyword Highlighting (Razor-Sharp)
     headline = strip_emojis(editorial.get("headline", ""))
     highlight = editorial.get("highlight_text", "")
     font_hl, hl_lines = fit_headline_font(headline, max_width=980, max_lines=3, start_size=50, draw=draw)
     
     y = draw_highlighted_headline(draw, font_hl, hl_lines, highlight, x=50, start_y=835)
     
-    # 6. Concise Summary (1-2 sentences) - Native Bold font (Razor-Sharp, No Blur)
-    font_sum = load_font("bold", 25)
+    # 6. Concise Summary (1-2 sentences) - Crisp Bold font (Razor-Sharp, No Blur)
+    font_sum = load_font("bold", 26)
     summary = strip_emojis(editorial.get("summary", ""))
     sum_lines = wrap_text_pixels(summary, font_sum, 980, draw)
     
     sy = y + 10
     for line in sum_lines[:2]:
         draw.text((50, sy), line, fill="#F8FAFC", font=font_sum)
-        sy += 34
+        sy += 36
         
     # 7. Warm Cream Bottom Footer Banner
     draw_footer_brand(draw)
@@ -360,9 +370,9 @@ def render_layout_c(editorial: Dict[str, Any], image_path: Optional[str], output
     header_label = editorial.get("header_label") or "DATA & ECONOMY"
     draw_header_brand(draw, header_label=header_label)
     
-    # Metric Callout Text - Native Bold
+    # Metric Callout Text - Heavy Arial Black
     metric = editorial.get("metric_callout") or "BIG NUMBERS"
-    font_metric = load_font("bold", 68)
+    font_metric = load_font("headline_bold", 68)
     draw.text((50, 720), metric, fill=BRAND_COLOR_ACCENT, font=font_metric)
     
     # Headline
@@ -372,15 +382,15 @@ def render_layout_c(editorial: Dict[str, Any], image_path: Optional[str], output
     
     y = draw_highlighted_headline(draw, font_hl, hl_lines, highlight, x=50, start_y=810)
     
-    # Summary - Native Bold font (Razor-Sharp, No Blur)
-    font_sum = load_font("bold", 25)
+    # Summary - Crisp Bold font (Razor-Sharp, No Blur)
+    font_sum = load_font("bold", 26)
     summary = strip_emojis(editorial.get("summary", ""))
     sum_lines = wrap_text_pixels(summary, font_sum, 980, draw)
     
     sy = y + 10
     for line in sum_lines[:2]:
         draw.text((50, sy), line, fill="#F8FAFC", font=font_sum)
-        sy += 34
+        sy += 36
         
     draw_footer_brand(draw)
     
