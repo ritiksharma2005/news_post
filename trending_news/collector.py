@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
-from .config import INSTAGRAM_SOURCES, APIFY_TOKEN, OUTPUT_DIR
+from .config import INSTAGRAM_SOURCES, APIFY_TOKEN, OUTPUT_DIR, POSTS_PER_SOURCE
 from .parser import parse_raw_post
 from .time_filter import get_run_time_window, is_within_time_window
 from .database import is_post_processed, get_last_run_timestamp
@@ -225,21 +225,24 @@ def collect_leads_for_run(run_type: str = "morning") -> List[Dict[str, Any]]:
             source_leads.append(parsed)
             print(f"  ✅ Qualified candidate lead: '{post_id}' from @{username}")
             
-        # Fallback for this specific account if strict time window yielded 0 posts
-        if not source_leads and raw_posts:
-            print(f"  ⚠️ [Collector Notice] Strict window yielded 0 posts for @{username}. Using latest unprocessed post as fallback...")
+        # Fallback for this specific account if strict time window yielded fewer than POSTS_PER_SOURCE (2) posts
+        if len(source_leads) < POSTS_PER_SOURCE and raw_posts:
+            existing_ids = set(sl["source_post_id"] for sl in source_leads)
+            print(f"  ⚠️ [Collector Notice] Window yielded {len(source_leads)}/{POSTS_PER_SOURCE} posts for @{username}. Fetching latest unprocessed fallback posts...")
             for p in raw_posts:
                 parsed = parse_raw_post(p, username)
                 post_id = parsed["source_post_id"]
-                if is_post_processed(post_id):
+                if post_id in existing_ids or is_post_processed(post_id):
                     continue
                 if parsed["image_url"]:
                     parsed["image_path"] = download_lead_image(parsed["image_url"], post_id)
                 else:
                     parsed["image_path"] = None
                 source_leads.append(parsed)
+                existing_ids.add(post_id)
                 print(f"  ✅ Qualified candidate lead (Account Fallback): '{post_id}' from @{username}")
-                break
+                if len(source_leads) >= POSTS_PER_SOURCE:
+                    break
                 
         collected_leads.extend(source_leads)
             

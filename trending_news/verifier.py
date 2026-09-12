@@ -6,6 +6,8 @@ Verification Layer & Fact Checking Engine
 import requests
 from typing import Dict, Any
 
+from .config import INSTAGRAM_SOURCES
+
 # Trusted lead domains and official portals
 HIGH_TRUST_SOURCES = ["forbesindia", "thebetterindia"]
 SENSITIVE_CATEGORIES = ["Politics", "Government", "Crime", "Economy", "Health"]
@@ -48,11 +50,19 @@ def verify_news_lead(lead: Dict[str, Any], analysis: Dict[str, Any]) -> Dict[str
     except Exception:
         pass
         
-    # Default for standard student/social leads
+    # 3. Configured Instagram lead sources (e.g. @indicore.in, @besanskari_) are accepted as valid social leads
+    target_sources = [s.lower() for s in INSTAGRAM_SOURCES]
+    if source_account in target_sources:
+        return {
+            "verification_status": "partially_verified",
+            "verification_notes": f"Accepted social news lead from target source @{source_account}."
+        }
+        
+    # Default for unknown external social leads
     if category in SENSITIVE_CATEGORIES:
         return {
             "verification_status": "unverified",
-            "verification_notes": f"Sensitive category '{category}' from social source; needs higher verification threshold."
+            "verification_notes": f"Sensitive category '{category}' from external source; needs higher verification threshold."
         }
         
     return {

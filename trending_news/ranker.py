@@ -7,7 +7,7 @@ Freshness: 15% | Indian Relevance: 10% | Student Relevance: 10%
 
 import json
 from typing import List, Dict, Any
-from .config import RANKING_WEIGHTS, MIN_QUALIFYING_SCORE, MAX_POSTERS_PER_RUN, TRENDING_GEMINI_API_KEY, GEMINI_MODEL
+from .config import RANKING_WEIGHTS, MIN_QUALIFYING_SCORE, MAX_POSTERS_PER_RUN, POSTS_PER_SOURCE, INSTAGRAM_SOURCES, TRENDING_GEMINI_API_KEY, GEMINI_MODEL
 
 try:
     from google import genai
@@ -114,8 +114,8 @@ def evaluate_score_with_ai(lead: Dict[str, Any], analysis: Dict[str, Any]) -> fl
 
 def rank_and_select_top_stories(candidates: List[Dict[str, Any]], max_select: int = MAX_POSTERS_PER_RUN) -> List[Dict[str, Any]]:
     """
-    Evaluates candidate posts and selects exactly 1 post from @indicore.in and 1 post from @besanskari_
-    to guarantee 2 posters per run with balanced source representation. Accepts all engaging news, memes, & viral trends.
+    Evaluates candidate posts and selects exactly POSTS_PER_SOURCE (2) posts from @indicore.in and 2 posts from @besanskari_
+    to guarantee 4 posters per run with balanced source representation. Accepts all engaging news, memes, & viral trends.
     """
     print(f"\n📊 [Ranker] Evaluating scores and balancing sources for {len(candidates)} candidates...")
     
@@ -146,16 +146,17 @@ def rank_and_select_top_stories(candidates: List[Dict[str, Any]], max_select: in
         
     selected_stories = []
     
-    # Select 1 top post from each source (@indicore.in and @besanskari_)
-    for src in ["indicore.in", "besanskari_"]:
+    # Select POSTS_PER_SOURCE (2) top posts from each source (@indicore.in and @besanskari_)
+    for src in INSTAGRAM_SOURCES:
         if src in by_source and by_source[src]:
             # Sort by posted_at timestamp (newest first) and trend_score
             by_source[src].sort(key=lambda x: (x.get("posted_at", ""), x.get("trend_score", 0.0)), reverse=True)
-            top_item = by_source[src].pop(0)
-            selected_stories.append(top_item)
-            print(f"  ✅ Selected 1 story from @{src}: '{top_item.get('source_post_id')}' (Date: {top_item.get('posted_at')})")
+            for _ in range(min(POSTS_PER_SOURCE, len(by_source[src]))):
+                item = by_source[src].pop(0)
+                selected_stories.append(item)
+                print(f"  ✅ Selected story from @{src}: '{item.get('source_post_id')}' (Date: {item.get('posted_at')})")
             
-    # If less than max_select (2), fill from remaining pool sorted by timestamp
+    # If less than max_select (4), fill from remaining pool sorted by timestamp
     if len(selected_stories) < max_select:
         remaining = [c for c in scored_candidates if c not in selected_stories]
         remaining.sort(key=lambda x: (x.get("posted_at", ""), x.get("trend_score", 0.0)), reverse=True)

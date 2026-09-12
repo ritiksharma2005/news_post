@@ -37,8 +37,9 @@ RUN_SCHEDULE = {
     }
 }
 
-# Maximum posters generated per run (Morning: 2, Evening: 2 -> Max 4 per day)
-MAX_POSTERS_PER_RUN = 2
+# Maximum posters generated per run (2 from indicore.in + 2 from besanskari_ = 4 per run)
+POSTS_PER_SOURCE = 2
+MAX_POSTERS_PER_RUN = 4
 
 # ==================================================
 # 3. NEWS RANKING WEIGHTS (Total: 100%)
