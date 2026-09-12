@@ -66,17 +66,33 @@ def init_db():
     conn.close()
 
 
-def is_post_processed(source_post_id: str) -> bool:
-    """Checks if a post ID has already been recorded in the database."""
+def is_post_processed(source_post_id: str, caption: str = "") -> bool:
+    """Checks if a post ID, source URL shortcode, or matching caption has already been recorded in the database."""
     if not source_post_id:
         return False
     init_db()
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT 1 FROM news_items WHERE source_post_id = ?", (str(source_post_id),))
-    row = cursor.fetchone()
+    
+    # 1. Check exact match on source_post_id or shortcode in source_url
+    cursor.execute("""
+    SELECT 1 FROM news_items 
+    WHERE source_post_id = ? OR source_url LIKE ?
+    """, (str(source_post_id), f"%{source_post_id}%"))
+    if cursor.fetchone() is not None:
+        conn.close()
+        return True
+        
+    # 2. Check caption snippet match (prevents duplicates when Apify numeric ID differs from Playwright shortcode)
+    if caption and len(caption.strip()) > 20:
+        snippet = caption.strip()[:60]
+        cursor.execute("SELECT 1 FROM news_items WHERE caption LIKE ?", (f"%{snippet}%",))
+        if cursor.fetchone() is not None:
+            conn.close()
+            return True
+            
     conn.close()
-    return row is not None
+    return False
 
 
 def insert_news_item(item: Dict[str, Any]) -> Optional[int]:

@@ -206,7 +206,7 @@ def collect_leads_for_run(run_type: str = "morning") -> List[Dict[str, Any]]:
             post_id = parsed["source_post_id"]
             
             # Check Level 1 deduplication
-            if is_post_processed(post_id):
+            if is_post_processed(post_id, parsed.get("caption", "")):
                 print(f"  [Skip - DB Duplicate] Post '{post_id}' already processed.")
                 continue
                 
@@ -232,7 +232,7 @@ def collect_leads_for_run(run_type: str = "morning") -> List[Dict[str, Any]]:
             for p in raw_posts:
                 parsed = parse_raw_post(p, username)
                 post_id = parsed["source_post_id"]
-                if post_id in existing_ids or is_post_processed(post_id):
+                if post_id in existing_ids or is_post_processed(post_id, parsed.get("caption", "")):
                     continue
                 if parsed["image_url"]:
                     parsed["image_path"] = download_lead_image(parsed["image_url"], post_id)
