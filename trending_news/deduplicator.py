@@ -30,32 +30,52 @@ def calculate_string_similarity(str1: str, str2: str) -> float:
     return SequenceMatcher(None, s1, s2).ratio()
 
 
+def calculate_word_jaccard(str1: str, str2: str) -> float:
+    """Calculates Jaccard similarity of significant words (length >= 4) between two texts."""
+    if not str1 or not str2:
+        return 0.0
+    w1 = set(w.lower().strip(".,!?:;\"'()[]") for w in str1.split() if len(w.strip(".,!?:;\"'()[]")) >= 4)
+    w2 = set(w.lower().strip(".,!?:;\"'()[]") for w in str2.split() if len(w.strip(".,!?:;\"'()[]")) >= 4)
+    if not w1 or not w2:
+        return 0.0
+    return len(w1.intersection(w2)) / len(w1.union(w2))
+
+
 def filter_level2_string_duplicates(candidates: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     Level 2 Duplicate Detection:
-    Checks candidates against recent DB headlines and each other using fuzzy string matching.
+    Checks candidates against recent DB headlines/summaries/captions and each other using fuzzy string matching & Jaccard overlap.
     """
-    db_recent = get_recent_headlines(days=7)
-    db_headlines = [item.get("headline", "").lower() for item in db_recent if item.get("headline")]
-    
+    db_recent = get_recent_headlines(days=30)
+    db_texts = []
+    for item in db_recent:
+        if item.get("headline"):
+            db_texts.append(item["headline"].lower())
+        if item.get("summary"):
+            db_texts.append(item["summary"].lower())
+        if item.get("caption"):
+            db_texts.append(item["caption"].lower())
+            
     unique_candidates = []
-    seen_headlines = set(db_headlines)
+    seen_candidate_texts = list(db_texts)
     
     for c in candidates:
-        headline = (c.get("headline_extracted") or c.get("caption")[:80]).strip()
-        headline_lower = headline.lower()
+        headline = (c.get("headline_extracted") or c.get("caption")[:120]).strip()
+        caption = (c.get("caption") or "").strip()
+        combined_text = f"{headline} {caption}".lower()
         
-        # Check against existing database headlines
         is_dup = False
-        for db_h in seen_headlines:
-            sim = calculate_string_similarity(headline_lower, db_h)
-            if sim > 0.65:
-                print(f"  [Deduplicator Level 2] Skipping duplicate headline '{headline[:40]}...' (Similarity {sim:.2f} with '{db_h[:40]}...')")
+        for ref_text in seen_candidate_texts:
+            seq_sim = calculate_string_similarity(combined_text[:150], ref_text[:150])
+            jaccard_sim = calculate_word_jaccard(combined_text, ref_text)
+            
+            if seq_sim > 0.50 or jaccard_sim > 0.35:
+                print(f"  [Deduplicator Level 2] Skipping duplicate candidate '{headline[:40]}...' (SeqSim {seq_sim:.2f}, Jaccard {jaccard_sim:.2f})")
                 is_dup = True
                 break
                 
         if not is_dup:
-            seen_headlines.add(headline_lower)
+            seen_candidate_texts.append(combined_text)
             unique_candidates.append(c)
             
     return unique_candidates
@@ -65,8 +85,7 @@ def cluster_level3_semantic_duplicates(candidates: List[Dict[str, Any]]) -> List
     """
     Level 3 Duplicate Detection (AI Semantic Event Clustering):
     Prompts Gemini to identify and group candidate posts that describe the same underlying
-    real-world story/event from different source accounts.
-    Merges them into 1 canonical story with combined source references.
+    real-world story/event from different source accounts or against recent database history.
     """
     if len(candidates) <= 1:
         return candidates
@@ -79,16 +98,23 @@ def cluster_level3_semantic_duplicates(candidates: List[Dict[str, Any]]) -> List
     posts_summary = []
     for idx, c in enumerate(candidates):
         headline = c.get("headline_extracted") or c.get("caption")[:80]
-        posts_summary.append(f"[{idx+1}] Account: @{c.get('source_account')}\nHeadline: {headline}\nCaption: {c.get('caption')[:150]}")
+        posts_summary.append(f"[{idx+1}] Account: @{c.get('source_account')}\nHeadline: {headline}\nCaption: {c.get('caption')[:200]}")
         
+    db_recent = get_recent_headlines(days=7)
+    db_history_snippets = [f"- {item.get('headline') or item.get('caption')[:80]}" for item in db_recent[:20] if item.get("headline") or item.get("caption")]
+    db_context = "\n".join(db_history_snippets)
+    
     prompt = (
-        "Analyze these candidate news posts from different Instagram accounts:\n\n"
+        "You are an expert news editor enforcing strict 100% uniqueness for Instagram news stories.\n\n"
+        "RECENTLY PUBLISHED STORIES (Do NOT repeat any event matching these):\n"
+        f"{db_context}\n\n"
+        "CANDIDATE NEWS POSTS TO EVALUATE:\n"
         + "\n\n".join(posts_summary) + "\n\n"
         "TASK:\n"
-        "1. Identify posts that refer to the SAME underlying news story or event.\n"
-        "2. Group duplicate posts together.\n"
-        "3. For each group, select the single best index (1-based).\n\n"
-        "OUTPUT FORMAT (Return a valid JSON array of integers representing the unique indices to keep, e.g. [1, 3]):\n"
+        "1. Identify any candidates that describe the SAME event as recently published stories or each other.\n"
+        "2. Keep only unique, distinct stories that represent brand new news events.\n"
+        "3. Return a valid JSON array of 1-based indices for the unique candidate posts to keep.\n\n"
+        "OUTPUT FORMAT (JSON array of integers, e.g. [1, 2]):\n"
         "[1, 2]"
     )
     
@@ -115,7 +141,7 @@ def cluster_level3_semantic_duplicates(candidates: List[Dict[str, Any]]) -> List
                 if isinstance(i, int) and 1 <= i <= len(candidates):
                     clustered.append(candidates[i-1])
             if clustered:
-                print(f"  [Deduplicator Level 3] AI semantic clustering reduced {len(candidates)} candidates down to {len(clustered)} distinct stories.")
+                print(f"  [Deduplicator Level 3] AI semantic clustering filtered candidate list down to {len(clustered)} 100% unique stories.")
                 return clustered
     except Exception as e:
         print(f"  [Deduplicator Level 3 Notice] AI clustering skipped: {e}")

@@ -171,16 +171,16 @@ def update_news_item(item_id: int, updates: Dict[str, Any]):
     conn.close()
 
 
-def get_recent_headlines(days: int = 7) -> List[Dict[str, Any]]:
+def get_recent_headlines(days: int = 30) -> List[Dict[str, Any]]:
     """Retrieves recent stories from the database to assist string/semantic deduplication."""
     init_db()
     conn = get_db_connection()
     cursor = conn.cursor()
     
     cursor.execute("""
-    SELECT id, source_account, source_post_id, headline, summary, story_hash, similarity_group, created_at
+    SELECT id, source_account, source_post_id, caption, headline, summary, story_hash, similarity_group, created_at
     FROM news_items
-    ORDER BY id DESC LIMIT 100;
+    ORDER BY id DESC LIMIT 500;
     """)
     rows = cursor.fetchall()
     conn.close()
