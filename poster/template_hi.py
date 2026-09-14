@@ -112,7 +112,7 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
     # Load fonts
     font_header_eng = get_font("english_bold", 34)
     font_footer = get_font("english_bold", 30)
-    font_summary = get_font("regular", 28)
+    font_summary = get_font("bold", 30)
     
     # 1. Top Accent Stripe
     draw.rectangle([(0, 0), (width, 18)], fill=accent_color)
@@ -176,40 +176,57 @@ def create_hindi_card(headline, summary, image_path, bucket="StudentEducation", 
         draw.rounded_rectangle([(bx, by), (bx + badge_w + 30, by + 40)], radius=6, fill=accent_color)
         draw.text((bx + 15, by + 8), badge_text, fill="#FFFFFF", font=font_badge)
     
-    # 6. Left-Aligned Summary Section (with light tint background)
+    # 6. Summary Section (with white tint background & cyan outline)
     y_summary_start = y_image_start + image_h + 16
     summary_h = 230
     
     draw.rounded_rectangle(
         [(60, y_summary_start), (1020, y_summary_start + summary_h)],
         radius=8,
-        fill=theme["tint_bg"],
-        outline=theme["tint_border"],
+        fill="#FFFFFF",
+        outline=accent_color,
         width=2
     )
     # Vertical accent bar
     draw.rectangle([(60, y_summary_start + 2), (76, y_summary_start + summary_h - 2)], fill=accent_color)
     
-    # Draw summary lines using pixel-based wrapping
-    summary_lines = wrap_text_by_pixels(summary, font_summary, 880, draw)
-        
-    y_sum_text = y_summary_start + 24
-    box_center_x = (60 + 1020) // 2
-    for line in summary_lines[:5]:  # Max 5 lines
-        # Center-aligned summary text
-        text_w = draw.textlength(line, font=font_summary)
-        line_x = box_center_x - (text_w // 2)
-        if line_x < 96:
-            line_x = 96
-        draw.text((line_x, y_sum_text), line, fill="#2D3748", font=font_summary)
-        y_sum_text += 38
+    # Draw summary lines with rich formatting support (**bold highlighted**)
+    rich_words = parse_rich_words(summary)
+    max_w = 920
+    lines = []
+    cur_line = []
+    cur_w = 0
+    for w, is_high in rich_words:
+        w_len = draw.textlength(w, font=font_summary)
+        if cur_w + w_len <= max_w or not cur_line:
+            cur_line.append((w, is_high))
+            cur_w += w_len
+        else:
+            lines.append(cur_line)
+            if w.strip() == "":
+                cur_line = []
+                cur_w = 0
+            else:
+                cur_line = [(w, is_high)]
+                cur_w = w_len
+    if cur_line:
+        lines.append(cur_line)
+
+    y_sum_text = y_summary_start + 20
+    for line in lines[:5]:
+        x = 90
+        for w, is_high in line:
+            c = accent_color if is_high else "#1A1A1A"
+            draw.text((x, y_sum_text), w, fill=c, font=font_summary)
+            x += draw.textlength(w, font=font_summary)
+        y_sum_text += 40
         
     # 7. Footer Separator Line
     draw.line([(100, 1000), (980, 1000)], fill="#E2E8F0", width=1)
     
     # Footer Centering
-    draw_camera_logo(draw, 388, 1018, "#1A1A1A")
-    draw.text((436, 1016), "@news.nit_iit", fill="#1A1A1A", font=font_footer)
+    draw_camera_logo(draw, 388, 1018, accent_color)
+    draw.text((436, 1016), "@news.nit_iit", fill=accent_color, font=font_footer)
     
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     card.save(output_path)

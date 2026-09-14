@@ -106,6 +106,28 @@ def wrap_text_by_pixels(text, font, max_width, draw):
         lines.append(current_line)
     return lines
 
+def parse_rich_words(text):
+    tokens = []
+    pattern = re.compile(r'(\*\*.*?\*\*|\*.*?\*)')
+    last_idx = 0
+    for match in pattern.finditer(text):
+        if match.start() > last_idx:
+            normal = text[last_idx:match.start()]
+            for w in re.split(r'(\s+)', normal):
+                if w:
+                    tokens.append((w, False))
+        clean = match.group(0).strip('*')
+        for w in re.split(r'(\s+)', clean):
+            if w:
+                tokens.append((w, True))
+        last_idx = match.end()
+    if last_idx < len(text):
+        normal = text[last_idx:]
+        for w in re.split(r'(\s+)', normal):
+            if w:
+                tokens.append((w, False))
+    return tokens
+
 def create_card(headline, summary, image_path, bucket="StudentEducation", category="Student", output_path="output/card.png"):
     """Renders a 1080x1080 Square Poster with Category Badges and professional layouts."""
     theme = BUCKET_COLORS.get(bucket, DEFAULT_COLOR)
@@ -119,7 +141,7 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", catego
     # Load fonts
     font_header = get_font("bold", 34)
     font_footer = get_font("bold", 30)
-    font_summary = get_font("regular", 28)
+    font_summary = get_font("bold", 30)
     
     # 1. Top Accent Stripe
     draw.rectangle([(0, 0), (width, 18)], fill=accent_color)
@@ -180,43 +202,54 @@ def create_card(headline, summary, image_path, bucket="StudentEducation", catego
         draw.rounded_rectangle([(bx, by), (bx + badge_w + 30, by + 40)], radius=6, fill=accent_color)
         draw.text((bx + 15, by + 8), badge_text, fill="#FFFFFF", font=font_badge)
     
-    # 6. Summary Section (with light tint background)
+    # 6. Summary Section (with white tint background & cyan outline)
     y_summary_start = y_image_start + image_h + 16
     summary_h = 190
     
     draw.rounded_rectangle(
         [(40, y_summary_start), (1040, y_summary_start + summary_h)],
         radius=8,
-        fill=theme["tint_bg"],
-        outline=theme["tint_border"],
+        fill="#FFFFFF",
+        outline=accent_color,
         width=2
     )
     # Vertical accent bar
-    draw.rectangle([(40, y_summary_start + 2), (54, y_summary_start + summary_h - 2)], fill=accent_color)
+    draw.rectangle([(40, y_summary_start + 2), (56, y_summary_start + summary_h - 2)], fill=accent_color)
     
-    # Draw summary lines
-    words_sum = summary.split()
-    summary_lines = []
-    cur_line = ""
-    for w in words_sum:
-        if len(cur_line + " " + w) < 52:
-            cur_line += " " + w if cur_line else w
+    # Draw summary lines with rich formatting support (**bold highlighted**)
+    rich_words = parse_rich_words(summary)
+    max_w = 950
+    lines = []
+    cur_line = []
+    cur_w = 0
+    for w, is_high in rich_words:
+        w_len = draw.textlength(w, font=font_summary)
+        if cur_w + w_len <= max_w or not cur_line:
+            cur_line.append((w, is_high))
+            cur_w += w_len
         else:
-            summary_lines.append(cur_line)
-            cur_line = w
+            lines.append(cur_line)
+            if w.strip() == "":
+                cur_line = []
+                cur_w = 0
+            else:
+                cur_line = [(w, is_high)]
+                cur_w = w_len
     if cur_line:
-        summary_lines.append(cur_line)
-        
-    y_sum_text = y_summary_start + 24
-    for line in summary_lines[:4]:  # Max 4 lines
-        line_w = draw.textlength(line, font=font_summary)
-        line_x = max(68, int((width - line_w) // 2))
-        draw.text((line_x, y_sum_text), line, fill="#2D3748", font=font_summary)
-        y_sum_text += 38
+        lines.append(cur_line)
+
+    y_sum_text = y_summary_start + 20
+    for line in lines[:4]:
+        x = 70
+        for w, is_high in line:
+            c = accent_color if is_high else "#1A1A1A"
+            draw.text((x, y_sum_text), w, fill=c, font=font_summary)
+            x += draw.textlength(w, font=font_summary)
+        y_sum_text += 40
         
     # 7. Footer
-    draw_camera_logo(draw, 388, 1020, "#1A1A1A")
-    draw.text((436, 1018), "@news.nit_iit", fill="#1A1A1A", font=font_footer)
+    draw_camera_logo(draw, 388, 1020, accent_color)
+    draw.text((436, 1018), "@news.nit_iit", fill=accent_color, font=font_footer)
     
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     card.save(output_path)
