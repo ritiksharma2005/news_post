@@ -67,7 +67,7 @@ def create_digest_card(headline, summary, image_path=None, output_path="output/d
 
     font_brand = get_font("bold", 34)
     font_headline = get_font("bold", 42)
-    font_bullet = get_font("bold", 26)  # Larger, clear bold typography for summary
+    font_bullet = get_font("bold", 28)  # Large, prominent bold typography for summary
     font_footer = get_font("bold", 30)
 
     # 1. Top Stripe & Header
@@ -100,7 +100,7 @@ def create_digest_card(headline, summary, image_path=None, output_path="output/d
     # 3. Compact Summary Box Proportions (anchored at bottom)
     footer_y = 1022
     box_bottom = footer_y - 20
-    box_height = 185  # Optimized for 3-4 lines of larger 26px bold text
+    box_height = 195  # Accommodates 3-4 lines of 28px large bold text
     box_top = box_bottom - box_height
     box_left, box_right = 40, 1040
 
@@ -136,20 +136,30 @@ def create_digest_card(headline, summary, image_path=None, output_path="output/d
         draw.rectangle([(0, image_top), (1080, image_top + image_height)], fill="#CBD5E1")
         draw.text((460, image_top + (image_height // 2) - 15), "news.nit_iit", fill="#64748B", font=font_brand)
 
-    # 5. Draw Summary Box
-    draw.rounded_rectangle([(box_left, box_top), (box_right, box_bottom)], radius=12, fill="#E0F2FE", outline="#BAE6FD", width=2)
-    draw.rectangle([(box_left, box_top), (box_left + 14, box_bottom)], fill=accent_color)
+    # 5. Draw High-Contrast Summary Box (Pure White background + Sky Blue Accent)
+    draw.rounded_rectangle([(box_left, box_top), (box_right, box_bottom)], radius=12, fill="#FFFFFF", outline="#0284C7", width=3)
+    draw.rectangle([(box_left, box_top), (box_left + 16, box_bottom)], fill=accent_color)
 
-    # Draw Paragraph Summary inside box with pixel-based auto-wrap (Max 3 to 4 lines, 26px bold font)
-    sum_y = box_top + 18
-    max_text_width = box_right - box_left - 72 - 32  # margins: left=72, right=32
-    line_spacing = 36
+    # Draw Summary text word-by-word with high contrast & inline keyword highlighting
+    sum_y = box_top + 16
+    max_text_width = box_right - box_left - 76 - 28
+    line_spacing = 38
     
     summary_text = strip_emojis(summary)
     wrapped = wrap_text_by_pixels(summary_text, font_bullet, max_text_width, draw)
-    # Limit to maximum 4 lines
+    
+    # Key terms to highlight in vibrant Sky Blue accent
+    highlight_keywords = {"iit", "nit", "iiit", "2026", "september", "october", "november", "december", "january", "february", "march", "april", "may", "june", "july", "august", "lakhs", "lakh", "crore", "crores", "hackathon", "internship", "placements", "placement", "admissions", "admission"}
+
     for line in wrapped[:4]:
-        draw.text((72, sum_y), line, fill="#0369A1", font=font_bullet)
+        words = line.split()
+        cur_x = 76
+        for word in words:
+            clean_w = word.lower().strip(".,!?:;\"'()[]")
+            is_highlight = clean_w in highlight_keywords or any(char.isdigit() for char in clean_w)
+            color = "#0284C7" if is_highlight else "#0F172A"
+            draw.text((cur_x, sum_y), word, fill=color, font=font_bullet)
+            cur_x += int(draw.textlength(word + " ", font=font_bullet))
         sum_y += line_spacing
 
     # 6. Footer Watermark (📸 @news.nit_iit)
