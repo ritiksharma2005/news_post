@@ -1,11 +1,12 @@
 name: 🔥 Run Trending News Project
 
 on:
-  schedule:
-    # 8:00 AM IST (02:30 AM UTC) — Morning Run
-    - cron: "30 2 * * *"
-    # 8:00 PM IST (02:30 PM UTC / 14:30 UTC) — Evening Run
-    - cron: "30 14 * * *"
+  # Schedule disabled as requested
+  # schedule:
+  #   # 8:00 AM IST (02:30 AM UTC) — Morning Run
+  #   - cron: "30 2 * * *"
+  #   # 8:00 PM IST (02:30 PM UTC / 14:30 UTC) — Evening Run
+  #   - cron: "30 14 * * *"
   workflow_dispatch: {}
 
 jobs:
