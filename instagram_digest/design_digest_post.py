@@ -67,7 +67,7 @@ def create_digest_card(headline, summary, image_path=None, output_path="output/d
 
     font_brand = get_font("bold", 34)
     font_headline = get_font("bold", 42)
-    font_bullet = get_font("regular", 22)  # Highly readable size for text
+    font_bullet = get_font("bold", 26)  # Larger, clear bold typography for summary
     font_footer = get_font("bold", 30)
 
     # 1. Top Stripe & Header
@@ -100,7 +100,7 @@ def create_digest_card(headline, summary, image_path=None, output_path="output/d
     # 3. Compact Summary Box Proportions (anchored at bottom)
     footer_y = 1022
     box_bottom = footer_y - 20
-    box_height = 195  # Reduced to accommodate 3-line headline
+    box_height = 185  # Optimized for 3-4 lines of larger 26px bold text
     box_top = box_bottom - box_height
     box_left, box_right = 40, 1040
 
@@ -140,15 +140,15 @@ def create_digest_card(headline, summary, image_path=None, output_path="output/d
     draw.rounded_rectangle([(box_left, box_top), (box_right, box_bottom)], radius=12, fill="#E0F2FE", outline="#BAE6FD", width=2)
     draw.rectangle([(box_left, box_top), (box_left + 14, box_bottom)], fill=accent_color)
 
-    # Draw Paragraph Summary inside box with pixel-based auto-wrap
+    # Draw Paragraph Summary inside box with pixel-based auto-wrap (Max 3 to 4 lines, 26px bold font)
     sum_y = box_top + 18
     max_text_width = box_right - box_left - 72 - 32  # margins: left=72, right=32
-    line_spacing = 28
+    line_spacing = 36
     
     summary_text = strip_emojis(summary)
     wrapped = wrap_text_by_pixels(summary_text, font_bullet, max_text_width, draw)
-    # Fit up to 5 lines inside the box (reduced by 1 line)
-    for line in wrapped[:5]:
+    # Limit to maximum 4 lines
+    for line in wrapped[:4]:
         draw.text((72, sum_y), line, fill="#0369A1", font=font_bullet)
         sum_y += line_spacing
 
