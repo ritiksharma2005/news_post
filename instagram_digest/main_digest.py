@@ -92,11 +92,14 @@ def run_digest_pipeline(dry_run=False):
             output_path=card_path
         )
 
+        from trending_news.hashtag_generator import generate_news_hashtags
+        digest_hashtags = generate_news_hashtags(item.get('headline', ''), item.get('summary', ''))
+
         caption_text = (
             f"{item.get('headline')}\n\n"
             f"{item.get('summary')}\n\n"
             f"📲 Join our Instagram Community (Link in Bio): https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/\n\n"
-            f"#IIT #NIT #CampusNews #Engineering #Placements #news_nit_iit"
+            f"{digest_hashtags}"
         )
 
         story_obj = {

@@ -5,6 +5,7 @@ Instagram Caption & Hashtag Formatter
 
 from typing import Dict, Any, List
 from .config import BRAND_HANDLE
+from .hashtag_generator import generate_news_hashtags
 
 
 def format_instagram_caption(editorial: Dict[str, Any], lead: Dict[str, Any]) -> str:
@@ -35,13 +36,8 @@ def format_instagram_caption(editorial: Dict[str, Any], lead: Dict[str, Any]) ->
     if source_account:
         attribution = f"\n\n(Source Lead: @{source_account})"
         
-    # 5. Hashtags
-    default_tags = ["#IndiaNews", "#StudentUpdates", "#UPSC", "#Education", "#Engineering", "#GenZNews", "#news_nit_iit"]
-    category_tag = f"#{category.replace(' ', '')}" if category else ""
-    if category_tag and category_tag not in default_tags:
-        default_tags.insert(0, category_tag)
-        
-    hashtags_str = " ".join(default_tags[:8])
+    # 5. Mandatory + College-Specific + Topic Hashtags
+    hashtags_str = generate_news_hashtags(headline, summary, category)
     
     caption_full = (
         f"{opening}\n"
