@@ -95,10 +95,17 @@ def run_digest_pipeline(dry_run=False):
         from trending_news.hashtag_generator import generate_news_hashtags
         digest_hashtags = generate_news_hashtags(item.get('headline', ''), item.get('summary', ''))
 
+        headline_text = item.get('headline', '').strip()
+        summary_text = item.get('summary', '').strip()
+
         caption_text = (
-            f"{item.get('headline')}\n\n"
-            f"{item.get('summary')}\n\n"
-            f"📲 Join our Instagram Community (Link in Bio): https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/\n\n"
+            f"🔥 {headline_text}\n\n"
+            f"🎓 Campus Update:\n"
+            f"{summary_text}\n\n"
+            f"💬 What is your opinion on this update? Let us know in the comments below! 👇\n\n"
+            f"📌 Tag an IIT / NIT friend to keep them updated!\n\n"
+            f"📲 Join our Instagram Broadcast Channel (Link in Bio): https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/\n\n"
+            f"📲 Follow @news.nit_iit for daily verified IIT/NIT & engineering news.\n\n"
             f"{digest_hashtags}"
         )
 
