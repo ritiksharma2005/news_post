@@ -26,13 +26,19 @@ def clean_env(name):
     return val
 
 
+def clean_bot_token(name):
+    token = clean_env(name)
+    if token.lower().startswith("bot") and ":" in token:
+        token = token[3:].strip()
+    return token
+
 # ---- API Keys (loaded from .env / GitHub Secrets) ----
 GNEWS_API_KEY = clean_env("GNEWS_API_KEY")
 GUARDIAN_API_KEY = clean_env("GUARDIAN_API_KEY")
 NEWSDATA_API_KEY = clean_env("NEWSDATA_API_KEY")
-GEMINI_API_KEY = clean_env("GEMINI_API_KEY")
-GROQ_API_KEY = clean_env("GROQ_API_KEY")
-TELEGRAM_BOT_TOKEN = clean_env("TELEGRAM_BOT_TOKEN")
+GEMINI_API_KEY = clean_env("GEMINI_API_KEY") or clean_env("TRENDING_GEMINI_API_KEY")
+GROQ_API_KEY = clean_env("GROQ_API_KEY") or clean_env("TRENDING_GROQ_API_KEY")
+TELEGRAM_BOT_TOKEN = clean_bot_token("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = clean_env("TELEGRAM_CHAT_ID")
 INSTAGRAM_ACCESS_TOKEN = clean_env("INSTAGRAM_ACCESS_TOKEN")
 INSTAGRAM_USER_ID = clean_env("INSTAGRAM_USER_ID")

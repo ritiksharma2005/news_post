@@ -45,7 +45,12 @@ TWITTER_SOURCES = [
     "TimesOfIndia"
 ]
 
+# Add root to sys.path for config import
+import sys
+sys.path.append(str(BASE_DIR))
+from config import clean_env, clean_bot_token
+
 # API Credentials & Keys
-GEMINI_API_KEY = os.getenv("TRENDING_GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY", "")
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
+GEMINI_API_KEY = clean_env("GEMINI_API_KEY") or clean_env("TRENDING_GEMINI_API_KEY")
+TELEGRAM_BOT_TOKEN = clean_bot_token("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = clean_env("TELEGRAM_CHAT_ID")
