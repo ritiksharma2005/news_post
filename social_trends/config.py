@@ -27,16 +27,22 @@ STORIES_PER_RUN = 4
 # Target Indian Subreddits covering overall trends (politics, protests, students, entertainment, sports, crime, state news)
 SUBREDDITS = [
     "india",
+    "IndiaSpeaks",
     "IndianNews",
     "IndianModerate",
     "UPSC",
+    "JEENEETards",
+    "CUETards",
     "studentsphile",
     "bollywood",
     "Cricket",
-    "bihar"
+    "bihar",
+    "Delhi",
+    "mumbai",
+    "legaladviceindia"
 ]
 
-# Twitter / Social Handles or Google News India RSS Fallbacks
+# Twitter / Social Handles
 TWITTER_SOURCES = [
     "ANI",
     "NDTV",
@@ -45,10 +51,26 @@ TWITTER_SOURCES = [
     "TimesOfIndia"
 ]
 
-# Add root to sys.path for config import
+# Google Trends & Google News India RSS Endpoints
+GOOGLE_TRENDS_INDIA_RSS = "https://trends.google.com/trends/trendingsearches/daily/rss?geo=IN"
+GOOGLE_NEWS_INDIA_RSS = "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en"
+GOOGLE_NEWS_INDIA_TOPICS = [
+    ("India National", "https://news.google.com/rss/topics/CAAqIQgKIhtDQkFTRHdvSkwyMHZNR1pzTjNld0VnSmVNU2dBUAE?hl=en-IN&gl=IN&ceid=IN:en"),
+    ("India Business", "https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx6TVdZU0VnSmVNU2dBUAE?hl=en-IN&gl=IN&ceid=IN:en"),
+    ("India Sports", "https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFp1ZEdvU0VnSmVNU2dBUAE?hl=en-IN&gl=IN&ceid=IN:en"),
+]
+
+# Import root config.py safely without module shadowing
 import sys
-sys.path.append(str(BASE_DIR))
-from config import clean_env, clean_bot_token
+import importlib.util
+
+root_config_path = BASE_DIR / "config.py"
+spec = importlib.util.spec_from_file_location("root_config", root_config_path)
+root_config = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(root_config)
+
+clean_env = root_config.clean_env
+clean_bot_token = root_config.clean_bot_token
 
 # API Credentials & Keys
 GEMINI_API_KEY = clean_env("GEMINI_API_KEY") or clean_env("TRENDING_GEMINI_API_KEY")

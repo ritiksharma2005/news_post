@@ -15,7 +15,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from social_trends.config import STORIES_PER_RUN, OUTPUT_DIR
 from social_trends.fetcher import fetch_all_social_trends
-from social_trends.analyzer import analyze_and_format_trend
+from social_trends.analyzer import analyze_and_format_trend, is_india_relevant
 from social_trends.telegram_notifier import broadcast_trend_to_telegram
 from social_trends.database import init_db, insert_social_trend, is_post_processed
 
@@ -35,32 +35,52 @@ def run_social_trends_pipeline(run_type: str = "morning", dry_run: bool = False)
         print("  [Notice] No new candidate trends collected for this run window.")
         return
         
-    print(f"\n📊 Filtered {len(raw_candidates)} candidate items. Selecting top {STORIES_PER_RUN} stories...")
+    print(f"\n📊 Filtered {len(raw_candidates)} candidate items. Selecting top {STORIES_PER_RUN} India-relevant stories...")
     
-    # 2. Select top STORIES_PER_RUN (4 stories) unique stories
+    # 2. Select top STORIES_PER_RUN (4 stories) with guaranteed Reddit & Social diversity
     selected_stories = []
     seen_titles = set()
     
-    for c in raw_candidates:
+    # Separate candidates into Reddit vs Non-Reddit (Google Trends / Social)
+    reddit_candidates = [c for c in raw_candidates if c.get("platform", "").startswith("Reddit")]
+    
+    # Pick top 2 Reddit posts first to ensure Reddit community voices are represented
+    for c in reddit_candidates:
         post_id = c.get("post_id")
         title = c.get("title", "")
-        
         if is_post_processed(post_id, title):
             continue
-            
-        # Check snippet duplication in current batch
         snippet = title[:40].lower()
         if snippet in seen_titles:
             continue
-            
+        if not is_india_relevant(c):
+            print(f"  [Relevance Filter] Skipping non-India Reddit trend: '{title[:60]}...'")
+            continue
         seen_titles.add(snippet)
         selected_stories.append(c)
-        
+        if len(selected_stories) >= 2:
+            break
+            
+    # Fill remaining slots from top remaining candidates (Google Trends, Social, or additional Reddit)
+    remaining_candidates = [c for c in raw_candidates if c.get("post_id") not in {s["post_id"] for s in selected_stories}]
+    for c in remaining_candidates:
+        post_id = c.get("post_id")
+        title = c.get("title", "")
+        if is_post_processed(post_id, title):
+            continue
+        snippet = title[:40].lower()
+        if snippet in seen_titles:
+            continue
+        if not is_india_relevant(c):
+            print(f"  [Relevance Filter] Skipping non-India trend: '{title[:60]}...'")
+            continue
+        seen_titles.add(snippet)
+        selected_stories.append(c)
         if len(selected_stories) >= STORIES_PER_RUN:
             break
             
     if not selected_stories:
-        print("  [Notice] All fetched candidate posts have already been processed.")
+        print("  [Notice] All fetched candidate posts have already been processed or filtered out as non-India news.")
         return
         
     print(f"\n🏆 [Selected {len(selected_stories)} Top Social Stories for Broadcast]:")
