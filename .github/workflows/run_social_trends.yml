@@ -1,0 +1,52 @@
+name: 🚀 Run India Social Trends Fetcher (Reddit + Twitter -> Telegram)
+
+on:
+  schedule:
+    # 8:30 AM IST (03:00 AM UTC) — Morning Run
+    - cron: "0 3 * * *"
+    # 8:30 PM IST (03:00 PM UTC / 15:00 UTC) — Evening Run
+    - cron: "0 15 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  run-social-trends:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies & Playwright
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+
+      - name: Run Social Trends Pipeline
+        env:
+          TRENDING_GEMINI_API_KEY: ${{ secrets.TRENDING_GEMINI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ "$(date -u +%H)" -eq "03" ]; then
+            python -m social_trends.orchestrator --type=morning
+          else
+            python -m social_trends.orchestrator --type=evening
+          fi
+
+      - name: Commit and Push Database & Outputs
+        if: always()
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull origin main --rebase || true
+          git add -f data/social_trends.db || true
+          git commit -m "Update Social Trends database history [skip ci]" || true
+          git push origin main || true
