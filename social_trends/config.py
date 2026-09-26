@@ -24,22 +24,22 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 # Output count per run (3 to 4 stories)
 STORIES_PER_RUN = 4
 
-# Target Indian Subreddits covering overall trends (politics, protests, students, entertainment, sports, crime, state news)
+# Target Indian Subreddits covering Student, Campus, Exams & Career/Placement Affairs
 SUBREDDITS = [
-    "india",
-    "IndiaSpeaks",
-    "IndianNews",
-    "IndianModerate",
-    "UPSC",
     "JEENEETards",
     "CUETards",
+    "btechtards",
+    "developersIndia",
+    "Indian_Academia",
+    "IndianEngineers",
+    "UPSC",
     "studentsphile",
-    "bollywood",
-    "Cricket",
+    "legaladviceindia",
+    "india",
+    "IndiaSpeaks",
     "bihar",
     "Delhi",
-    "mumbai",
-    "legaladviceindia"
+    "mumbai"
 ]
 
 # Twitter / Social Handles
@@ -55,9 +55,9 @@ TWITTER_SOURCES = [
 GOOGLE_TRENDS_INDIA_RSS = "https://trends.google.com/trends/trendingsearches/daily/rss?geo=IN"
 GOOGLE_NEWS_INDIA_RSS = "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en"
 GOOGLE_NEWS_INDIA_TOPICS = [
-    ("India National", "https://news.google.com/rss/topics/CAAqIQgKIhtDQkFTRHdvSkwyMHZNR1pzTjNld0VnSmVNU2dBUAE?hl=en-IN&gl=IN&ceid=IN:en"),
-    ("India Business", "https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx6TVdZU0VnSmVNU2dBUAE?hl=en-IN&gl=IN&ceid=IN:en"),
-    ("India Sports", "https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFp1ZEdvU0VnSmVNU2dBUAE?hl=en-IN&gl=IN&ceid=IN:en"),
+    ("India Education & Exams", "https://news.google.com/rss/search?q=student+exam+JEE+NEET+placement+IIT+India&hl=en-IN&gl=IN&ceid=IN:en"),
+    ("India Tech & Hiring", "https://news.google.com/rss/search?q=hiring+layoffs+placements+company+career+India&hl=en-IN&gl=IN&ceid=IN:en"),
+    ("India Campus & Youth", "https://news.google.com/rss/search?q=college+campus+protest+university+ragging+safety+India&hl=en-IN&gl=IN&ceid=IN:en"),
 ]
 
 # Import root config.py safely without module shadowing
