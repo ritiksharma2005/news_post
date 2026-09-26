@@ -262,13 +262,28 @@ def fetch_all_social_trends() -> List[Dict[str, Any]]:
     # Sort candidates by upvote/importance score
     candidates.sort(key=lambda x: x.get("score", 0), reverse=True)
     
-    # Download attached source photos for candidates
-    print(f"\n📥 [Fetcher] Downloading attached source photos for {len(candidates)} candidates...")
+    # Download attached source photos or fetch/generate fallback relevant image for candidates
+    print(f"\n📥 [Fetcher] Downloading/Ensuring attached source photos for {len(candidates)} candidates...")
     for c in candidates:
         if c.get("image_url"):
             local_img = download_source_image(c["image_url"], c["post_id"])
             c["image_path"] = local_img
         else:
             c["image_path"] = None
+            
+        # Fallback real image web search or AI generation if no direct image attached
+        if not c.get("image_path"):
+            query_text = c.get("title", "")
+            temp_out = OUTPUT_DIR / "temp" / f"social_{c.get('post_id')}.jpg"
+            try:
+                from generate_image import fetch_search_image, generate_image
+                search_q = f"{query_text[:50]} student India news photo"
+                img_path = fetch_search_image(search_q, str(temp_out))
+                if not img_path:
+                    img_path = generate_image(query_text[:80], headline=query_text[:80], output_path=str(temp_out))
+                if img_path and os.path.exists(img_path):
+                    c["image_path"] = str(img_path)
+            except Exception as ie:
+                print(f"  [Image Engine Notice] Fallback image search/gen notice for '{c.get('post_id')}': {ie}")
             
     return candidates
