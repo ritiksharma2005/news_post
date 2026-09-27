@@ -40,23 +40,41 @@ def init_db():
     conn.close()
 
 
-def is_post_processed(post_id: str, title: str = "") -> bool:
-    """Checks if a post ID or matching title snippet has already been processed."""
-    if not post_id:
+import sys
+import os
+
+# Import history_manager for unified cross-run uniqueness across local JSON, SQLite & Supabase
+try:
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+    from workflow.history_manager import is_duplicate_news, add_published_news
+    HISTORY_MANAGER_AVAILABLE = True
+except Exception:
+    HISTORY_MANAGER_AVAILABLE = False
+
+
+def is_post_processed(post_id: str, title: str = "", source_url: str = "") -> bool:
+    """Checks if a post ID, title similarity, or source URL has already been processed across runs."""
+    if not post_id and not title:
         return False
+        
+    # 1. Check unified history_manager (fuzzy title similarity > 0.6, URL match, published_history.json & Supabase)
+    if HISTORY_MANAGER_AVAILABLE and title and len(title.strip()) > 10:
+        if is_duplicate_news(title, source_url):
+            return True
+
+    # 2. Check local SQLite DB
     init_db()
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    # 1. Exact match on post_id
-    cursor.execute("SELECT 1 FROM social_trends WHERE post_id = ?", (str(post_id),))
-    if cursor.fetchone() is not None:
-        conn.close()
-        return True
-        
-    # 2. Check title similarity snippet
+    if post_id:
+        cursor.execute("SELECT 1 FROM social_trends WHERE post_id = ?", (str(post_id),))
+        if cursor.fetchone() is not None:
+            conn.close()
+            return True
+            
     if title and len(title.strip()) > 15:
-        snippet = title.strip()[:50]
+        snippet = title.strip()[:40]
         cursor.execute("SELECT 1 FROM social_trends WHERE title LIKE ?", (f"%{snippet}%",))
         if cursor.fetchone() is not None:
             conn.close()
@@ -67,11 +85,21 @@ def is_post_processed(post_id: str, title: str = "") -> bool:
 
 
 def insert_social_trend(item: Dict[str, Any]) -> Optional[int]:
-    """Inserts a new social trend item into SQLite DB."""
+    """Inserts a new social trend item into SQLite DB and syncs with unified history_manager."""
     init_db()
     conn = get_db_connection()
     cursor = conn.cursor()
     now_iso = datetime.now(timezone.utc).isoformat()
+    
+    title = item.get("title", "")
+    source_url = item.get("source_url", "")
+    
+    # Sync with history_manager to record in published_history.json & Supabase
+    if HISTORY_MANAGER_AVAILABLE and title:
+        try:
+            add_published_news(title, source_url)
+        except Exception as he:
+            print(f"  [History Manager Sync Notice] {he}")
     
     try:
         cursor.execute("""
@@ -81,9 +109,9 @@ def insert_social_trend(item: Dict[str, Any]) -> Optional[int]:
         """, (
             item.get("platform", "Reddit"),
             str(item.get("post_id", "")),
-            item.get("title", ""),
+            title,
             item.get("summary", ""),
-            item.get("source_url", ""),
+            source_url,
             item.get("image_url", ""),
             int(item.get("score", 0)),
             1 if item.get("published_to_telegram") else 0,

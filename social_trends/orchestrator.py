@@ -48,7 +48,8 @@ def run_social_trends_pipeline(run_type: str = "morning", dry_run: bool = False)
     for c in reddit_candidates:
         post_id = c.get("post_id")
         title = c.get("title", "")
-        if is_post_processed(post_id, title):
+        source_url = c.get("source_url", "")
+        if is_post_processed(post_id, title, source_url):
             continue
         snippet = title[:40].lower()
         if snippet in seen_titles:
@@ -66,7 +67,8 @@ def run_social_trends_pipeline(run_type: str = "morning", dry_run: bool = False)
     for c in remaining_candidates:
         post_id = c.get("post_id")
         title = c.get("title", "")
-        if is_post_processed(post_id, title):
+        source_url = c.get("source_url", "")
+        if is_post_processed(post_id, title, source_url):
             continue
         snippet = title[:40].lower()
         if snippet in seen_titles:
