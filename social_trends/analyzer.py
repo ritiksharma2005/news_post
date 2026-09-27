@@ -62,6 +62,50 @@ def is_student_career_relevant(story: Dict[str, Any]) -> bool:
     return True
 
 
+def is_sports_relevant(story: Dict[str, Any]) -> bool:
+    """
+    Evaluates whether a candidate story is directly relevant to Sports
+    (Cricket, BCCI, IPL, Asian Games, Olympics, Football, Badminton, Tennis, Chess, Athletics).
+    """
+    title = story.get("title", "")
+    selftext = story.get("selftext", "")
+    platform = story.get("platform", "")
+    
+    sports_subreddits = ["cricket", "indiansports"]
+    if any(f"r/{sub}" in platform.lower() for sub in sports_subreddits):
+        return True
+        
+    sports_keywords = [
+        "cricket", "bcci", "ipl", "t20", "test match", "odi", "asian games", "olympics",
+        "badminton", "football", "sports", "athletics", "chess", "tennis", "hockey",
+        "kabaddi", "wrestler", "wrestling", "boxing", "archer", "archery", "neeraj chopra",
+        "rohit sharma", "virat kohli", "jasprit bumrah", "sachin", "dhoni", "praggnanandhaa"
+    ]
+    combined_lower = f"{title} {selftext} {platform}".lower()
+    if any(kw in combined_lower for kw in sports_keywords):
+        return True
+        
+    prompt = (
+        "You are an AI editor filtering news for a Sports section on Telegram.\n"
+        f"Platform: {platform}\n"
+        f"Title: {title}\n"
+        f"Context: {selftext[:300]}\n\n"
+        "QUESTION: Is this story directly related to Sports (Cricket, Football, Asian Games, Badminton, Chess, Athletics, Indian or Global Sports)?\n"
+        "Respond ONLY with 'YES' or 'NO'."
+    )
+    
+    try:
+        ans = ai_client.ask_ai(prompt).strip().upper()
+        if "YES" in ans:
+            return True
+        elif "NO" in ans:
+            return False
+    except Exception as e:
+        print(f"  [Sports Relevance Filter Notice] AI check fallback: {e}")
+        
+    return False
+
+
 def is_india_relevant(story: Dict[str, Any]) -> bool:
     """Backward compatibility alias calling is_student_career_relevant."""
     return is_student_career_relevant(story)

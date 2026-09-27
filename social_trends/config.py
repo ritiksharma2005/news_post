@@ -24,7 +24,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 # Output count per run (3 to 4 stories)
 STORIES_PER_RUN = 4
 
-# Target Indian Subreddits covering Student, Campus, Exams & Career/Placement Affairs
+# Target Indian Subreddits covering Student, Campus, Exams, Career/Placements & Sports
 SUBREDDITS = [
     "JEENEETards",
     "CUETards",
@@ -39,7 +39,9 @@ SUBREDDITS = [
     "IndiaSpeaks",
     "bihar",
     "Delhi",
-    "mumbai"
+    "mumbai",
+    "Cricket",
+    "IndianSports"
 ]
 
 # Twitter / Social Handles
@@ -58,6 +60,7 @@ GOOGLE_NEWS_INDIA_TOPICS = [
     ("India Education & Exams", "https://news.google.com/rss/search?q=student+exam+JEE+NEET+placement+IIT+India&hl=en-IN&gl=IN&ceid=IN:en"),
     ("India Tech & Hiring", "https://news.google.com/rss/search?q=hiring+layoffs+placements+company+career+India&hl=en-IN&gl=IN&ceid=IN:en"),
     ("India Campus & Youth", "https://news.google.com/rss/search?q=college+campus+protest+university+ragging+safety+India&hl=en-IN&gl=IN&ceid=IN:en"),
+    ("India Sports", "https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFp1ZEdvU0VnSmVNU2dBUAE?hl=en-IN&gl=IN&ceid=IN:en"),
 ]
 
 # Import root config.py safely without module shadowing
