@@ -37,17 +37,12 @@ def run_social_trends_pipeline(run_type: str = "morning", dry_run: bool = False)
         
     print(f"\n📊 Filtered {len(raw_candidates)} candidate items. Selecting top {STORIES_PER_RUN} Student & Career stories...")
     
-    # 2. Select top STORIES_PER_RUN (4 stories) with student/career relevance and image priority
+    # 2. Select top STORIES_PER_RUN (4 stories) with student/career relevance
     selected_stories = []
     seen_titles = set()
     
-    # Prioritize candidates with attached source images
-    image_candidates = [c for c in raw_candidates if c.get("image_path") or c.get("image_url")]
-    no_image_candidates = [c for c in raw_candidates if not (c.get("image_path") or c.get("image_url"))]
-    ordered_candidates = image_candidates + no_image_candidates
-    
-    # Separate ordered candidates into Reddit vs Social
-    reddit_candidates = [c for c in ordered_candidates if c.get("platform", "").startswith("Reddit")]
+    # Separate candidates into Reddit vs Social
+    reddit_candidates = [c for c in raw_candidates if c.get("platform", "").startswith("Reddit")]
     
     # Pick top 2 Reddit student/campus stories first
     for c in reddit_candidates:
@@ -67,7 +62,7 @@ def run_social_trends_pipeline(run_type: str = "morning", dry_run: bool = False)
             break
             
     # Fill remaining slots from top remaining candidates (Google Trends, Social, or additional Reddit)
-    remaining_candidates = [c for c in ordered_candidates if c.get("post_id") not in {s["post_id"] for s in selected_stories}]
+    remaining_candidates = [c for c in raw_candidates if c.get("post_id") not in {s["post_id"] for s in selected_stories}]
     for c in remaining_candidates:
         post_id = c.get("post_id")
         title = c.get("title", "")

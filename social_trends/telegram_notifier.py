@@ -31,7 +31,7 @@ def get_clean_chat_id() -> str:
 
 
 def send_telegram_message(text: str) -> bool:
-    """Sends a plain text message to Telegram channel/chat."""
+    """Sends a single detailed text message to Telegram channel/chat."""
     token = get_clean_bot_token()
     chat_id = get_clean_chat_id()
     
@@ -45,7 +45,7 @@ def send_telegram_message(text: str) -> bool:
         resp = requests.post(url, data=payload, timeout=20)
         res = resp.json()
         if res.get("ok"):
-            print("  ✅ Telegram text message sent successfully.")
+            print("  ✅ Telegram text news message sent successfully (1 single message).")
             return True
         else:
             print(f"  [Telegram Error] sendMessage failed: {res} (Token length: {len(token)}, Chat ID: {chat_id})")
@@ -54,54 +54,14 @@ def send_telegram_message(text: str) -> bool:
     return False
 
 
-def send_telegram_photo(image_path: str, caption: str = "") -> bool:
-    """Sends a photo with caption to Telegram channel/chat."""
-    token = get_clean_bot_token()
-    chat_id = get_clean_chat_id()
-    
-    if not token or not chat_id:
-        print("  [Telegram Notifier] Error: TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is missing or empty in secrets.")
-        return False
-        
-    if not image_path or not os.path.exists(image_path):
-        return send_telegram_message(caption)
-        
-    url = f"https://api.telegram.org/bot{token}/sendPhoto"
-    short_enough = len(caption) <= TELEGRAM_CAPTION_LIMIT
-    photo_caption = caption if short_enough else caption[:980] + "\n\n...(full details below)"
-    
-    try:
-        with open(image_path, "rb") as photo_file:
-            files = {"photo": photo_file}
-            data = {"chat_id": chat_id, "caption": photo_caption}
-            resp = requests.post(url, data=data, files=files, timeout=35)
-            res = resp.json()
-            if res.get("ok"):
-                print("  ✅ Telegram photo & caption sent successfully.")
-                if not short_enough:
-                    send_telegram_message(caption)
-                return True
-            else:
-                print(f"  [Telegram Notice] sendPhoto failed: {res}. Falling back to text message...")
-                return send_telegram_message(caption)
-    except Exception as e:
-        print(f"  [Telegram Notice] sendPhoto exception: {e}. Falling back to text message...")
-        return send_telegram_message(caption)
-
-
 def broadcast_trend_to_telegram(story: Dict[str, Any], caption_text: str, dry_run: bool = False) -> bool:
-    """Master broadcast wrapper sending trend photo/text to Telegram."""
-    image_path = story.get("image_path")
+    """Master broadcast wrapper sending a single text-only news story with full details to Telegram."""
     headline = story.get("headline", story.get("title", ""))
     
-    print(f"\n📤 Sending trend to Telegram: '{headline[:60]}...'")
+    print(f"\n📤 Sending detailed news update to Telegram: '{headline[:60]}...'")
     if dry_run:
         print("  🔒 [DRY RUN ACTIVE] Telegram broadcast skipped for preview.")
-        print(f"  Image Path: {image_path}")
-        print(f"  Caption Draft:\n{caption_text}")
+        print(f"  News Message Draft:\n{caption_text}")
         return True
         
-    if image_path and os.path.exists(image_path):
-        return send_telegram_photo(image_path, caption_text)
-    else:
-        return send_telegram_message(caption_text)
+    return send_telegram_message(caption_text)
