@@ -15,14 +15,14 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from social_trends.config import STORIES_PER_RUN, OUTPUT_DIR
 from social_trends.fetcher import fetch_all_social_trends
-from social_trends.analyzer import analyze_and_format_trend, is_student_career_relevant, is_sports_relevant
+from social_trends.analyzer import analyze_and_format_trend, is_student_career_relevant, is_viral_trending_relevant
 from social_trends.telegram_notifier import broadcast_trend_to_telegram
 from social_trends.database import init_db, insert_social_trend, is_post_processed
 
 
 def run_social_trends_pipeline(run_type: str = "morning", dry_run: bool = False):
     print("=" * 60)
-    print(f"🚀 INDIAN STUDENT, CAREER & SPORTS TRENDS PIPELINE — {run_type.upper()} RUN")
+    print(f"🚀 INDIAN STUDENT & VIRAL SOCIAL TRENDS PIPELINE — {run_type.upper()} RUN")
     print(f"📅 Timestamp (UTC): {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"🔒 Mode: {'DRY RUN (Preview Only)' if dry_run else 'PRODUCTION'}")
     print("=" * 60)
@@ -35,30 +35,13 @@ def run_social_trends_pipeline(run_type: str = "morning", dry_run: bool = False)
         print("  [Notice] No new candidate trends collected for this run window.")
         return
         
-    print(f"\n📊 Filtered {len(raw_candidates)} candidate items. Selecting 3 Student/Career + 1 Sports story...")
+    print(f"\n📊 Filtered {len(raw_candidates)} candidate items. Selecting 3 Student News + 1 Viral Social Media Trend...")
     
-    # 2. Select 3 Student/Campus/Career stories + 1 Sports story
+    # 2. Select 3 Student News stories + 1 Viral Social Media Trend story
     selected_stories = []
     seen_titles = set()
     
-    # A. Select 1 Sports Story
-    sports_story = None
-    for c in raw_candidates:
-        post_id = c.get("post_id")
-        title = c.get("title", "")
-        source_url = c.get("source_url", "")
-        if is_post_processed(post_id, title, source_url):
-            continue
-        snippet = title[:40].lower()
-        if snippet in seen_titles:
-            continue
-        if is_sports_relevant(c):
-            seen_titles.add(snippet)
-            sports_story = c
-            print(f"  🏆 [Sports Selection] Selected Sports Story: '({c.get('platform')}) {title[:60]}...'")
-            break
-            
-    # B. Select 3 Student & Career Stories
+    # A. Select 3 Student News Stories (achievements, protests, campus issues, exams, placements, scholarships)
     student_stories = []
     for c in raw_candidates:
         post_id = c.get("post_id")
@@ -76,12 +59,30 @@ def run_social_trends_pipeline(run_type: str = "morning", dry_run: bool = False)
         if len(student_stories) >= 3:
             break
             
-    # Combine (3 Student/Career + 1 Sports)
+    # B. Select 1 Viral Social Media / Google Trends Story
+    trending_story = None
+    for c in raw_candidates:
+        post_id = c.get("post_id")
+        title = c.get("title", "")
+        source_url = c.get("source_url", "")
+        if is_post_processed(post_id, title, source_url):
+            continue
+        snippet = title[:40].lower()
+        if snippet in seen_titles:
+            continue
+        # Check for viral social media / Google Trends items
+        if is_viral_trending_relevant(c):
+            seen_titles.add(snippet)
+            trending_story = c
+            print(f"  🔥 [Viral Trend Selection] Selected Social Media Trend: '({c.get('platform')}) {title[:60]}...'")
+            break
+            
+    # Combine (3 Student Stories + 1 Viral Social Media Trend)
     selected_stories.extend(student_stories)
-    if sports_story:
-        selected_stories.append(sports_story)
+    if trending_story:
+        selected_stories.append(trending_story)
         
-    # Fallback if sports story wasn't found or student stories were under 3
+    # Fallback if trending story wasn't found or student stories were under 3
     if len(selected_stories) < STORIES_PER_RUN:
         remaining = [c for c in raw_candidates if c.get("post_id") not in {s["post_id"] for s in selected_stories}]
         for c in remaining:

@@ -106,6 +106,27 @@ def is_sports_relevant(story: Dict[str, Any]) -> bool:
     return False
 
 
+def is_viral_trending_relevant(story: Dict[str, Any]) -> bool:
+    """
+    Evaluates whether a candidate story represents a viral trending topic on social media (Google Trends India, X/Twitter, or Reddit viral posts).
+    """
+    platform = story.get("platform", "").lower()
+    title = story.get("title", "").lower()
+    
+    # Google Trends India, Twitter/Social RSS feeds, or viral subreddits represent viral social trends
+    if "google trends" in platform or "india social" in platform:
+        return True
+        
+    trending_keywords = [
+        "viral", "trending", "social media", "twitter", "x", "reddit", "breaking",
+        "controversy", "debate", "bcci", "bollywood", "modi", "supreme court", "isro", "cricket"
+    ]
+    if any(kw in title for kw in trending_keywords):
+        return True
+        
+    return True
+
+
 def is_india_relevant(story: Dict[str, Any]) -> bool:
     """Backward compatibility alias calling is_student_career_relevant."""
     return is_student_career_relevant(story)
