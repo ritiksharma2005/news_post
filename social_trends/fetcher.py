@@ -100,9 +100,14 @@ def scrape_reddit_with_playwright(subreddits: List[str], limit_per_sub: int = 5)
                         if not title:
                             continue
                             
-                        # Skip pinned meta threads, rules, and community hubs
-                        skip_meta = ["community hub", "weekly thread", "daily discussion", "megathread", "rules & faq", "welcome to r/"]
-                        if any(kw in title.lower() for kw in skip_meta):
+                        # Skip pinned meta threads, low-quality informal rants, personal score flexes, and memes
+                        skip_informal = [
+                            "community hub", "weekly thread", "daily discussion", "megathread", "rules & faq", "welcome to r/",
+                            "looking for a mentor", "is this tuff", "comeback", "bag chura", "all dis for", "im stuck",
+                            "am i lying", "rate my", "help me decide", "suggest me", "doubt", "is it worth it", "meme",
+                            "tier 3 btech", "happy to announce that i got placed"
+                        ]
+                        if any(kw in title.lower() for kw in skip_informal):
                             continue
                             
                         if is_post_processed(post_id, title):
@@ -116,7 +121,7 @@ def scrape_reddit_with_playwright(subreddits: List[str], limit_per_sub: int = 5)
                             "selftext": title,
                             "source_url": permalink or f"https://www.reddit.com/r/{sub}/",
                             "image_url": image_url,
-                            "score": 110 - idx,
+                            "score": 100 - idx,
                             "subreddit": sub
                         })
                     page.close()
@@ -169,7 +174,7 @@ def fetch_google_trends_india_rss(limit: int = 12) -> List[Dict[str, Any]]:
                         "selftext": title,
                         "source_url": link or "https://trends.google.com/trends/trendingsearches/daily?geo=IN",
                         "image_url": image_url,
-                        "score": 98 - idx
+                        "score": 110 - idx
                     })
     except Exception as e:
         print(f"  [Google Trends IN Error] Failed fetching Google Trends: {e}")
@@ -234,7 +239,7 @@ def fetch_google_news_india_rss(limit: int = 15) -> List[Dict[str, Any]]:
                             "selftext": title_clean,
                             "source_url": link,
                             "image_url": image_url,
-                            "score": 90 - idx,
+                            "score": 120 - idx,
                             "pub_date": pub_date
                         })
         except Exception as e:

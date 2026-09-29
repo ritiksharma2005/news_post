@@ -30,11 +30,11 @@ def is_student_career_relevant(story: Dict[str, Any]) -> bool:
         return True
         
     student_career_keywords = [
-        "student", "protest", "ragging", "suicide", "murder", "crime", "safety", "discrimination",
-        "jee", "neet", "gate", "upsc", "cuet", "cat", "iit", "nit", "iiit", "college", "campus",
-        "university", "du", "bhu", "jnu", "exam", "cutoff", "result", "paper leak", "scam",
+        "student", "protest", "ragging", "campus", "college", "university", "hostel",
+        "jee", "neet", "gate", "upsc", "cuet", "cat", "iit", "nit", "iiit", "aiims", "nta",
+        "exam", "cutoff", "result", "paper leak", "admit card", "answer key",
         "placement", "hiring", "layoff", "firing", "internship", "vacancy", "salary", "package",
-        "company", "career", "svnit", "bits", "recruitment", "engineer", "medical", "hostel"
+        "job market", "workplace", "career", "svnit", "bits", "recruitment", "engineer", "medical"
     ]
     combined_lower = f"{title} {selftext} {platform}".lower()
     if any(kw in combined_lower for kw in student_career_keywords):
@@ -59,7 +59,7 @@ def is_student_career_relevant(story: Dict[str, Any]) -> bool:
     except Exception as e:
         print(f"  [Relevance Filter Notice] AI check fallback: {e}")
         
-    return True
+    return False
 
 
 def is_sports_relevant(story: Dict[str, Any]) -> bool:
