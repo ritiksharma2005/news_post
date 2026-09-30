@@ -4,6 +4,8 @@ on:
   schedule:
     # 8:30 AM IST (03:00 AM UTC) — Morning Run
     - cron: "0 3 * * *"
+    # 2:30 PM IST (09:00 AM UTC) — Afternoon Run
+    - cron: "0 9 * * *"
     # 8:30 PM IST (03:00 PM UTC / 15:00 UTC) — Evening Run
     - cron: "0 15 * * *"
   workflow_dispatch: {}
@@ -35,8 +37,11 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          if [ "$(date -u +%H)" -eq "03" ]; then
+          HOUR="$(date -u +%H)"
+          if [ "$HOUR" -eq "03" ]; then
             python -m social_trends.orchestrator --type=morning
+          elif [ "$HOUR" -eq "09" ]; then
+            python -m social_trends.orchestrator --type=afternoon
           else
             python -m social_trends.orchestrator --type=evening
           fi

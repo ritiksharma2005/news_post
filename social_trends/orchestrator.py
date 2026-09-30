@@ -142,7 +142,7 @@ def run_social_trends_pipeline(run_type: str = "morning", dry_run: bool = False)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="India Social Trends Pipeline (Reddit + Twitter -> Telegram)")
-    parser.add_argument("--type", choices=["morning", "evening"], default="morning", help="Run schedule type")
+    parser.add_argument("--type", choices=["morning", "afternoon", "evening"], default="morning", help="Run schedule type")
     parser.add_argument("--dry-run", action="store_true", default=False, help="Execute dry run mode without live Telegram broadcasting")
     args = parser.parse_args()
     
