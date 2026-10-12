@@ -185,8 +185,10 @@ def collect_daily_posts(
     
     Returns posts sorted newest-first.
     """
-    if not target_date_ist:
+    if not target_date_ist or target_date_ist.strip().lower() in ["", "today", "now", "default", "current"]:
         target_date_ist = datetime.now(IST_TZ).strftime("%Y-%m-%d")
+    else:
+        target_date_ist = target_date_ist.strip()
         
     print("=" * 60)
     print(f"📥 COLLECTING INSTAGRAM POSTS FOR TARGET DATE: {target_date_ist} (IST)")

@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       date:
-        description: "Target date in YYYY-MM-DD (Asia/Kolkata timezone). Leave empty for today."
+        description: "Target date: Type 'today' (default) for today's posts, or enter YYYY-MM-DD for a past date"
         required: false
-        default: ""
+        default: "today"
       dry_run:
         description: "Dry run (test run without sending to Telegram or updating DB)"
         type: boolean
@@ -56,8 +56,11 @@ jobs:
           if [ "${{ inputs.force }}" = "true" ]; then
             CMD="$CMD --force"
           fi
-          if [ -n "${{ inputs.date }}" ]; then
-            CMD="$CMD --date=${{ inputs.date }}"
+          DATE_INPUT="${{ inputs.date }}"
+          if [ -n "$DATE_INPUT" ]; then
+            CMD="$CMD --date=$DATE_INPUT"
+          else
+            CMD="$CMD --date=today"
           fi
           echo "Executing: $CMD"
           eval $CMD
