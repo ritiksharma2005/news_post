@@ -110,8 +110,27 @@ class TestChannelDigestCollectorUtils(unittest.TestCase):
 
 class TestChannelDigestDatabase(unittest.TestCase):
 
+    def _cleanup_test_data(self):
+        try:
+            from channel_digest.database import get_db_connection, _load_history_json, _save_history_json
+            conn = get_db_connection()
+            conn.execute("DELETE FROM channel_digest_roundups WHERE roundup_date='2099-12-31'")
+            conn.execute("DELETE FROM channel_digest_posts WHERE roundup_date='2099-12-31' OR media_id='test_mid_9999'")
+            conn.commit()
+            conn.close()
+            h = _load_history_json()
+            h["channel_digest_media_ids"] = [x for x in h.get("channel_digest_media_ids", []) if x != "test_mid_9999"]
+            h["channel_digest_roundup_dates"] = [x for x in h.get("channel_digest_roundup_dates", []) if x != "2099-12-31"]
+            _save_history_json(h)
+        except Exception:
+            pass
+
     def setUp(self):
         init_db()
+        self._cleanup_test_data()
+
+    def tearDown(self):
+        self._cleanup_test_data()
 
     def test_record_and_check_roundup(self):
         test_date = "2099-12-31"
