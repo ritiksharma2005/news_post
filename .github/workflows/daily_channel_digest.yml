@@ -1,0 +1,73 @@
+name: 📢 Daily Instagram Broadcast Channel Digest (@news.nit_iit -> Telegram)
+
+on:
+  schedule:
+    # 10:00 PM IST (04:30 PM UTC / 16:30 UTC) — Daily Evening Channel Roundup
+    - cron: "30 16 * * *"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Target date in YYYY-MM-DD (Asia/Kolkata timezone). Leave empty for today."
+        required: false
+        default: ""
+      dry_run:
+        description: "Dry run (test run without sending to Telegram or updating DB)"
+        type: boolean
+        required: false
+        default: false
+      force:
+        description: "Force regeneration even if already completed today"
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  run-daily-channel-digest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Daily Instagram Channel Digest
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+        run: |
+          CMD="python daily_channel_digest.py"
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            CMD="$CMD --dry-run"
+          fi
+          if [ "${{ inputs.force }}" = "true" ]; then
+            CMD="$CMD --force"
+          fi
+          if [ -n "${{ inputs.date }}" ]; then
+            CMD="$CMD --date=${{ inputs.date }}"
+          fi
+          echo "Executing: $CMD"
+          eval $CMD
+
+      - name: Commit and Push Database History
+        if: always()
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull origin main --rebase || true
+          git add -f data/channel_digest.db data/published_history.json || true
+          git commit -m "Update Channel Digest database history [skip ci]" || true
+          git push origin main || true
