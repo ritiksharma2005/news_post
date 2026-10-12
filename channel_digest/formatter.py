@@ -66,17 +66,21 @@ def format_single_entry(idx: int, post: Dict[str, Any]) -> str:
 
 def build_roundup_messages(
     posts: List[Dict[str, Any]],
-    roundup_date: str
+    roundup_date: str,
+    run_type: str = "evening"
 ) -> List[str]:
     """
     Constructs the complete daily roundup text matching the requested format.
     Splits into multiple numbered parts if the message exceeds Telegram character limits.
     """
+    title_label = "MORNING NEWS ROUNDUP" if run_type == "morning" else "DAILY NEWS ROUNDUP"
+    time_label = "this morning" if run_type == "morning" else "today"
+
     # Case: No posts published on this date
     if not posts:
         empty_msg = (
-            "NEWS NIT IIT — DAILY NEWS ROUNDUP\n\n"
-            f"No new posts were published today on @news.nit_iit.\n\n"
+            f"NEWS NIT IIT — {title_label}\n\n"
+            f"No new posts were published {time_label} on @news.nit_iit.\n\n"
             f"📅 Date: {roundup_date}\n"
             "Follow @news.nit_iit for more updates!"
         )
@@ -90,7 +94,7 @@ def build_roundup_messages(
         entries.append(format_single_entry(idx, post))
         
     intro_header = (
-        "NEWS NIT IIT — DAILY NEWS ROUNDUP\n\n"
+        f"NEWS NIT IIT — {title_label}\n\n"
         "Here are today's latest updates from @news.nit_iit. Tap the links to read the complete posts.\n\n"
     )
     footer = "\n\nFollow @news.nit_iit for more updates!"

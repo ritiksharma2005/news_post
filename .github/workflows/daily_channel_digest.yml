@@ -2,14 +2,25 @@ name: 📢 Daily Instagram Broadcast Channel Digest (@news.nit_iit -> Telegram)
 
 on:
   schedule:
-    # 10:00 PM IST (04:30 PM UTC / 16:30 UTC) — Daily Evening Channel Roundup
-    - cron: "30 16 * * *"
+    # 11:00 AM IST (05:30 AM UTC) — Morning Channel Roundup
+    - cron: "30 5 * * *"
+    # 9:00 PM IST (03:30 PM UTC / 15:30 UTC) — Evening Channel Roundup
+    - cron: "30 15 * * *"
   workflow_dispatch:
     inputs:
       date:
         description: "Target date: Type 'today' (default) for today's posts, or enter YYYY-MM-DD for a past date"
         required: false
         default: "today"
+      run_type:
+        description: "Run type: 'auto' (default), 'morning' (11 AM update), or 'evening' (9 PM daily roundup)"
+        type: choice
+        options:
+          - "auto"
+          - "morning"
+          - "evening"
+        required: false
+        default: "auto"
       dry_run:
         description: "Dry run (test run without sending to Telegram or updating DB)"
         type: boolean
@@ -61,6 +72,12 @@ jobs:
             CMD="$CMD --date=$DATE_INPUT"
           else
             CMD="$CMD --date=today"
+          fi
+          RUN_TYPE_INPUT="${{ inputs.run_type }}"
+          if [ -n "$RUN_TYPE_INPUT" ] && [ "$RUN_TYPE_INPUT" != "auto" ]; then
+            CMD="$CMD --run-type=$RUN_TYPE_INPUT"
+          else
+            CMD="$CMD --run-type=auto"
           fi
           echo "Executing: $CMD"
           eval $CMD

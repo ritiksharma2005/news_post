@@ -49,7 +49,7 @@ exactly why each one was picked.
 An automated daily workflow that collects all news posts published by `@news.nit_iit` throughout the day, prepares an organized daily roundup with direct Instagram permalinks, and sends a ready-to-copy summary to Telegram for sharing in the [News NIT IIT Instagram Broadcast Channel](https://www.instagram.com/channel/AbYg9NWAeNaKS8gf/).
 
 ### How It Works
-1. Runs once every day at **10:00 PM IST** (16:30 UTC) via GitHub Actions (`.github/workflows/daily_channel_digest.yml`).
+1. Runs twice daily at **11:00 AM IST** (05:30 UTC — Morning Update) and **9:00 PM IST** (15:30 UTC — Evening Daily Roundup) via GitHub Actions (`.github/workflows/daily_channel_digest.yml`).
 2. Fetches all posts published by `@news.nit_iit` during the calendar day in `Asia/Kolkata` (IST) timezone using the official Meta Graph API (with automatic fallback to scrapers).
 3. Excludes previous days, duplicate links, and already included posts.
 4. Prepares a formatted, numbered roundup:

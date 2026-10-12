@@ -76,6 +76,18 @@ class TestChannelDigestFormatter(unittest.TestCase):
         self.assertIn("2. GATE 2026 Registration Open", msgs[0])
         self.assertIn("Follow @news.nit_iit for more updates!", msgs[0])
 
+    def test_build_roundup_messages_morning(self):
+        posts = [
+            {
+                "headline": "Morning Campus Update",
+                "permalink": "https://www.instagram.com/p/MorningPost/"
+            }
+        ]
+        msgs = build_roundup_messages(posts, "2026-10-13", run_type="morning")
+        self.assertEqual(len(msgs), 1)
+        self.assertIn("NEWS NIT IIT — MORNING NEWS ROUNDUP", msgs[0])
+        self.assertIn("1. Morning Campus Update", msgs[0])
+
     def test_build_roundup_messages_splitting(self):
         # Create 35 posts with long headlines to force message splitting beyond character threshold
         posts = []
