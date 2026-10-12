@@ -9,11 +9,11 @@ on:
   workflow_dispatch:
     inputs:
       date:
-        description: "Target date: Type 'today' (default) for today's posts, or enter YYYY-MM-DD for a past date"
+        description: "Target date: 'today' (default) for today's posts, or enter YYYY-MM-DD"
         required: false
         default: "today"
       run_type:
-        description: "Run type: 'auto' (default), 'morning' (11 AM update), or 'evening' (9 PM daily roundup)"
+        description: "Run type: 'auto' (default), 'morning' (11 AM), or 'evening' (9 PM)"
         type: choice
         options:
           - "auto"
@@ -21,16 +21,6 @@ on:
           - "evening"
         required: false
         default: "auto"
-      dry_run:
-        description: "Dry run (test run without sending to Telegram or updating DB)"
-        type: boolean
-        required: false
-        default: false
-      force:
-        description: "Force regeneration even if already completed today"
-        type: boolean
-        required: false
-        default: false
 
 jobs:
   run-daily-channel-digest:
@@ -60,13 +50,8 @@ jobs:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
         run: |
-          CMD="python daily_channel_digest.py"
-          if [ "${{ inputs.dry_run }}" = "true" ]; then
-            CMD="$CMD --dry-run"
-          fi
-          if [ "${{ inputs.force }}" = "true" ]; then
-            CMD="$CMD --force"
-          fi
+          # Always run in live production mode with --force so Telegram receives the update every time
+          CMD="python daily_channel_digest.py --force"
           DATE_INPUT="${{ inputs.date }}"
           if [ -n "$DATE_INPUT" ]; then
             CMD="$CMD --date=$DATE_INPUT"
@@ -79,7 +64,7 @@ jobs:
           else
             CMD="$CMD --run-type=auto"
           fi
-          echo "Executing: $CMD"
+          echo "Executing live production run: $CMD"
           eval $CMD
 
       - name: Commit and Push Database History
