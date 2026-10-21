@@ -251,5 +251,12 @@
     "DepPCmYRTen",
     "DerbfI-Mnr2",
     "DeuDHWHqTcn"
+  ],
+  "channel_digest_media_ids": [
+    "18130360030696067",
+    "18114205628610746"
+  ],
+  "channel_digest_roundup_dates": [
+    "2026-10-22_morning"
   ]
 }
