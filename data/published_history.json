@@ -256,5 +256,15 @@
     "DewKEKMk0rm",
     "De1cSndRdy7",
     "De2JU-8Ey2g"
+  ],
+  "channel_digest_media_ids": [
+    "17993499543053025",
+    "18348075151265164",
+    "18113970095119528",
+    "18163531036497663",
+    "17917661097468577"
+  ],
+  "channel_digest_roundup_dates": [
+    "2026-10-24_evening"
   ]
 }
