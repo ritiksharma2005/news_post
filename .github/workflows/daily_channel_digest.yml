@@ -1,11 +1,12 @@
 name: 📢 Daily Instagram Broadcast Channel Digest (@news.nit_iit -> Telegram)
 
 on:
-  schedule:
-    # 11:00 AM IST (05:30 AM UTC) — Morning Channel Roundup
-    - cron: "30 5 * * *"
-    # 9:00 PM IST (03:30 PM UTC / 15:30 UTC) — Evening Channel Roundup
-    - cron: "30 15 * * *"
+  # Schedule stopped as requested
+  # schedule:
+  #   # 11:00 AM IST (05:30 AM UTC) — Morning Channel Roundup
+  #   - cron: "30 5 * * *"
+  #   # 9:00 PM IST (03:30 PM UTC / 15:30 UTC) — Evening Channel Roundup
+  #   - cron: "30 15 * * *"
   workflow_dispatch:
     inputs:
       date:

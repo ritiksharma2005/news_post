@@ -1,4 +1,4 @@
-name: 🚀 Run India Social Trends Fetcher (Reddit + Twitter -> Telegram)
+name: 🎓 Run Indian Student & Exam News Fetcher (Reddit + Education News -> Telegram)
 
 on:
   schedule:

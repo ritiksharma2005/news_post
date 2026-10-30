@@ -188,7 +188,7 @@ def fetch_google_news_india_rss(limit: int = 15) -> List[Dict[str, Any]]:
     results = []
     
     feed_urls = [
-        ("Google News India", GOOGLE_NEWS_INDIA_RSS),
+        ("Google News (Education & Exams)", GOOGLE_NEWS_INDIA_RSS),
     ] + GOOGLE_NEWS_INDIA_TOPICS
     
     for feed_name, rss_url in feed_urls:

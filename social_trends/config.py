@@ -24,7 +24,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 # Output count per run (3 to 4 stories)
 STORIES_PER_RUN = 4
 
-# Target Indian Subreddits covering Student, Campus, Exams, Career/Placements & Sports
+# Target Indian Subreddits covering Students, Campus Affairs, Exams & Career/Placements
 SUBREDDITS = [
     "JEENEETards",
     "CUETards",
@@ -34,14 +34,9 @@ SUBREDDITS = [
     "IndianEngineers",
     "UPSC",
     "studentsphile",
-    "legaladviceindia",
-    "india",
-    "IndiaSpeaks",
-    "bihar",
-    "Delhi",
-    "mumbai",
-    "Cricket",
-    "IndianSports"
+    "GATEtards",
+    "delhiuniversity",
+    "MEDICOreTARDS"
 ]
 
 # Twitter / Social Handles
@@ -53,14 +48,14 @@ TWITTER_SOURCES = [
     "TimesOfIndia"
 ]
 
-# Google Trends & Google News India RSS Endpoints
+# Google Trends & Google News India RSS Endpoints (Exams & Student Specific)
 GOOGLE_TRENDS_INDIA_RSS = "https://trends.google.com/trends/trendingsearches/daily/rss?geo=IN"
-GOOGLE_NEWS_INDIA_RSS = "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en"
+GOOGLE_NEWS_INDIA_RSS = "https://news.google.com/rss/search?q=(student+OR+exam+OR+JEE+OR+NEET+OR+UPSC+OR+college+OR+university)+India&hl=en-IN&gl=IN&ceid=IN:en"
 GOOGLE_NEWS_INDIA_TOPICS = [
-    ("India Education & Exams", "https://news.google.com/rss/search?q=student+exam+JEE+NEET+placement+IIT+India&hl=en-IN&gl=IN&ceid=IN:en"),
-    ("India Tech & Hiring", "https://news.google.com/rss/search?q=hiring+layoffs+placements+company+career+India&hl=en-IN&gl=IN&ceid=IN:en"),
-    ("India Campus & Youth", "https://news.google.com/rss/search?q=college+campus+protest+university+ragging+safety+India&hl=en-IN&gl=IN&ceid=IN:en"),
-    ("India Sports", "https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFp1ZEdvU0VnSmVNU2dBUAE?hl=en-IN&gl=IN&ceid=IN:en"),
+    ("India Education & Exams", "https://news.google.com/rss/search?q=(student+OR+exam+OR+JEE+OR+NEET+OR+GATE+OR+UPSC+OR+CUET)+India&hl=en-IN&gl=IN&ceid=IN:en"),
+    ("India Colleges & Placements", "https://news.google.com/rss/search?q=(IIT+OR+NIT+OR+college+OR+university+OR+placements+OR+internship)+India&hl=en-IN&gl=IN&ceid=IN:en"),
+    ("India Campus Issues & Safety", "https://news.google.com/rss/search?q=(campus+OR+ragging+OR+protest+OR+student+safety+OR+paper+leak)+India&hl=en-IN&gl=IN&ceid=IN:en"),
+    ("India Freshers & Career", "https://news.google.com/rss/search?q=(hiring+OR+layoffs+OR+freshers+OR+campus+offers+OR+scholarship)+India&hl=en-IN&gl=IN&ceid=IN:en"),
 ]
 
 # Import root config.py safely without module shadowing

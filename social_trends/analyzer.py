@@ -6,6 +6,7 @@ Rewrites raw Reddit/Twitter post data into high-impact Telegram captions.
 
 import sys
 import os
+import re
 from typing import Dict, Any, List
 
 # Add parent directory for ai_client import
@@ -14,42 +15,83 @@ import ai_client
 from trending_news.hashtag_generator import generate_news_hashtags
 
 
-def is_student_career_relevant(story: Dict[str, Any]) -> bool:
+def is_student_exam_relevant(story: Dict[str, Any]) -> bool:
     """
-    Evaluates whether a candidate story is directly relevant to Indian Students, Campus Affairs,
-    Exams (JEE, NEET, GATE, UPSC, CUET), Higher Education Institutions (IIT, NIT, IIIT), or Career/Corporate Trends
-    (Placements, Internships, Layoffs, Hiring, Company Policies).
+    Strictly evaluates whether a candidate story is directly relevant to Indian Students,
+    Exams (JEE, NEET, GATE, UPSC, CUET, Boards, SSC, PSC), Higher Education (IIT, NIT, IIIT, AIIMS, Universities),
+    Campus Issues (protests, ragging, safety, results, cutoffs), or Student Career/Placements.
+    Strictly filters out non-student general politics, Bollywood, cricket, and unrelated crime/news.
     """
     title = story.get("title", "")
     selftext = story.get("selftext", "")
     platform = story.get("platform", "")
-    
-    # Priority subreddits targeting students & career are automatically relevant
-    student_subreddits = ["jeeneetards", "cuetards", "btechtards", "developersindia", "indian_academia", "indianengineers", "upsc", "studentsphile"]
+    combined_lower = f"{title} {selftext}".lower()
+
+    # 1. Strict Negative Filters: Immediately reject purely unrelated topics (unless explicit student keywords present)
+    negative_topics = [
+        "bollywood", "box office", "cricket match", "bcci", "ipl", "t20", "actor", "actress",
+        "movie review", "trailer release", "election rally", "assembly election", "lok sabha election",
+        "modi rally", "rahul gandhi says", "parliament election", "sensex", "nifty", "crypto",
+        "state polls", "exit polls"
+    ]
+    has_negative = any(neg in combined_lower for neg in negative_topics)
+
+    core_student_indicators = [
+        "student", "students", "exam", "exams", "jee", "neet", "gate", "upsc", "cuet", "iit", "nit",
+        "iiit", "aiims", "campus", "ragging", "admit card", "answer key", "cutoff", "cut-off",
+        "paper leak", "placement", "placements", "scholarship", "board exam", "cbse", "nta"
+    ]
+    has_core_student = any(bool(re.search(r'\b' + re.escape(ind) + r'\b', combined_lower)) for ind in core_student_indicators)
+
+    # If it is clearly an unrelated topic with no core student connection, reject it immediately
+    if has_negative and not has_core_student:
+        return False
+
+    # 2. Priority subreddits targeting students & exams
+    student_subreddits = [
+        "jeeneetards", "cuetards", "btechtards", "developersindia", "indian_academia",
+        "indianengineers", "upsc", "studentsphile", "gatetards", "delhiuniversity", "medicoretards"
+    ]
     if any(f"r/{sub}" in platform.lower() for sub in student_subreddits):
         return True
-        
-    student_career_keywords = [
-        "student", "protest", "ragging", "campus", "college", "university", "hostel",
-        "jee", "neet", "gate", "upsc", "cuet", "cat", "iit", "nit", "iiit", "aiims", "nta",
-        "exam", "cutoff", "result", "paper leak", "admit card", "answer key",
-        "placement", "hiring", "layoff", "firing", "internship", "vacancy", "salary", "package",
-        "job market", "workplace", "career", "svnit", "bits", "recruitment", "engineer", "medical"
+
+    # 3. Comprehensive Positive Keywords for Students, Exams, Campuses & Placements (Word-boundary matched)
+    student_exam_keywords = [
+        # Exams & Admissions
+        "exam", "exams", "jee", "jee main", "jee advanced", "neet", "neet ug", "neet pg",
+        "gate", "upsc", "cuet", "cat", "clat", "nda", "cds", "ssc", "ssc cgl", "ssc chsl",
+        "ibps", "sbi po", "board exam", "cbse", "icse", "class 10", "class 12", "admit card",
+        "answer key", "cutoff", "cut-off", "percentile", "result", "results", "rank", "ranks",
+        "paper leak", "cheating", "nta", "ugc", "aicte", "counselling", "josaa", "csab",
+        # Colleges, Campuses & Institutions
+        "student", "students", "college", "colleges", "campus", "campuses", "university",
+        "universities", "hostel", "hostels", "canteen", "mess", "faculty", "professor",
+        "iit", "nit", "iiit", "aiims", "iim", "bits", "delhi university", "du", "jnu", "bhu",
+        "jadavpur", "amu", "jamia", "anna university", "vtu", "svnit", "engineering college", "medical college",
+        # Student Affairs, Issues & Safety
+        "ragging", "anti-ragging", "student protest", "protests", "student union", "suicide",
+        "harassment", "student safety", "fee hike", "scholarship", "fellowship", "stipend",
+        "attendance", "reservation", "paper leak scam",
+        # Career, Placements & Internships
+        "placement", "placements", "campus placement", "job offer", "ppo", "internship",
+        "internships", "fresher", "freshers", "hiring", "layoff", "layoffs", "package",
+        "lpa", "salary", "campus drive", "off-campus", "recruitment"
     ]
-    combined_lower = f"{title} {selftext} {platform}".lower()
-    if any(kw in combined_lower for kw in student_career_keywords):
+    if any(bool(re.search(r'\b' + re.escape(kw) + r'\b', combined_lower)) for kw in student_exam_keywords):
         return True
-        
+
+    # 4. AI Verification Check (when Gemini is configured)
     prompt = (
-        "You are an AI editor filtering news for an Indian Student, Campus & Career Telegram channel.\n"
+        "You are an AI editor strictly filtering news for an Indian Student and Exam channel on Telegram.\n"
         f"Platform: {platform}\n"
         f"Title: {title}\n"
         f"Context: {selftext[:300]}\n\n"
-        "QUESTION: Is this story directly related to Indian students, campus issues (protests, safety, ragging, administration), "
-        "exams (JEE, NEET, GATE, UPSC, CUET), colleges (IIT, NIT, universities), or career/corporate trends (placements, hiring, layoffs, internships)?\n"
+        "QUESTION: Is this story DIRECTLY relevant to Indian students, competitive/entrance exams "
+        "(such as JEE, NEET, GATE, UPSC, CUET, Boards), colleges/universities (IIT, NIT, campuses), "
+        "student issues (protests, ragging, student safety, results), or campus placements/internships?\n"
         "Respond ONLY with 'YES' or 'NO'."
     )
-    
+
     try:
         ans = ai_client.ask_ai(prompt).strip().upper()
         if "YES" in ans:
@@ -58,78 +100,23 @@ def is_student_career_relevant(story: Dict[str, Any]) -> bool:
             return False
     except Exception as e:
         print(f"  [Relevance Filter Notice] AI check fallback: {e}")
-        
+
     return False
 
 
-def is_sports_relevant(story: Dict[str, Any]) -> bool:
-    """
-    Evaluates whether a candidate story is directly relevant to Sports
-    (Cricket, BCCI, IPL, Asian Games, Olympics, Football, Badminton, Tennis, Chess, Athletics).
-    """
-    title = story.get("title", "")
-    selftext = story.get("selftext", "")
-    platform = story.get("platform", "")
-    
-    sports_subreddits = ["cricket", "indiansports"]
-    if any(f"r/{sub}" in platform.lower() for sub in sports_subreddits):
-        return True
-        
-    sports_keywords = [
-        "cricket", "bcci", "ipl", "t20", "test match", "odi", "asian games", "olympics",
-        "badminton", "football", "sports", "athletics", "chess", "tennis", "hockey",
-        "kabaddi", "wrestler", "wrestling", "boxing", "archer", "archery", "neeraj chopra",
-        "rohit sharma", "virat kohli", "jasprit bumrah", "sachin", "dhoni", "praggnanandhaa"
-    ]
-    combined_lower = f"{title} {selftext} {platform}".lower()
-    if any(kw in combined_lower for kw in sports_keywords):
-        return True
-        
-    prompt = (
-        "You are an AI editor filtering news for a Sports section on Telegram.\n"
-        f"Platform: {platform}\n"
-        f"Title: {title}\n"
-        f"Context: {selftext[:300]}\n\n"
-        "QUESTION: Is this story directly related to Sports (Cricket, Football, Asian Games, Badminton, Chess, Athletics, Indian or Global Sports)?\n"
-        "Respond ONLY with 'YES' or 'NO'."
-    )
-    
-    try:
-        ans = ai_client.ask_ai(prompt).strip().upper()
-        if "YES" in ans:
-            return True
-        elif "NO" in ans:
-            return False
-    except Exception as e:
-        print(f"  [Sports Relevance Filter Notice] AI check fallback: {e}")
-        
-    return False
+def is_student_career_relevant(story: Dict[str, Any]) -> bool:
+    """Alias for backward compatibility."""
+    return is_student_exam_relevant(story)
 
 
 def is_viral_trending_relevant(story: Dict[str, Any]) -> bool:
-    """
-    Evaluates whether a candidate story represents a viral trending topic on social media (Google Trends India, X/Twitter, or Reddit viral posts).
-    """
-    platform = story.get("platform", "").lower()
-    title = story.get("title", "").lower()
-    
-    # Google Trends India, Twitter/Social RSS feeds, or viral subreddits represent viral social trends
-    if "google trends" in platform or "india social" in platform:
-        return True
-        
-    trending_keywords = [
-        "viral", "trending", "social media", "twitter", "x", "reddit", "breaking",
-        "controversy", "debate", "bcci", "bollywood", "modi", "supreme court", "isro", "cricket"
-    ]
-    if any(kw in title for kw in trending_keywords):
-        return True
-        
-    return True
+    """Deprecated: redirects to is_student_exam_relevant to prevent non-student viral posts."""
+    return is_student_exam_relevant(story)
 
 
 def is_india_relevant(story: Dict[str, Any]) -> bool:
-    """Backward compatibility alias calling is_student_career_relevant."""
-    return is_student_career_relevant(story)
+    """Backward compatibility alias calling is_student_exam_relevant."""
+    return is_student_exam_relevant(story)
 
 
 def analyze_and_format_trend(story: Dict[str, Any]) -> Dict[str, Any]:
@@ -172,9 +159,9 @@ def analyze_and_format_trend(story: Dict[str, Any]) -> Dict[str, Any]:
         headline = title
         summary = selftext or title
         
-    # Generate dynamic mandatory & student/college hashtags
+    # Generate dynamic mandatory & student/college/exam hashtags
     base_hashtags = generate_news_hashtags(headline, summary)
-    student_tags = ["#students", "#campus", "#jee", "#neet", "#gate", "#upsc", "#placements", "#career"]
+    student_tags = ["#students", "#exams", "#campus", "#jee", "#neet", "#gate", "#upsc", "#placements", "#career", "#education"]
     combined_words = base_hashtags.split()
     for st in student_tags:
         if st not in combined_words:

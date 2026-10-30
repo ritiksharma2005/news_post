@@ -15,14 +15,14 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from social_trends.config import STORIES_PER_RUN, OUTPUT_DIR
 from social_trends.fetcher import fetch_all_social_trends
-from social_trends.analyzer import analyze_and_format_trend, is_student_career_relevant, is_viral_trending_relevant
+from social_trends.analyzer import analyze_and_format_trend, is_student_exam_relevant
 from social_trends.telegram_notifier import broadcast_trend_to_telegram
 from social_trends.database import init_db, insert_social_trend, is_post_processed
 
 
 def run_social_trends_pipeline(run_type: str = "morning", dry_run: bool = False):
     print("=" * 60)
-    print(f"🚀 INDIAN STUDENT & VIRAL SOCIAL TRENDS PIPELINE — {run_type.upper()} RUN")
+    print(f"🚀 INDIAN STUDENT & EXAM NEWS PIPELINE — {run_type.upper()} RUN")
     print(f"📅 Timestamp (UTC): {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"🔒 Mode: {'DRY RUN (Preview Only)' if dry_run else 'PRODUCTION'}")
     print("=" * 60)
@@ -35,14 +35,12 @@ def run_social_trends_pipeline(run_type: str = "morning", dry_run: bool = False)
         print("  [Notice] No new candidate trends collected for this run window.")
         return
         
-    print(f"\n📊 Filtered {len(raw_candidates)} candidate items. Selecting 3 Student News + 1 Viral Social Media Trend...")
+    print(f"\n📊 Filtered {len(raw_candidates)} candidate items. Selecting {STORIES_PER_RUN} Student & Exam News stories...")
     
-    # 2. Select 3 Student News stories + 1 Viral Social Media Trend story
+    # 2. Select up to STORIES_PER_RUN stories strictly relevant to students and exams
     selected_stories = []
     seen_titles = set()
     
-    # A. Select 3 Student News Stories (achievements, protests, campus issues, exams, placements, scholarships)
-    student_stories = []
     for c in raw_candidates:
         post_id = c.get("post_id")
         title = c.get("title", "")
@@ -52,58 +50,18 @@ def run_social_trends_pipeline(run_type: str = "morning", dry_run: bool = False)
         snippet = title[:40].lower()
         if snippet in seen_titles:
             continue
-        if not is_student_career_relevant(c):
+        if not is_student_exam_relevant(c):
             continue
         seen_titles.add(snippet)
-        student_stories.append(c)
-        if len(student_stories) >= 3:
+        selected_stories.append(c)
+        if len(selected_stories) >= STORIES_PER_RUN:
             break
-            
-    # B. Select 1 Viral Social Media / Google Trends Story
-    trending_story = None
-    for c in raw_candidates:
-        post_id = c.get("post_id")
-        title = c.get("title", "")
-        source_url = c.get("source_url", "")
-        if is_post_processed(post_id, title, source_url):
-            continue
-        snippet = title[:40].lower()
-        if snippet in seen_titles:
-            continue
-        # Check for viral social media / Google Trends items
-        if is_viral_trending_relevant(c):
-            seen_titles.add(snippet)
-            trending_story = c
-            print(f"  🔥 [Viral Trend Selection] Selected Social Media Trend: '({c.get('platform')}) {title[:60]}...'")
-            break
-            
-    # Combine (3 Student Stories + 1 Viral Social Media Trend)
-    selected_stories.extend(student_stories)
-    if trending_story:
-        selected_stories.append(trending_story)
-        
-    # Fallback if trending story wasn't found or student stories were under 3
-    if len(selected_stories) < STORIES_PER_RUN:
-        remaining = [c for c in raw_candidates if c.get("post_id") not in {s["post_id"] for s in selected_stories}]
-        for c in remaining:
-            post_id = c.get("post_id")
-            title = c.get("title", "")
-            source_url = c.get("source_url", "")
-            if is_post_processed(post_id, title, source_url):
-                continue
-            snippet = title[:40].lower()
-            if snippet in seen_titles:
-                continue
-            seen_titles.add(snippet)
-            selected_stories.append(c)
-            if len(selected_stories) >= STORIES_PER_RUN:
-                break
             
     if not selected_stories:
-        print("  [Notice] All fetched candidate posts have already been processed or filtered out as non-India news.")
+        print("  [Notice] All fetched candidate posts have already been processed or filtered out as non-student/exam news.")
         return
         
-    print(f"\n🏆 [Selected {len(selected_stories)} Top Social Stories for Broadcast]:")
+    print(f"\n🏆 [Selected {len(selected_stories)} Top Student & Exam Stories for Broadcast]:")
     for idx, story in enumerate(selected_stories):
         print(f"  [{idx+1}] ({story.get('platform')}) Score: {story.get('score')} | {story.get('title')[:70]}...")
         
