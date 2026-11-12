@@ -41,11 +41,11 @@ def send_reel_for_approval(video_path: Path, post_id: str, metadata: Dict) -> bo
         return False
 
     caption_text = (
-        f"🎥 *YOUR NEWS REEL IS READY FOR REVIEW!*\n\n"
-        f"📌 *Headline*: {metadata.get('headline', '')}\n"
-        f"⏱️ *Duration*: {metadata.get('duration', 0):.1f}s\n"
-        f"👤 *Anchor*: Masked Anchor ({metadata.get('anchor_type', 'scarf').capitalize()})\n\n"
-        f"📝 *Instagram Caption & Tags*:\n{metadata.get('reel_caption', '')[:400]}...\n\n"
+        f"🎥 YOUR NEWS REEL IS READY FOR REVIEW!\n\n"
+        f"📌 Headline: {metadata.get('headline', '')}\n"
+        f"⏱️ Duration: {metadata.get('duration', 0):.1f}s\n"
+        f"👤 Anchor: Masked Anchor ({metadata.get('anchor_type', 'scarf').capitalize()})\n\n"
+        f"📝 Instagram Caption & Tags:\n{metadata.get('reel_caption', '')[:400]}...\n\n"
         f"Tap below to authorize publishing to {INSTAGRAM_ACCOUNT}:"
     )
 
@@ -66,7 +66,6 @@ def send_reel_for_approval(video_path: Path, post_id: str, metadata: Dict) -> bo
             data = {
                 "chat_id": TELEGRAM_CHAT_ID,
                 "caption": caption_text,
-                "parse_mode": "Markdown",
                 "supports_streaming": True,
                 "reply_markup": json.dumps(reply_markup)
             }

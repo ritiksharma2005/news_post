@@ -138,29 +138,14 @@ def fetch_latest_posts(limit: int = 15) -> List[Dict]:
         if not image_url:
             continue
 
-        # Download the post image locally so it can be shown in the 8-25s B-roll section
-        local_img_path = TEMP_DIR / f"post_{media_id}.jpg"
-        try:
-            img_resp = requests.get(image_url, timeout=25)
-            if img_resp.status_code == 200:
-                with open(local_img_path, "wb") as f:
-                    f.write(img_resp.content)
-            else:
-                local_img_path = None
-        except Exception as e:
-            print(f"[Instagram Fetcher] Could not download image for post {media_id}: {e}")
-            local_img_path = None
-
-        if not local_img_path or not local_img_path.exists():
-            continue
-
         headline = extract_headline_from_caption(caption)
         candidates.append({
             "media_id": media_id,
             "headline": headline,
             "caption": caption,
             "permalink": permalink,
-            "image_path": str(local_img_path),
+            "image_url": image_url,
+            "image_path": str(TEMP_DIR / f"post_{media_id}.jpg"),
             "timestamp": timestamp,
             "formatted_date": parse_iso_timestamp(timestamp).strftime("%d %b, %I:%M %p")
         })

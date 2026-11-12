@@ -27,16 +27,17 @@ def notify_candidates_on_telegram():
 
     print(f"[Candidate Notifier] Preparing Telegram message with {len(candidates)} candidate options...")
 
-    # Build the Telegram message
+    # Build the Telegram message (HTML formatted with fallback)
     message_lines = [
-        f"📺 *{BRAND_NAME} — SELECT POST FOR VIDEO REEL*\n",
+        f"📺 <b>{BRAND_NAME} — SELECT POST FOR VIDEO REEL</b>\n",
         "Found fresh updates from @news.nit_iit. Which one would you like to turn into a 30–45s News Reel?\n"
     ]
 
     inline_keyboard = []
 
     for idx, c in enumerate(candidates, 1):
-        message_lines.append(f"*{idx}️⃣ {c['formatted_date']}*\n📌 {c['headline']}\n🔗 [View Original Post]({c['permalink']})\n")
+        clean_headline = c['headline'].replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        message_lines.append(f"<b>{idx}️⃣ {c['formatted_date']}</b>\n📌 {clean_headline}\n🔗 <a href=\"{c['permalink']}\">View Original Post</a>\n")
         inline_keyboard.append([{
             "text": f"🎬 Generate Reel #{idx}",
             "callback_data": f"make_reel:{c['media_id']}"
@@ -51,7 +52,7 @@ def notify_candidates_on_telegram():
     payload = {
         "chat_id": TELEGRAM_CHAT_ID,
         "text": full_text,
-        "parse_mode": "Markdown",
+        "parse_mode": "HTML",
         "disable_web_page_preview": True,
         "reply_markup": json.dumps({"inline_keyboard": inline_keyboard})
     }
@@ -59,19 +60,33 @@ def notify_candidates_on_telegram():
     try:
         resp = requests.post(url, json=payload, timeout=20)
         data = resp.json()
+        if not data.get("ok"):
+            print(f"[Candidate Notifier] HTML send failed ({data.get('description')}), retrying with plain text...")
+            # Strip HTML tags and remove parse_mode for 100% reliable plain text fallback
+            plain_lines = [
+                f"📺 {BRAND_NAME} — SELECT POST FOR VIDEO REEL\n",
+                "Found fresh updates from @news.nit_iit. Which one would you like to turn into a 30–45s News Reel?\n"
+            ]
+            for idx, c in enumerate(candidates, 1):
+                plain_lines.append(f"{idx}. {c['formatted_date']}\n📌 {c['headline']}\n🔗 {c['permalink']}\n")
+            payload["text"] = "\n".join(plain_lines)
+            payload.pop("parse_mode", None)
+            resp = requests.post(url, json=payload, timeout=20)
+            data = resp.json()
+
         if data.get("ok"):
-            print(f"[Candidate Notifier] Successfully sent {len(candidates)} candidates to Telegram.")
+            print(f"[Candidate Notifier] 🚀 Successfully delivered {len(candidates)} candidates to Telegram!")
             for c in candidates:
                 mark_post_status(c["media_id"], "candidate_sent", {
                     "headline": c["headline"],
                     "permalink": c["permalink"],
-                    "image_path": c["image_path"],
-                    "caption": c["caption"]
+                    "caption": c["caption"],
+                    "image_url": c.get("image_url", "")
                 })
         else:
-            print(f"[Candidate Notifier] Telegram send error: {data}")
+            print(f"[Candidate Notifier] ❌ Telegram API error: {data}")
     except Exception as e:
-        print(f"[Candidate Notifier] Failed to notify Telegram: {e}")
+        print(f"[Candidate Notifier] ❌ Failed to notify Telegram: {e}")
 
 if __name__ == "__main__":
     notify_candidates_on_telegram()

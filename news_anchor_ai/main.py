@@ -73,6 +73,19 @@ def run_generate_pipeline(media_id: str = None, dry_run: bool = False):
     caption = target_post["caption"]
     image_path = target_post["image_path"]
 
+    # Ensure post image is downloaded
+    if not Path(image_path).exists() and target_post.get("image_url"):
+        print(f"  Downloading post image from: {target_post['image_url'][:60]}...")
+        try:
+            import requests
+            resp = requests.get(target_post["image_url"], timeout=30)
+            if resp.status_code == 200:
+                with open(image_path, "wb") as f:
+                    f.write(resp.content)
+                print(f"  Successfully downloaded post image to: {image_path}")
+        except Exception as e:
+            print(f"  Warning: Could not download post image: {e}")
+
     print(f"\n[Target Post Identified]")
     print(f"  ID: {post_id}")
     print(f"  Headline: {headline}")
