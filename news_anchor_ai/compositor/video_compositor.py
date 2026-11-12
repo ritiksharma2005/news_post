@@ -107,7 +107,7 @@ def create_outro_frame() -> Path:
     font_handle = ImageFont.truetype(str(FONT_BOLD), 38) if FONT_BOLD.exists() else ImageFont.load_default()
 
     draw.text(((VIDEO_WIDTH - 520) // 2, 700), BRAND_NAME, fill=(255, 255, 255), font=font_big)
-    draw.text(((VIDEO_WIDTH - 640) // 2, 800), "Daily Verified Student & Exam Updates", fill=(148, 163, 184), font=font_sub)
+    draw.text(((VIDEO_WIDTH - 520) // 2 + 50, 800), "Your Campus, Our News", fill=(253, 224, 71), font=font_sub)
 
     box_rect = [(VIDEO_WIDTH - 600) // 2, 940, (VIDEO_WIDTH + 600) // 2, 1040]
     draw.rounded_rectangle(box_rect, radius=20, fill=(225, 29, 72))
