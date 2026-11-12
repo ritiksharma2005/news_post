@@ -63,8 +63,8 @@ FPS = 30
 # Voice settings (Permanent Signature Voice: Mature Indian English Male)
 # Locked permanently across all videos for consistent brand identity
 VOICE_NAME = "en-IN-PrabhatNeural"
-VOICE_RATE = "+1%"   # Measured, authoritative news delivery cadence
-VOICE_PITCH = "-3Hz"  # Deeper, mature broadcast tone with commanding presence
+VOICE_RATE = "+12%"  # Fast, engaging, high-energy prime-time delivery cadence
+VOICE_PITCH = "-2Hz" # Deep, authoritative broadcast presence
 
 # Target Timing (30–45s total)
 MIN_DURATION = 30

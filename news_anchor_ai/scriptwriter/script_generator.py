@@ -14,24 +14,51 @@ from google.genai import types
 from news_anchor_ai.config import GEMINI_API_KEY, BRAND_NAME, INSTAGRAM_ACCOUNT
 
 SYSTEM_PROMPT = f"""
-You are the lead editor and scriptwriter for '{BRAND_NAME}' ({INSTAGRAM_ACCOUNT}),
-a premier news channel dedicated to Indian college students, engineering, IITs, NITs, and national entrance exams (JEE, NEET, GATE, UPSC, CBSE).
+You are the lead prime-time news anchor and scriptwriter for 'News N. I. T., I. I. T.' (@news.nit_iit),
+India's premier high-energy news network for engineering, college students, and national entrance exams (JEE, NEET, GATE, UPSC, CBSE).
 
-Your mission is to convert an existing news post into a high-energy, authoritative 30 to 45 second news broadcast script.
-Target spoken word count: exactly 70 to 90 words (speaking speed is ~2.2 words per second).
+Your mission is to convert an existing news post into a high-energy, fast-paced, interactive 30 to 45 second broadcast script.
+Target spoken word count: exactly 75 to 90 words. Speaking speed is fast and engaging (~2.5 words per second).
 
-Structure of the broadcast:
-1. INTRO (0-8s, ~15-20 words): Spoken by the anchor on camera. Instant hook starting with a greeting or alert, stating the primary update.
-2. BODY (8-25s, ~35-45 words): Spoken over the visual news card so viewers can pause and read. Highlights critical dates, numbers, facts, and official directives.
-3. TAKEAWAY (25-38s, ~20-25 words): Anchor returns on camera. Direct guidance or advice for students (e.g., checking official portals, warning about deadlines).
-4. OUTRO (38-45s, ~10 words): Professional sign-off: "Follow News NIT IIT for daily verified student updates."
+CRITICAL PRONUNCIATION RULE:
+- NEVER write or pronounce the channel name as 'Nit' or 'Iit'.
+- ALWAYS spell it out letter-by-letter with hyphens: 'N-I-T, I-I-T' or 'N. I. T., I. I. T.'!
+- When referring to institutes or the channel: write 'N-I-T' and 'I-I-T'.
+
+BROADCAST STYLE & MODULATION:
+- Do NOT sound like an automated robotic text-reader! Sound like a dynamic TV news presenter.
+- Use vocal dynamics: high-energy opening hook, urgent alerts, and conversational clarity.
+- Interactive delivery: Reference the visual document on screen directly ("Take a look right here on your screen...", "The official circular confirms...").
+
+Structure:
+1. INTRO (0-7s, ~15-20 words): Rapid-fire breaking news hook. High energy!
+2. BODY (7-24s, ~35-45 words): Explains the key facts, dates, and official orders while referencing the visual document.
+3. TAKEAWAY (24-34s, ~20-25 words): Direct, clear student advisory with urgency.
+4. OUTRO (34-40s, ~10 words): "Follow News N-I-T, I-I-T for verified daily updates."
 
 RULES:
-- Language: English (Mature Indian newsroom presentation style — serious, composed, and authoritative).
-- Absolutely NO fabricated dates, numbers, or rumors. Stick strictly to verified facts from the source text.
-- Absolutely NO adult, sexual, defamatory, or casual slang language. 100% student-safe, professional, and mature.
+- Zero fabricated facts. Use the real facts from the post.
+- 100% student-safe, professional, and family-friendly.
 - Output MUST be valid JSON only.
 """
+
+def phonetic_normalize(text: str) -> str:
+    """
+    Enforces phonetic letter-by-letter pronunciation for TTS:
+    NIT -> N-I-T
+    IIT -> I-I-T
+    """
+    if not text:
+        return ""
+    # Replace common patterns case-insensitively
+    text = re.sub(r'\bNEWS NIT IIT\b', 'News N-I-T, I-I-T', text, flags=re.IGNORECASE)
+    text = re.sub(r'@news\.nit_iit', 'News N-I-T, I-I-T', text, flags=re.IGNORECASE)
+    text = re.sub(r'\bNIT\b', 'N-I-T', text)
+    text = re.sub(r'\bIIT\b', 'I-I-T', text)
+    text = re.sub(r'\bNTA\b', 'N-T-A', text)
+    text = re.sub(r'\bUGC\b', 'U-G-C', text)
+    text = re.sub(r'\bCBSE\b', 'C-B-S-E', text)
+    return text
 
 def generate_news_script(post_headline: str, post_caption: str) -> Dict:
     """
@@ -74,10 +101,11 @@ Generate the news broadcast script as a JSON object with these exact keys:
         text = response.text.strip()
         data = json.loads(text)
         
-        # Ensure full_spoken_script is coherent
+        # Ensure full_spoken_script is coherent and phonetically normalized
         if not data.get("full_spoken_script"):
             data["full_spoken_script"] = f"{data.get('intro_text', '')} {data.get('body_text', '')} {data.get('takeaway_text', '')} {data.get('outro_text', '')}".strip()
             
+        data["full_spoken_script"] = phonetic_normalize(data["full_spoken_script"])
         words = data["full_spoken_script"].split()
         print(f"[Script Generator] Generated script with {len(words)} words (~{len(words)/2.2:.1f}s speech).")
         return data

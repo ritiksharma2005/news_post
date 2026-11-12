@@ -64,53 +64,81 @@ def create_studio_background(style: str = "blue") -> Path:
 
 def create_post_reading_frame(post_image_path: str, headline: str, category: str = "OFFICIAL UPDATE") -> Path:
     """
-    Creates a framed 1080x1920 slide featuring the actual published Instagram post
-    so viewers can clearly pause and read the full news announcement.
+    Creates an advanced, broadcast-grade 1080x1920 reading frame for the published
+    Instagram post with HUD tech corners, glowing borders, stat badges,
+    and a pause-to-read banner.
     """
     from news_anchor_ai.config import TEMP_DIR
     out_path = TEMP_DIR / "framed_post_slide.png"
 
-    # Base canvas
-    base = Image.new("RGBA", (VIDEO_WIDTH, VIDEO_HEIGHT), (8, 12, 22, 255))
+    # Base canvas (dark broadcast newsroom palette)
+    base = Image.new("RGBA", (VIDEO_WIDTH, VIDEO_HEIGHT), (6, 10, 20, 255))
     draw = ImageDraw.Draw(base)
 
-    # Header Bar
-    draw.rectangle([(0, 0), (VIDEO_WIDTH, 140)], fill=(15, 23, 42, 240))
+    # 1. Subtle background grid
+    for y in range(160, VIDEO_HEIGHT - 200, 100):
+        draw.line([(0, y), (VIDEO_WIDTH, y)], fill=(15, 23, 42, 100), width=1)
+    for x in range(100, VIDEO_WIDTH, 120):
+        draw.line([(x, 160), (x, VIDEO_HEIGHT - 200)], fill=(15, 23, 42, 60), width=1)
+
+    # 2. Header Bar with Red & Cyan Accents
+    draw.rectangle([(0, 0), (VIDEO_WIDTH, 140)], fill=(12, 18, 32, 245))
     draw.rectangle([(0, 136), (VIDEO_WIDTH, 140)], fill=(225, 29, 72, 255))  # red accent line
 
     # Fonts
     font_bold_title = ImageFont.truetype(str(FONT_BOLD), 36) if FONT_BOLD.exists() else ImageFont.load_default()
-    font_cat = ImageFont.truetype(str(FONT_BOLD), 24) if FONT_BOLD.exists() else ImageFont.load_default()
-    font_hint = ImageFont.truetype(str(FONT_REGULAR), 24) if FONT_REGULAR.exists() else ImageFont.load_default()
+    font_cat = ImageFont.truetype(str(FONT_BOLD), 22) if FONT_BOLD.exists() else ImageFont.load_default()
+    font_hint = ImageFont.truetype(str(FONT_BOLD), 26) if FONT_BOLD.exists() else ImageFont.load_default()
+    font_badge = ImageFont.truetype(str(FONT_BOLD), 20) if FONT_BOLD.exists() else ImageFont.load_default()
 
     # Brand Title
-    draw.text((40, 35), BRAND_NAME, fill=(255, 255, 255), font=font_bold_title)
-    draw.rectangle([(300, 42), (480, 76)], fill=(225, 29, 72), outline=None)
-    draw.text((315, 45), category.upper()[:16], fill=(255, 255, 255), font=font_cat)
+    draw.text((40, 38), BRAND_NAME, fill=(255, 255, 255), font=font_bold_title)
+    draw.rectangle([(320, 42), (520, 78)], fill=(225, 29, 72))
+    draw.text((335, 46), f"● {category.upper()[:16]}", fill=(255, 255, 255), font=font_cat)
 
-    # Load original post image and scale cleanly
+    # 3. Load & Frame the Post Image
     try:
         post_img = Image.open(post_image_path).convert("RGBA")
-        # Target area: max width 960, max height 1100
-        max_w, max_h = 960, 1100
+        max_w, max_h = 920, 1060
         post_img.thumbnail((max_w, max_h), Image.Resampling.LANCZOS)
 
-        # Center position
         x = (VIDEO_WIDTH - post_img.width) // 2
         y = 200 + (max_h - post_img.height) // 2
 
-        # Card shadow / glowing border
-        shadow_rect = [x - 8, y - 8, x + post_img.width + 8, y + post_img.height + 8]
-        draw.rounded_rectangle(shadow_rect, radius=16, fill=(30, 41, 59, 255), outline=(56, 189, 248, 180), width=3)
+        # Glowing cyan outer border
+        outer_box = [x - 8, y - 8, x + post_img.width + 8, y + post_img.height + 8]
+        draw.rounded_rectangle(outer_box, radius=16, fill=(15, 23, 42, 255), outline=(56, 189, 248, 220), width=3)
 
         # Paste the post image
         base.paste(post_img, (x, y), post_img)
 
-        # Pause hint badge below card
-        badge_y = y + post_img.height + 25
-        badge_rect = [(VIDEO_WIDTH - 420) // 2, badge_y, (VIDEO_WIDTH + 420) // 2, badge_y + 44]
-        draw.rounded_rectangle(badge_rect, radius=12, fill=(15, 23, 42, 220), outline=(245, 158, 11, 200), width=2)
-        draw.text(((VIDEO_WIDTH - 420) // 2 + 30, badge_y + 8), "⏸️ TAP & HOLD TO READ FULL NOTICE", fill=(253, 224, 71), font=font_hint)
+        # 4. HUD Viewfinder Tech Corners (Professional Graphic Accents)
+        c_len = 35
+        # Top-Left corner
+        draw.line([(x - 16, y - 16), (x - 16 + c_len, y - 16)], fill=(253, 224, 71), width=4)
+        draw.line([(x - 16, y - 16), (x - 16, y - 16 + c_len)], fill=(253, 224, 71), width=4)
+        # Top-Right corner
+        draw.line([(x + post_img.width + 16, y - 16), (x + post_img.width + 16 - c_len, y - 16)], fill=(253, 224, 71), width=4)
+        draw.line([(x + post_img.width + 16, y - 16), (x + post_img.width + 16, y - 16 + c_len)], fill=(253, 224, 71), width=4)
+        # Bottom-Left corner
+        draw.line([(x - 16, y + post_img.height + 16), (x - 16 + c_len, y + post_img.height + 16)], fill=(253, 224, 71), width=4)
+        draw.line([(x - 16, y + post_img.height + 16), (x - 16, y + post_img.height + 16 - c_len)], fill=(253, 224, 71), width=4)
+        # Bottom-Right corner
+        draw.line([(x + post_img.width + 16, y + post_img.height + 16), (x + post_img.width + 16 - c_len, y + post_img.height + 16)], fill=(253, 224, 71), width=4)
+        draw.line([(x + post_img.width + 16, y + post_img.height + 16), (x + post_img.width + 16, y + post_img.height + 16 - c_len)], fill=(253, 224, 71), width=4)
+
+        # 5. Floating Status Badges (Left & Right)
+        draw.rounded_rectangle([(x, y - 48), (x + 220, y - 14)], radius=8, fill=(225, 29, 72))
+        draw.text((x + 18, y - 43), "OFFICIAL DOCUMENT", fill=(255, 255, 255), font=font_badge)
+
+        draw.rounded_rectangle([(x + post_img.width - 180, y - 48), (x + post_img.width, y - 14)], radius=8, fill=(30, 41, 59), outline=(56, 189, 248), width=1)
+        draw.text((x + post_img.width - 160, y - 43), "VERIFIED SOURCE", fill=(56, 189, 248), font=font_badge)
+
+        # 6. High-Contrast Interactive Pause Banner
+        badge_y = y + post_img.height + 30
+        badge_rect = [(VIDEO_WIDTH - 480) // 2, badge_y, (VIDEO_WIDTH + 480) // 2, badge_y + 52]
+        draw.rounded_rectangle(badge_rect, radius=14, fill=(15, 23, 42, 240), outline=(245, 158, 11, 240), width=3)
+        draw.text(((VIDEO_WIDTH - 480) // 2 + 25, badge_y + 11), "⏸️ TAP & HOLD TO READ FULL NOTICE", fill=(253, 224, 71), font=font_hint)
 
     except Exception as e:
         print(f"[Studio Builder] Warning: Could not frame post image: {e}")
