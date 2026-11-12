@@ -32,6 +32,7 @@ from news_anchor_ai.backgrounds.studio_builder import (
     create_post_reading_frame
 )
 from news_anchor_ai.voice.bg_audio_generator import ensure_background_music
+from news_anchor_ai.avatar.avatar_animator import get_animated_anchor_video
 
 def create_anchor_scene_frame(anchor_type: str, headline: str, category: str) -> Path:
     """
@@ -167,7 +168,8 @@ def composite_news_reel(
     srt_path = TEMP_DIR / f"subs_{post_id}.srt"
     bg_music_path = ensure_background_music(total_duration + 5.0)
 
-    # 1. Generate frames
+    # 1. Generate frames and check for animated character video (Option B)
+    animated_video = get_animated_anchor_video(anchor_type, audio_path, post_id)
     anchor_frame = create_anchor_scene_frame(anchor_type, headline, category)
     post_frame = create_post_reading_frame(post_image_path, headline, category)
     outro_frame = create_outro_frame()
@@ -183,16 +185,21 @@ def composite_news_reel(
     print(f"[Compositor] Timing: Intro: 0–{t_intro_end}s | B-Roll: {t_intro_end}–{t_anchor_return}s | Return: {t_anchor_return}–{t_outro_start}s | Outro: {t_outro_start}–{total_duration}s")
 
     # 4. Construct Subtitles Filter
-    # Font size 20, Primary Color = Yellow (&H0000FFFF), Outline = Black, MarginV = 220
     sub_filter = ""
     if srt_path.exists() and srt_path.stat().st_size > 0:
         clean_srt = str(srt_path).replace("\\", "/").replace(":", "\\:")
         sub_filter = f",subtitles='{clean_srt}':force_style='Fontname=Noto Sans,Fontsize=20,PrimaryColour=&H0000FFFF&,OutlineColour=&H00000000&,BorderStyle=3,Outline=3,Shadow=1,Alignment=2,MarginV=220'"
 
     # 5. FFmpeg Command with Audio Mixing & Video Overlay
+    # If animated_video is available from Option B, use it as anchor layer; else loop the styled anchor scene
+    if animated_video and animated_video.exists():
+        anchor_input = ["-i", str(animated_video)]
+    else:
+        anchor_input = ["-loop", "1", "-t", str(total_duration), "-i", str(anchor_frame)]
+
     cmd = [
-        "ffmpeg", "-y",
-        "-loop", "1", "-t", str(total_duration), "-i", str(anchor_frame),    # [0:v] Anchor
+        "ffmpeg", "-y"
+    ] + anchor_input + [
         "-loop", "1", "-t", str(total_duration), "-i", str(post_frame),      # [1:v] Post Card (Pause to Read)
         "-loop", "1", "-t", str(total_duration), "-i", str(outro_frame),     # [2:v] Outro
         "-i", str(audio_path),                                               # [3:a] Voiceover
@@ -201,7 +208,6 @@ def composite_news_reel(
         f"[0:v][1:v]overlay=enable='between(t,{t_intro_end},{t_anchor_return})'[v1];"
         f"[v1][2:v]overlay=enable='gte(t,{t_outro_start})'[v2]"
         f"{'[v2]' + sub_filter[1:] + '[vout]' if sub_filter else ';[v2]copy[vout]'};"
-        # Mix voice at 1.0 (100%) and background ambient music at 0.10 (-20dB)
         "[3:a]volume=1.0[v_aud];"
         "[4:a]volume=0.10[bg_aud];"
         "[v_aud][bg_aud]amix=inputs=2:duration=first:dropout_transition=2[aout]",

@@ -55,6 +55,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
+          HEDRA_API_KEY: ${{ secrets.HEDRA_API_KEY }}
         run: |
           ACTION="${{ github.event.inputs.action || 'check_candidates' }}"
           POST_ID="${{ github.event.inputs.post_id || 'latest' }}"
