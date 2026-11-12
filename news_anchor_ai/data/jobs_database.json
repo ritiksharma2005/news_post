@@ -1,5 +1,25 @@
 {
-  "counter": 2,
-  "jobs": {},
+  "counter": 3,
+  "jobs": {
+    "NNIIT-2026-002": {
+      "job_id": "NNIIT-2026-002",
+      "source_url": "https://www.instagram.com/p/DfnRulRsE83/",
+      "post_id": "18142378558713707",
+      "raw_caption": "🚨 LAYOFF ALERT: Qualcomm Begins Job Cuts in India!\n\nA major development in India's tech industry. Qualcomm has reportedly begun layoffs at its Bengaluru facility, with around 1,000 roles potentially at risk amid global restructuring.\n\n📍 The reported impact could extend to engineering and research teams across Bengaluru, Hyderabad, Delhi-NCR and Chennai.\n\n⚠️ However, Qualcomm has not officially confirmed the number of Indian employees affected.\n\nWhat does this mean for India's tech workforce and fresh engineering graduates?\n\n📲 Follow @news.nit_iit for the latest campus, education and industry updates.\n\n#Qualcomm #Layoffs #TechNews #IndiaJobs #ITIndustry EngineeringJobs CampusNews PlacementNews NIT IIT NewsNITIIT",
+      "image_url": "https://scontent-iad3-1.cdninstagram.com/v/t51.82787-15/899039333_17967900726233445_7901665205577092774_n.webp?stp=dst-jpg_e35_tt6&_nc_cat=109&_nc_map=urlgen_bucketless&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=BrS2BIFKptQQ7kNvwHwZWWk&_nc_oc=AdoNVvSEjzVgHxU7Gk5B28YolWXNOmvqIsF3CEAcCigsMGKzqHq_zvP3_tQvOjNFRhM&_nc_zt=23&_nc_ht=scontent-iad3-1.cdninstagram.com&edm=AFF3FJ0EAAAA&_nc_gid=u5QuGlqLIpuE4kO6saq0OQ&_nc_ct=RQosPBUKFQIAAAA&oh=00_AQTcc1OH0GVYraQws6wrpzqL4XvnGpGxKsXal1Iz9yYjPQ&oe=6AFB8F71",
+      "status": "PENDING_APPROVAL",
+      "created_at": "2026-11-12T12:54:33.648427+00:00",
+      "updated_at": "2026-11-12T12:55:29.075820+00:00",
+      "headline": "LAYOFF ALERT: Qualcomm Begins Job Cuts in India!",
+      "script": "Did you know about this major update regarding LAYOFF ALERT: Qualcomm Begins Job Cuts in India!? Official details have been confirmed across major academic and campus channels. Looking at the official announcement, several critical directives and updates have been laid out for students. The key takeaway is to act early, verify official portals, and stay ahead of deadlines. This is News N-I-T, I-I-T — your campus, our news.",
+      "voice_path": "/home/runner/work/news_post/news_post/news_anchor_ai/output/audio/voice_NNIIT-2026-002.mp3",
+      "video_path": "/home/runner/work/news_post/news_post/news_anchor_ai/output/reels/reel_NNIIT-2026-002.mp4",
+      "public_video_url": "https://api.telegram.org/file/bot8906168519:AAEmaGYxZzFi32kQtYRWmNWt00tCDxK1_K0/videos/file_731.mp4",
+      "anchor_type": "gaiter",
+      "is_published": false,
+      "is_rejected": false,
+      "reel_caption": "🚨 LAYOFF ALERT: Qualcomm Begins Job Cuts in India!\n\nStay informed with @news.nit_iit.\n\n#news_nitiit #studentnews #examalert #collegeupdates"
+    }
+  },
   "last_anchor": "gaiter"
 }
