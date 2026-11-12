@@ -1,0 +1,5 @@
+google-genai>=0.1.1
+edge-tts>=6.1.12
+pillow>=10.0.0
+requests>=2.31.0
+python-dotenv>=1.0.0
