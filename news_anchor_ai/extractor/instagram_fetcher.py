@@ -30,6 +30,33 @@ def parse_iso_timestamp(ts_str: str) -> datetime:
     except Exception:
         return datetime.min.replace(tzinfo=timezone.utc)
 
+def resolve_instagram_user_id(token: str, user_id: str) -> str:
+    """
+    Auto-resolves Facebook Page ID to connected Instagram Business Account ID (178414...).
+    """
+    if not user_id or not token:
+        return user_id
+    if user_id.startswith("178414"):
+        return user_id
+    try:
+        url = f"https://graph.facebook.com/v19.0/{user_id}?fields=instagram_business_account&access_token={token}"
+        resp = requests.get(url, timeout=12).json()
+        if "instagram_business_account" in resp and "id" in resp["instagram_business_account"]:
+            ig_id = resp["instagram_business_account"]["id"]
+            print(f"  💡 Auto-resolved Instagram Business Account ID: {ig_id} from Page {user_id}")
+            return ig_id
+        accounts_url = f"https://graph.facebook.com/v19.0/me/accounts?fields=instagram_business_account&access_token={token}"
+        acc_resp = requests.get(accounts_url, timeout=12).json()
+        if "data" in acc_resp:
+            for item in acc_resp["data"]:
+                if "instagram_business_account" in item and "id" in item["instagram_business_account"]:
+                    ig_id = item["instagram_business_account"]["id"]
+                    print(f"  💡 Auto-resolved Instagram Business Account ID from me/accounts: {ig_id}")
+                    return ig_id
+    except Exception as e:
+        print(f"  [Instagram ID Notice] {e}")
+    return user_id
+
 def extract_headline_from_caption(caption: str) -> str:
     """Extracts a clean, punchy headline from the post caption."""
     if not caption:
@@ -57,7 +84,8 @@ def fetch_latest_posts(limit: int = 15) -> List[Dict]:
         print("[Instagram Fetcher] Error: INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID not configured.")
         return []
 
-    url = f"https://graph.facebook.com/{GRAPH_API_VERSION}/{INSTAGRAM_USER_ID}/media"
+    user_id = resolve_instagram_user_id(INSTAGRAM_ACCESS_TOKEN, INSTAGRAM_USER_ID)
+    url = f"https://graph.facebook.com/{GRAPH_API_VERSION}/{user_id}/media"
     params = {
         "fields": "id,caption,media_type,media_url,permalink,timestamp,children{media_url,media_type}",
         "limit": limit,
@@ -76,6 +104,7 @@ def fetch_latest_posts(limit: int = 15) -> List[Dict]:
         return []
 
     items = data.get("data", [])
+    print(f"  [Instagram Fetcher] Graph API query returned {len(items)} raw media objects.")
     if not items:
         print(f"[Instagram Fetcher] No media items returned for {INSTAGRAM_ACCOUNT}")
         return []

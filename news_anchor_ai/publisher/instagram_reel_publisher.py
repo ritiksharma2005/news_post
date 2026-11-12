@@ -13,6 +13,8 @@ from news_anchor_ai.config import (
     INSTAGRAM_ACCOUNT
 )
 
+from news_anchor_ai.extractor.instagram_fetcher import resolve_instagram_user_id
+
 GRAPH_API_VERSION = "v19.0"
 
 def publish_video_reel(video_url: str, caption: str) -> bool:
@@ -24,10 +26,11 @@ def publish_video_reel(video_url: str, caption: str) -> bool:
         print("[Reel Publisher] Error: INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID not configured.")
         return False
 
-    print(f"[Reel Publisher] Initiating Reel container for {INSTAGRAM_ACCOUNT}...")
+    user_id = resolve_instagram_user_id(INSTAGRAM_ACCESS_TOKEN, INSTAGRAM_USER_ID)
+    print(f"[Reel Publisher] Initiating Reel container for {INSTAGRAM_ACCOUNT} (User ID: {user_id})...")
 
     # Step 1: Create media container for REELS
-    container_url = f"https://graph.facebook.com/{GRAPH_API_VERSION}/{INSTAGRAM_USER_ID}/media"
+    container_url = f"https://graph.facebook.com/{GRAPH_API_VERSION}/{user_id}/media"
     container_payload = {
         "media_type": "REELS",
         "video_url": video_url,
@@ -73,7 +76,7 @@ def publish_video_reel(video_url: str, caption: str) -> bool:
             print(f"  Status query warning: {e}")
 
     # Step 3: Publish the container
-    publish_url = f"https://graph.facebook.com/{GRAPH_API_VERSION}/{INSTAGRAM_USER_ID}/media_publish"
+    publish_url = f"https://graph.facebook.com/{GRAPH_API_VERSION}/{user_id}/media_publish"
     publish_payload = {
         "creation_id": creation_id,
         "access_token": INSTAGRAM_ACCESS_TOKEN

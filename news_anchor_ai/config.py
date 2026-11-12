@@ -19,9 +19,15 @@ def _clean(val: str) -> str:
         return val[1:-1].strip()
     return val
 
+def clean_bot_token(token: str) -> str:
+    val = _clean(token)
+    if val.lower().startswith("bot") and ":" in val:
+        val = val[3:].strip()
+    return val
+
 # API Credentials
 GEMINI_API_KEY = _clean(os.getenv("GEMINI_API_KEY", ""))
-TELEGRAM_BOT_TOKEN = _clean(os.getenv("TELEGRAM_BOT_TOKEN", ""))
+TELEGRAM_BOT_TOKEN = clean_bot_token(os.getenv("TELEGRAM_BOT_TOKEN", ""))
 TELEGRAM_CHAT_ID = _clean(os.getenv("TELEGRAM_CHAT_ID", ""))
 INSTAGRAM_ACCESS_TOKEN = _clean(os.getenv("INSTAGRAM_ACCESS_TOKEN", ""))
 INSTAGRAM_USER_ID = _clean(os.getenv("INSTAGRAM_USER_ID", ""))

@@ -15,14 +15,17 @@ def notify_candidates_on_telegram():
     Checks for fresh published posts on @news.nit_iit and sends
     an interactive selection menu to the user's Telegram.
     """
+    print(f"[Candidate Notifier] Initiating candidate check for {BRAND_NAME}...")
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
-        print("[Candidate Notifier] Telegram token or Chat ID missing.")
+        print("[Candidate Notifier] ⚠️ Error: Telegram token or Chat ID missing.")
         return
 
     candidates = fetch_latest_posts(limit=15)
     if not candidates:
-        print("[Candidate Notifier] No new posts eligible for video conversion.")
+        print("[Candidate Notifier] ℹ️ No fresh candidate posts found (or all recent posts already processed).")
         return
+
+    print(f"[Candidate Notifier] Preparing Telegram message with {len(candidates)} candidate options...")
 
     # Build the Telegram message
     message_lines = [
