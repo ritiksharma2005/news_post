@@ -100,7 +100,8 @@ def fetch_latest_posts(limit: int = 15) -> List[Dict]:
         return []
 
     if "error" in data:
-        print(f"[Instagram Fetcher] Graph API Error: {data['error'].get('message')}")
+        err = data['error']
+        print(f"[Instagram Fetcher] Graph API Error ({err.get('code')}): {err.get('message')}")
         return []
 
     items = data.get("data", [])

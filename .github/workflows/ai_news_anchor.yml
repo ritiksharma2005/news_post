@@ -49,6 +49,7 @@ jobs:
 
       - name: 🚀 Run AI News Anchor Pipeline
         env:
+          PYTHONUNBUFFERED: "1"
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -58,16 +59,19 @@ jobs:
           ACTION="${{ github.event.inputs.action || 'check_candidates' }}"
           POST_ID="${{ github.event.inputs.post_id || 'latest' }}"
           
-          echo "Executing Action: $ACTION"
+          echo "=================================================="
+          echo "🎬 EXECUTING ACTION: $ACTION"
+          echo "📌 TARGET POST ID: $POST_ID"
+          echo "=================================================="
           
           if [ "$ACTION" = "check_candidates" ]; then
-            python news_anchor_ai/main.py --check-candidates
+            python -u news_anchor_ai/main.py --check-candidates
           elif [ "$ACTION" = "generate_video" ]; then
-            python news_anchor_ai/main.py --generate "$POST_ID"
+            python -u news_anchor_ai/main.py --generate "$POST_ID"
           elif [ "$ACTION" = "publish_reel" ]; then
-            python news_anchor_ai/main.py --publish "$POST_ID"
+            python -u news_anchor_ai/main.py --publish "$POST_ID"
           else
-            python news_anchor_ai/main.py --check-candidates
+            python -u news_anchor_ai/main.py --check-candidates
           fi
 
       - name: 💾 Commit & Push State (processed posts & anchor rotation)
