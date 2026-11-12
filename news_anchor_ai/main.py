@@ -1,10 +1,8 @@
 """
 news_anchor_ai/main.py
-Master Pipeline Coordinator for AI News Anchor – NEWS NIT IIT (@news.nit_iit)
-Commands:
-- python news_anchor_ai/main.py --check-candidates
-- python news_anchor_ai/main.py --generate <media_id>
-- python news_anchor_ai/main.py --publish <media_id>
+Master Production Coordinator for NEWS NIT IIT — AI Anchor Studio.
+Implements the complete 7-stage production lifecycle:
+Input (URL / Upload) -> Analysis -> Gemini Multimodal Script -> Voice -> Motion -> 9:16 Render -> Telegram Review -> Instagram Reel
 """
 
 import sys
@@ -20,146 +18,169 @@ from news_anchor_ai.config import (
     INSTAGRAM_ACCOUNT,
     TEMP_DIR
 )
-from news_anchor_ai.database import (
-    get_next_anchor,
-    get_post_metadata,
-    mark_post_status
+from news_anchor_ai.database.job_manager import (
+    create_job,
+    update_job_status,
+    get_job,
+    get_latest_job
+)
+from news_anchor_ai.database import get_next_anchor
+from news_anchor_ai.ai.news_extractor import (
+    extract_from_instagram_url,
+    extract_from_direct_upload
 )
 from news_anchor_ai.extractor.instagram_fetcher import fetch_latest_posts
-from news_anchor_ai.scriptwriter.script_generator import generate_news_script
+from news_anchor_ai.ai.script_generator import generate_multimodal_news_script
 from news_anchor_ai.voice.voice_generator import generate_anchor_voice
-from news_anchor_ai.compositor.video_compositor import composite_news_reel
-from news_anchor_ai.telegram_bot.candidate_notifier import notify_candidates_on_telegram
-from news_anchor_ai.telegram_bot.approval_handler import (
-    send_reel_for_approval,
-    execute_publish_action
+from news_anchor_ai.video.renderer import render_master_news_reel
+from news_anchor_ai.telegram.bot_controller import (
+    send_job_status,
+    deliver_reel_for_review,
+    handle_approval_action,
+    handle_reject_action,
+    send_telegram_message
 )
+from news_anchor_ai.telegram_bot.candidate_notifier import notify_candidates_on_telegram
 
-def run_generate_pipeline(media_id: str = None, dry_run: bool = False):
-    print("=" * 60)
-    print(f"🎬 AI NEWS ANCHOR PIPELINE — {BRAND_NAME}")
-    print("=" * 60)
+def run_production_pipeline(
+    post_url: str = None,
+    image_path: str = None,
+    custom_caption: str = "",
+    media_id: str = None,
+    dry_run: bool = False
+) -> bool:
+    print("=" * 65)
+    print(f"🎬 NEWS NIT IIT — AI ANCHOR STUDIO PIPELINE")
+    print("=" * 65)
 
-    # 1. Resolve Target Post Data
-    target_post = None
-    if media_id:
-        cached = get_post_metadata(media_id)
-        if cached and cached.get("image_path"):
-            target_post = {
-                "media_id": media_id,
-                "headline": cached.get("headline", "Latest Student News"),
-                "caption": cached.get("caption", ""),
-                "image_path": cached.get("image_path"),
-                "permalink": cached.get("permalink", "")
-            }
-
-    if not target_post:
-        print("[Pipeline] Querying latest Instagram posts...")
+    # 1. Step 1: Ingest Content
+    extracted = None
+    if post_url:
+        print(f"[Pipeline] Ingesting Instagram Post URL: {post_url}")
+        extracted = extract_from_instagram_url(post_url)
+    elif image_path and Path(image_path).exists():
+        print(f"[Pipeline] Ingesting Direct Image Upload: {image_path}")
+        extracted = extract_from_direct_upload(Path(image_path), custom_caption)
+    else:
+        print("[Pipeline] No direct URL or upload provided. Querying recent posts from @news.nit_iit...")
         candidates = fetch_latest_posts(limit=15)
-        if not candidates:
-            print("[Pipeline] No eligible posts found to generate video.")
-            return False
-        # If media_id matches one of candidates, use that; else use newest candidate
-        if media_id:
-            for c in candidates:
-                if c["media_id"] == media_id:
-                    target_post = c
-                    break
-        if not target_post:
-            target_post = candidates[0]
+        if candidates:
+            if media_id and media_id != "latest":
+                for c in candidates:
+                    if c["media_id"] == media_id:
+                        extracted = c
+                        break
+            if not extracted:
+                extracted = candidates[0]
 
-    post_id = target_post["media_id"]
-    headline = target_post["headline"]
-    caption = target_post["caption"]
-    image_path = target_post["image_path"]
+    if not extracted or not extracted.get("image_path"):
+        print("[Pipeline] ⚠️ Error: Could not resolve eligible post content or image.")
+        send_telegram_message(
+            "⚠️ I couldn't automatically access that Instagram post media.\n\n"
+            "Please upload the photo or screenshot directly here in Telegram, "
+            "and I will generate the complete video immediately!"
+        )
+        return False
 
-    # Ensure post image is downloaded
-    if not Path(image_path).exists() and target_post.get("image_url"):
-        print(f"  Downloading post image from: {target_post['image_url'][:60]}...")
-        try:
-            import requests
-            resp = requests.get(target_post["image_url"], timeout=30)
-            if resp.status_code == 200:
-                with open(image_path, "wb") as f:
-                    f.write(resp.content)
-                print(f"  Successfully downloaded post image to: {image_path}")
-        except Exception as e:
-            print(f"  Warning: Could not download post image: {e}")
+    # 2. Step 2: Initialize Official Job
+    job = create_job(
+        source_url=extracted.get("permalink", post_url or "Direct Upload"),
+        post_id=extracted.get("media_id"),
+        raw_caption=extracted.get("caption", ""),
+        image_url=extracted.get("image_url", "")
+    )
+    job_id = job["job_id"]
+    print(f"\n[Job Initialized] Official Job ID: {job_id}")
 
-    print(f"\n[Target Post Identified]")
-    print(f"  ID: {post_id}")
-    print(f"  Headline: {headline}")
-    print(f"  Image: {image_path}")
+    send_job_status(job_id, "Link received. Analyzing post & extracting visual source elements…")
 
-    # 2. Alternate Anchor Character
+    # 3. Step 3: Multimodal Gemini 2.0 Scriptwriting
     anchor_type = get_next_anchor()
-    print(f"\n👤 Selected Anchor for this video: Masked Anchor ({anchor_type.upper()})")
+    print(f"👤 Assigned Anchor Persona: Masked Anchor ({anchor_type.upper()})")
 
-    # 3. Generate 30–45s Script with Gemini
-    print(f"\n✍️ Generating 30–45s broadcast news script with Gemini...")
-    script_data = generate_news_script(headline, caption)
-    spoken_text = script_data.get("full_spoken_script", "")
-    final_headline = script_data.get("headline", headline)
-    category = script_data.get("category", "EXAM UPDATE")
-    reel_caption = script_data.get("reel_caption", caption)
+    send_job_status(job_id, "Crafting 5-part storytelling script with Gemini 2.0 Vision…")
+    script_data = generate_multimodal_news_script(
+        post_headline=extracted.get("headline", ""),
+        post_caption=extracted.get("caption", ""),
+        post_image_path=extracted.get("image_path")
+    )
 
-    print(f"  Headline: {final_headline}")
-    print(f"  Category: {category}")
-    print(f"  Script words: {len(spoken_text.split())}")
+    spoken_script = script_data.get("full_spoken_script", "")
+    headline = script_data.get("headline", extracted.get("headline", ""))
+    category = script_data.get("category", "Campus Update")
+    reel_caption = script_data.get("reel_caption", extracted.get("caption", ""))
 
-    # 4. Generate Indian English Male Voice
-    print(f"\n🎙️ Synthesizing Indian English male voice (Prabhat)...")
-    audio_path, duration, word_timestamps = generate_anchor_voice(spoken_text, post_id)
-    print(f"  Audio rendered: {audio_path.name} ({duration:.1f}s)")
+    update_job_status(job_id, "SCRIPT_READY", {
+        "headline": headline,
+        "script": spoken_script,
+        "reel_caption": reel_caption,
+        "anchor_type": anchor_type
+    })
 
-    # 5. Composite 1080x1920 (9:16) Vertical News Reel
-    print(f"\n🎞️ Compositing vertical Reel with masked anchor & B-roll reading frame...")
-    video_path = composite_news_reel(
-        post_id=post_id,
-        headline=final_headline,
+    # 4. Step 4: Signature Voice Generation
+    send_job_status(job_id, "Synthesizing signature Indian English male voice (Prabhat)…")
+    voice_path, duration, word_timestamps = generate_anchor_voice(spoken_script, job_id)
+
+    update_job_status(job_id, "VOICE_READY", {"voice_path": str(voice_path)})
+
+    # 5. Step 5: Render 9:16 Broadcast Sequence
+    send_job_status(job_id, "Rendering 5-step broadcast sequence, HUD graphics & subtitles…")
+    video_path = render_master_news_reel(
+        job_id=job_id,
+        headline=headline,
         category=category,
-        post_image_path=image_path,
-        audio_path=audio_path,
+        post_image_path=extracted["image_path"],
+        voice_path=voice_path,
         total_duration=duration,
         word_timestamps=word_timestamps,
         anchor_type=anchor_type
     )
 
     if dry_run:
-        print(f"\n🔒 [DRY RUN ACTIVE] Video generated successfully at: {video_path}")
+        print(f"\n🔒 [DRY RUN ACTIVE] Render complete at: {video_path}")
         return True
 
-    # 6. Deliver to Telegram for Approval
-    print(f"\n📲 Delivering video to Telegram for your review...")
+    # 6. Step 6: Deliver to Telegram for Human Review
     metadata = {
-        "headline": final_headline,
+        "headline": headline,
         "duration": duration,
         "anchor_type": anchor_type,
         "reel_caption": reel_caption
     }
-    sent = send_reel_for_approval(video_path, post_id, metadata)
-    if sent:
-        print(f"\n✅ SUCCESS! Video is ready in your Telegram chat. Tap Approve on your phone to publish!")
-    return sent
+    delivered = deliver_reel_for_review(job_id, video_path, metadata)
+    if delivered:
+        print(f"\n✅ Job {job_id} successfully delivered to Telegram for review!")
+    return delivered
+
 
 def main():
-    parser = argparse.ArgumentParser(description="AI News Anchor Pipeline")
-    parser.add_argument("--check-candidates", action="store_true", help="Fetch fresh posts and send candidate menu to Telegram")
-    parser.add_argument("--generate", type=str, nargs="?", const="latest", help="Generate video for specified post ID or latest")
-    parser.add_argument("--publish", type=str, help="Publish approved video for specified post ID")
-    parser.add_argument("--dry-run", action="store_true", help="Test run without sending to Telegram or Instagram")
+    parser = argparse.ArgumentParser(description="NEWS NIT IIT — AI Anchor Studio")
+    parser.add_argument("--url", type=str, help="Instagram Post URL to process")
+    parser.add_argument("--image", type=str, help="Path to direct image upload (Telegram fallback)")
+    parser.add_argument("--caption", type=str, default="", help="Custom caption for direct image upload")
+    parser.add_argument("--generate", type=str, nargs="?", const="latest", help="Generate from latest post or media ID")
+    parser.add_argument("--check-candidates", action="store_true", help="Send candidate options to Telegram")
+    parser.add_argument("--approve", type=str, help="Approve and publish Job ID")
+    parser.add_argument("--reject", type=str, help="Reject Job ID")
+    parser.add_argument("--dry-run", action="store_true", help="Test run without sending to Telegram/Instagram")
 
     args = parser.parse_args()
 
-    if args.check_candidates:
+    if args.approve:
+        handle_approval_action(args.approve)
+    elif args.reject:
+        handle_reject_action(args.reject)
+    elif args.check_candidates:
         notify_candidates_on_telegram()
+    elif args.url:
+        run_production_pipeline(post_url=args.url, dry_run=args.dry_run)
+    elif args.image:
+        run_production_pipeline(image_path=args.image, custom_caption=args.caption, dry_run=args.dry_run)
     elif args.generate:
         target_id = None if args.generate == "latest" else args.generate
-        run_generate_pipeline(media_id=target_id, dry_run=args.dry_run)
-    elif args.publish:
-        execute_publish_action(args.publish)
+        run_production_pipeline(media_id=target_id, dry_run=args.dry_run)
     else:
-        # Default behavior: check candidates
+        # Default: check candidates
         notify_candidates_on_telegram()
 
 if __name__ == "__main__":

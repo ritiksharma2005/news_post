@@ -9,14 +9,15 @@ on:
       action:
         description: "Action to perform"
         required: true
-        default: "check_candidates"
+        default: "generate_video"
         type: choice
         options:
-          - "check_candidates"
           - "generate_video"
-          - "publish_reel"
-      post_id:
-        description: "Target Instagram Media ID (leave 'latest' for newest post)"
+          - "check_candidates"
+          - "approve_job"
+          - "reject_job"
+      target:
+        description: "Post URL, Media ID (or 'latest'), or Job ID for approval"
         required: false
         default: "latest"
 
@@ -58,19 +59,25 @@ jobs:
           HEDRA_API_KEY: ${{ secrets.HEDRA_API_KEY }}
         run: |
           ACTION="${{ github.event.inputs.action || 'check_candidates' }}"
-          POST_ID="${{ github.event.inputs.post_id || 'latest' }}"
+          TARGET="${{ github.event.inputs.target || 'latest' }}"
           
           echo "=================================================="
           echo "🎬 EXECUTING ACTION: $ACTION"
-          echo "📌 TARGET POST ID: $POST_ID"
+          echo "📌 TARGET: $TARGET"
           echo "=================================================="
           
           if [ "$ACTION" = "check_candidates" ]; then
             python -u news_anchor_ai/main.py --check-candidates
           elif [ "$ACTION" = "generate_video" ]; then
-            python -u news_anchor_ai/main.py --generate "$POST_ID"
-          elif [ "$ACTION" = "publish_reel" ]; then
-            python -u news_anchor_ai/main.py --publish "$POST_ID"
+            if [[ "$TARGET" =~ ^https?:// ]]; then
+              python -u news_anchor_ai/main.py --url "$TARGET"
+            else
+              python -u news_anchor_ai/main.py --generate "$TARGET"
+            fi
+          elif [ "$ACTION" = "approve_job" ]; then
+            python -u news_anchor_ai/main.py --approve "$TARGET"
+          elif [ "$ACTION" = "reject_job" ]; then
+            python -u news_anchor_ai/main.py --reject "$TARGET"
           else
             python -u news_anchor_ai/main.py --check-candidates
           fi
