@@ -27,9 +27,9 @@ Structure of the broadcast:
 4. OUTRO (38-45s, ~10 words): Professional sign-off: "Follow News NIT IIT for daily verified student updates."
 
 RULES:
-- Language: English (Indian newsroom presentation style).
+- Language: English (Mature Indian newsroom presentation style — serious, composed, and authoritative).
 - Absolutely NO fabricated dates, numbers, or rumors. Stick strictly to verified facts from the source text.
-- Absolutely NO adult, sexual, defamatory, or inappropriate language. 100% student-safe and professional.
+- Absolutely NO adult, sexual, defamatory, or casual slang language. 100% student-safe, professional, and mature.
 - Output MUST be valid JSON only.
 """
 
