@@ -1,13 +1,14 @@
 name: 🎓 Run Indian Student & Exam News Fetcher (Reddit + Education News -> Telegram)
 
 on:
-  schedule:
-    # 8:30 AM IST (03:00 AM UTC) — Morning Run
-    - cron: "0 3 * * *"
-    # 2:30 PM IST (09:00 AM UTC) — Afternoon Run
-    - cron: "0 9 * * *"
-    # 8:30 PM IST (03:00 PM UTC / 15:00 UTC) — Evening Run
-    - cron: "0 15 * * *"
+  # Schedule stopped as requested
+  # schedule:
+  #   # 8:30 AM IST (03:00 AM UTC) — Morning Run
+  #   - cron: "0 3 * * *"
+  #   # 2:30 PM IST (09:00 AM UTC) — Afternoon Run
+  #   - cron: "0 9 * * *"
+  #   # 8:30 PM IST (03:00 PM UTC / 15:00 UTC) — Evening Run
+  #   - cron: "0 15 * * *"
   workflow_dispatch: {}
 
 jobs:
